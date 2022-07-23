@@ -1,0 +1,37 @@
+// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
+
+@import "src/fi/hg/frontend/stylesstyles/index";
+
+.checkbox-field {
+
+  padding           : $field-padding;
+  margin            : $field-margin;
+  border-radius     : $field-border-radius;
+
+  display           : flex;
+  flex-direction    : row;
+  align-items       : center;
+  justify-content   : flex-start;
+
+  & > .checkbox-field-input {
+
+    flex-shrink    : 0;
+    padding        : 0 1em 0 0.5em;
+
+  }
+
+  & > .checkbox-field-label {
+
+    flex-grow      : 1;
+    padding        : 0.5em;
+    border         : 0;
+    font-size      : 1.25em;
+    border-radius  : 0.25em;
+
+  }
+
+  &.field-state-invalid {
+    border            : $field-border-invalid;
+  }
+
+}

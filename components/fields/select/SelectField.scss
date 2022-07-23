@@ -1,0 +1,93 @@
+// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
+@import "src/fi/hg/frontend/stylesstyles/index";
+
+.select-field {
+
+  box-sizing   : border-box;
+  padding      : 0;
+  margin       : $field-margin;
+
+  & > .select-field-label {
+
+    padding           : $field-padding;
+    margin            : 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    & > .select-field-label {
+
+      flex-shrink: 1;
+      padding: 0 1em 0 0.5em;
+      box-sizing: border-box;
+      min-width: $field-label-min-width;
+      text-align   : right;
+
+    }
+
+    & > .select-field-input {
+      flex-grow: 1;
+      padding: 0.5em;
+      border: 0;
+      font-size: 1.25em;
+      border-radius: 0.25em;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+  }
+
+  & > .popup {
+
+    top: -5px;
+    box-sizing: border-box;
+
+    & > .popup-window {
+
+      border-radius  : 0.5em;
+      right          : 0;
+      left           : 0;
+      box-sizing     : border-box;
+      min-width      : 15em;
+
+      & > .select-field-dropdown {
+
+        background-color : #00000009;
+        border           : 1px solid #00000022;
+        border-radius    : 0.5em;
+        box-sizing       : border-box;
+        padding          : 0.25em 0;
+        margin           : 0;
+
+        display          : flex;
+        flex-direction   : column;
+
+        & > .select-field-dropdown-item {
+
+          box-sizing       : border-box;
+          background-color : #ffffff;
+          padding          : 0.5em;
+          margin           : 0.25em 0.5em;
+
+          //&.select-field-dropdown-item-current {
+          //  background-color : #ffffffff;
+          //}
+
+        }
+
+      }
+
+    }
+
+  }
+
+  &.field-state-invalid {
+    border            : $field-border-invalid;
+  }
+
+}

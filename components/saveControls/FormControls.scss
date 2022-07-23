@@ -1,0 +1,71 @@
+
+.nor-form-controls {
+
+  height          : 100%;
+  box-sizing      : border-box;
+  padding         : 0;
+  margin          : 0;
+  display         : flex;
+  flex-direction  : row;
+  align-items     : center;
+  justify-items   : center;
+  align-content   : center;
+  justify-content : center;
+
+  color            : #ffffff;
+  background-color : #5bb65b;
+
+  &.nor-form-controls-with-errors {
+    background-color : #b65b5b;
+  }
+
+  & > .nor-form-controls-content {
+
+    flex-grow   : 1;
+    box-sizing  : border-box;
+    padding     : 0 1em;
+    margin      : 0;
+    font-weight : bold;
+
+  }
+
+  & > .nor-form-controls-button {
+
+    box-sizing: border-box;
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 8px;
+
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    & > .icon {
+      margin-right: 0.5em;
+      fill: #ffffff;
+    }
+
+  }
+
+  & > .nor-form-controls-cancel-button {
+
+    color        : #f0f0f0;
+    border       : 1px solid #22222222;
+    margin-right : 3em;
+
+  }
+
+  & > .nor-form-controls-submit-button {
+
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    background: #52ad52;
+
+  }
+
+}

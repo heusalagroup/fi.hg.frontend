@@ -1,0 +1,47 @@
+// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
+
+@import "src/fi/hg/frontend/stylesstyles/variables";
+
+$neumorphism-button-border-size          : $border-size;
+$neumorphism-button-border-radius        : $border-radius;
+$neumorphism-field-border-size           : $border-size;
+$neumorphism-field-border-radius         : $border-radius;
+$neumorphism-field-border-size-invalid   : 1px;
+$neumorphism-field-border-style-invalid  : solid;
+$neumorphism-field-border-radius-invalid : $neumorphism-field-border-radius;
+
+$light-neumorphism-button-light-shadow-color         : $light-shadow-color-light-mode;
+$light-neumorphism-button-dark-shadow-color          : $dark-shadow-color-light-mode;
+$light-neumorphism-button-border-color               : $border-color-light-mode;
+$light-neumorphism-button-box-shadow                 : 6px 6px 16px 0 $light-neumorphism-button-dark-shadow-color, -6px -6px 26px 0 $light-neumorphism-button-light-shadow-color;
+$light-neumorphism-button-border                     : $neumorphism-button-border-size solid $light-neumorphism-button-border-color;
+$light-neumorphism-field-light-shadow-color          : $light-shadow-color-light-mode;
+$light-neumorphism-field-dark-shadow-color           : $dark-shadow-color-light-mode;
+$light-neumorphism-field-border-color                : $border-color-light-mode;
+$light-neumorphism-field-box-shadow                  : 6px 6px 16px 0 $light-neumorphism-field-dark-shadow-color, -6px -6px 26px 0 $light-neumorphism-field-light-shadow-color;
+$light-neumorphism-field-border                      : $neumorphism-field-border-size solid $light-neumorphism-field-border-color;
+$light-neumorphism-field-light-shadow-color-reddish  : $light-shadow-color-reddish;
+$light-neumorphism-field-dark-shadow-color-reddish   : $dark-shadow-color-reddish;
+$light-neumorphism-field-border-color-invalid        : rgba(255, 200, 200, 0.50);
+$light-neumorphism-field-box-shadow-invalid          : 6px 6px 16px 0 $light-neumorphism-field-dark-shadow-color-reddish, -6px -6px 26px 0 $light-neumorphism-field-light-shadow-color-reddish;
+$light-neumorphism-field-border-invalid              : $neumorphism-field-border-size-invalid $neumorphism-field-border-style-invalid $light-neumorphism-field-border-color-invalid;
+$light-neumorphism-modal-overlay-background-color    : #2f222219;
+$light-neumorphism-modal-content-background-color    : #efeeee;
+
+$dark-neumorphism-button-light-shadow-color         : $dark-shadow-color-dark-mode;
+$dark-neumorphism-button-dark-shadow-color          : $dark-shadow-color-dark-mode;
+$dark-neumorphism-button-border-color               : $border-color-dark-mode;
+$dark-neumorphism-button-box-shadow                 : 6px 6px 16px 0 $dark-neumorphism-button-dark-shadow-color, -6px -6px 26px 0 $dark-neumorphism-button-light-shadow-color;
+$dark-neumorphism-button-border                     : $neumorphism-button-border-size solid $dark-neumorphism-button-border-color;
+$dark-neumorphism-field-light-shadow-color          : $dark-shadow-color-dark-mode;
+$dark-neumorphism-field-dark-shadow-color           : $dark-shadow-color-dark-mode;
+$dark-neumorphism-field-border-color                : $border-color-dark-mode;
+$dark-neumorphism-field-box-shadow                  : 6px 6px 16px 0 $dark-neumorphism-field-dark-shadow-color, -6px -6px 26px 0 $dark-neumorphism-field-light-shadow-color;
+$dark-neumorphism-field-border                      : $neumorphism-field-border-size solid $dark-neumorphism-field-border-color;
+$dark-neumorphism-field-light-shadow-color-reddish  : $dark-shadow-color-reddish;
+$dark-neumorphism-field-dark-shadow-color-reddish   : $dark-shadow-color-reddish;
+$dark-neumorphism-field-border-color-invalid        : rgba(255, 200, 200, 0.50);
+$dark-neumorphism-field-box-shadow-invalid          : 6px 6px 16px 0 $dark-neumorphism-field-dark-shadow-color-reddish, -6px -6px 26px 0 $dark-neumorphism-field-light-shadow-color-reddish;
+$dark-neumorphism-field-border-invalid              : $neumorphism-field-border-size-invalid $neumorphism-field-border-style-invalid $dark-neumorphism-field-border-color-invalid;
+$dark-neumorphism-modal-overlay-background-color    : #2f222219;
+$dark-neumorphism-modal-content-background-color    : #efeeee;

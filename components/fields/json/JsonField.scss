@@ -1,0 +1,40 @@
+// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
+@import "src/fi/hg/frontend/stylesstyles/index";
+
+.json-field {
+
+  padding           : $field-padding;
+  margin            : $field-margin;
+  border-radius     : $field-border-radius;
+
+  display         : flex;
+  flex-direction  : row;
+  align-items     : stretch;
+  align-content   : stretch;
+  justify-items   : stretch;
+  justify-content : stretch;
+
+  & > .json-field-label {
+
+    flex-shrink : 1;
+    padding     : 0.75em 1em 0 0.5em;
+    min-width: $field-label-min-width;
+    text-align   : right;
+
+  }
+
+  & > .json-field-input {
+    flex-grow     : 1;
+    padding       : 0.5em;
+    border        : 0;
+    font-size     : 1.25em;
+    border-radius : 0.25em;
+    max-width     : 100%;
+    min-width     : 0;
+  }
+
+  &.field-state-invalid {
+    border            : $field-border-invalid;
+  }
+
+}
