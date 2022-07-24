@@ -42,12 +42,12 @@
 
   }
 
-  & > .popup {
+  & > .hg-popup {
 
     top: -5px;
     box-sizing: border-box;
 
-    & > .popup-window {
+    & > .hg-popup-window {
 
       border-radius  : 0.5em;
       right          : 0;
@@ -86,7 +86,7 @@
 
   }
 
-  &.field-state-invalid {
+  &.hg-field-state-invalid {
     border            : $field-border-invalid;
   }
 

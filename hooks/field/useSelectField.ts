@@ -104,13 +104,19 @@ export function useSelectField<T> (
 
     const closeDropdownCallback = useCallback(
         () => {
+
+            LOG.debug(`${identifier}: Closing dropdown`);
             setDropdownOpen(false);
+
             const inputEl = inputRef?.current;
             if ( inputEl ) {
+                LOG.debug(`${identifier}: Setting focus on input element`, inputEl);
                 inputEl.focus();
             }
+
         },
         [
+            identifier,
             setDropdownOpen,
             inputRef
         ]
@@ -170,15 +176,18 @@ export function useSelectField<T> (
             if ( index < buttonRefsRef.current.length ) {
                 const el = buttonRefsRef.current[index]?.current;
                 if ( el ) {
+                    LOG.debug(`${identifier}: Setting focus on element `, el);
                     el.focus();
                 } else {
-                    LOG.warn(`_setButtonFocus: No button element found for index ${index}`);
+                    LOG.warn(`${identifier}: _setButtonFocus: No button element found for index ${index}`);
                 }
             } else {
-                LOG.warn(`_setButtonFocus: No button ref found for index ${index}`);
+                LOG.warn(`${identifier}: _setButtonFocus: No button ref found for index ${index}`);
             }
         },
-        []
+        [
+            identifier
+        ]
     );
 
     const openDropdownIfNotOpenCallback = useCallback(
@@ -206,7 +215,6 @@ export function useSelectField<T> (
             }
 
             LOG.debug(`${identifier}: _moveCurrentItemTo: Selecting ${nextItem}`);
-
             setButtonFocusCallback(nextItem);
             changeCallback(propsValues[nextItem].value);
             openDropdownIfNotOpenCallback();
@@ -224,9 +232,10 @@ export function useSelectField<T> (
     const moveToFirstItemCallback = useCallback(
         () => {
             if ( dropdownOpen ) {
+                LOG.debug(`${identifier}: moveToFirstItemCallback: Dropdown was open, selecting first element`);
                 moveCurrentItemToCallback(0);
             } else {
-                LOG.warn(`${identifier}: Warning! Dropdown not open yet.`);
+                LOG.warn(`${identifier}: moveToFirstItemCallback: Warning! Dropdown not open yet.`);
             }
         },
         [
@@ -250,9 +259,7 @@ export function useSelectField<T> (
             }
 
             const items: readonly SelectFieldItem<T>[] = propsValues;
-
             const currentItem: number | undefined = getCurrentIndexCallback();
-
             const buttonIndex: number = findIndex(buttonRefsRef.current, (item: RefObject<HTMLButtonElement>): boolean => {
                 const currentElement: HTMLButtonElement | null | undefined = item?.current;
                 return currentElement ? elementHasFocus(currentElement) : false;
@@ -289,13 +296,16 @@ export function useSelectField<T> (
     const onFocusCallback = useCallback(
         () => {
             if ( !dropdownOpen ) {
+                LOG.debug(`${identifier}: Dropdown not open, opening it`);
                 openDropdownCallback();
                 delayedMoveToFirstItemCallback();
             } else {
+                LOG.debug(`${identifier}: Dropdown was open, updating current item from focus`);
                 updateCurrentItemFromFocusCallback();
             }
         },
         [
+            identifier,
             dropdownOpen,
             openDropdownCallback,
             delayedMoveToFirstItemCallback,
@@ -411,16 +421,20 @@ export function useSelectField<T> (
     const onEnterCallback = useCallback(
         () => {
             if ( dropdownOpen ) {
+                LOG.debug(`${identifier}: onEnterCallback: Dropdown was open`);
                 const currentItem = getCurrentIndexCallback();
                 if ( currentItem !== undefined ) {
+                    LOG.debug(`${identifier}: Selecting currentItem: `, currentItem);
                     selectItemCallback(currentItem);
                 }
             } else {
+                LOG.debug(`${identifier}: onEnterCallback: Dropdown was not open`);
                 openDropdownCallback();
                 delayedMoveToFirstItemCallback();
             }
         },
         [
+            identifier,
             dropdownOpen,
             getCurrentIndexCallback,
             selectItemCallback,
@@ -465,6 +479,7 @@ export function useSelectField<T> (
             cancelKeyEvent(event);
 
             if ( !dropdownOpen ) {
+                LOG.debug(`${identifier}: Dropdown was no open, opening it`);
                 openDropdownCallback();
                 delayedMoveToFirstItemCallback();
             }
@@ -496,15 +511,24 @@ export function useSelectField<T> (
 
     const mountCallback = useCallback(
         () => {
-            if ( inputHasFocusCallback() ) {
-                openDropdownCallback();
-                delayedMoveToFirstItemCallback();
+            if (!dropdownOpen) {
+                if ( inputHasFocusCallback() ) {
+                    LOG.debug(`${identifier}: Input had focus, opening the dropdown`);
+                    openDropdownCallback();
+                    delayedMoveToFirstItemCallback();
+                } else {
+                    LOG.debug(`${identifier}: Input did not have focus, not opening the dropdown`);
+                }
+            } else {
+                LOG.debug(`${identifier}: Dropdown was already open`);
             }
             setFieldState(FormFieldState.MOUNTED);
             updateFieldStateCallback();
             updateCurrentItemIndexCallback();
         },
         [
+            identifier,
+            dropdownOpen,
             inputHasFocusCallback,
             openDropdownCallback,
             delayedMoveToFirstItemCallback,
