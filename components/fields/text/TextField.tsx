@@ -63,12 +63,10 @@ export function TextField (props: TextFieldProps) {
             }
         >
             {label ? (
-                <span
-                    className={
-                        COMPONENT_CLASS_NAME + '-label'
-                        + ` ${FIELD_CLASS_NAME}-label`
-                    }
-                >{label}</span>
+                <span className={
+                    COMPONENT_CLASS_NAME + '-label'
+                    + ` ${FIELD_CLASS_NAME}-label`
+                }>{label}</span>
             ) : null}
             <input
                 className={

@@ -87,7 +87,7 @@ export function SelectField (props: SelectFieldProps<any>) {
             }>
 
                 {label ? (
-                    <span className={COMPONENT_CLASS_NAME+'-label'}>{label}</span>
+                    <span className={COMPONENT_CLASS_NAME+'-label-text'}>{label}</span>
                 ) : null}
 
                 <input
