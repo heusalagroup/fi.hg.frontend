@@ -108,11 +108,16 @@ export function useSelectField<T> (
             LOG.debug(`${identifier}: Closing dropdown`);
             setDropdownOpen(false);
 
-            const inputEl = inputRef?.current;
-            if ( inputEl ) {
-                LOG.debug(`${identifier}: Setting focus on input element`, inputEl);
-                inputEl.focus();
-            }
+            // This code might have some intended functionality but not sure
+            // right now. If focus is set here on the input element, the mount
+            // callback will re-open the dropdown again, which clearly isn't
+            // what we usually want.
+            //
+            //const inputEl = inputRef?.current;
+            //if ( inputEl ) {
+            //    LOG.debug(`${identifier}: Setting focus on input element`, inputEl);
+            //    inputEl.focus();
+            //}
 
         },
         [
