@@ -1,19 +1,17 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 
-.drop-zone {
+.hg-drop-zone {
 
   border  : 0;
   margin  : 0;
   padding : 0;
 
-  &.drop-zone-is-over {
-
+  &.hg-drop-zone-is-over {
     border: 3px dashed #00ffff;
-
   }
 
-  &.drop-zone-not-over {
+  &.hg-drop-zone-not-over {
 
   }
 

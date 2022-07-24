@@ -1,9 +1,9 @@
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { Component , RefObject , createRef } from 'react';
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { LogService } from "../../../core/LogService";
 import { createPortal } from 'react-dom';
+import { POPUP_CLASS_NAME } from "../../constants/hgClassName";
 import './Popup.scss';
 
 const LOG = LogService.createLogger('Popup');
@@ -16,12 +16,12 @@ export enum PopupType {
 
 export interface PopupProps {
 
-    className ?: string;
-    type      ?: PopupType;
-    open       : boolean;
+    readonly className ?: string;
+    readonly type      ?: PopupType;
+    readonly open       : boolean;
 
     /** Target to mount the popup on DOM (using React Portal) */
-    target    ?: any;
+    readonly target    ?: any;
 
 }
 
@@ -32,9 +32,9 @@ enum PopupDirection {
 }
 
 export interface PopupState {
-    direction : PopupDirection,
-    width     : number | undefined;
-    height    : number | undefined;
+    readonly direction : PopupDirection,
+    readonly width     : number | undefined;
+    readonly height    : number | undefined;
 }
 
 export class Popup extends Component<PopupProps, PopupState> {
@@ -46,9 +46,7 @@ export class Popup extends Component<PopupProps, PopupState> {
     static Type = PopupType;
 
     static defaultProps : Partial<PopupProps> = {
-
         type: PopupType.DEFAULT
-
     };
 
     constructor (props: PopupProps) {
@@ -85,7 +83,7 @@ export class Popup extends Component<PopupProps, PopupState> {
 
         if (this.props.target) {
             return createPortal((
-                <div className={UserInterfaceClassName.POPUP+'-window'}>{this.props.children}</div>
+                <div className={POPUP_CLASS_NAME+'-window'}>{this.props.children}</div>
             ), this.props.target);
         } else {
 
@@ -100,14 +98,14 @@ export class Popup extends Component<PopupProps, PopupState> {
             return (
                 <div
                     className={
-                        UserInterfaceClassName.POPUP +
+                        POPUP_CLASS_NAME +
                         ' ' + (this.props.className ?? '') +
                         ' ' + Popup.getTypeClassName(this.props.type)
                     }
                     ref={this._ref}
                 >
                     <div
-                        className={UserInterfaceClassName.POPUP+'-window'}
+                        className={POPUP_CLASS_NAME+'-window'}
                         style={styles}
                     >{this.props.children}</div>
                 </div>
@@ -117,12 +115,10 @@ export class Popup extends Component<PopupProps, PopupState> {
     }
 
     static getTypeClassName (type : (PopupType|undefined)) : string {
-
         switch (type) {
-            case PopupType.DEFAULT : return UserInterfaceClassName.POPUP + '-type-default';
+            case PopupType.DEFAULT : return POPUP_CLASS_NAME + '-type-default';
             default                : return '';
         }
-
     }
 
     private _updateDomInfo () {

@@ -2,7 +2,6 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { Component } from 'react';
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { FormModel } from "../../types/FormModel";
 import { FormFieldModel,  isFormFieldModel } from "../../types/FormFieldModel";
 import { Button,  ButtonClickCallback} from "../button/Button";
@@ -15,6 +14,7 @@ import { PageBreakModel } from "../../types/items/PageBreakModel";
 import { VoidCallback } from "../../../core/interfaces/callbacks";
 import { FormFieldState } from "../../types/FormFieldState";
 import { ButtonType } from "../button/types/ButtonType";
+import { MODEL_FORM_CLASS_NAME } from "../../constants/hgClassName";
 import './ModelForm.scss';
 
 const LOG = LogService.createLogger('Form');
@@ -24,21 +24,17 @@ export interface ModelFormFieldStateObject {
 }
 
 export interface ModelFormState {
-
     readonly page        : number;
     readonly fieldStates : ModelFormFieldStateObject;
-
 }
 
 export interface ModelFormProps<ValueT> {
-
     readonly className ?: string;
     readonly model      : FormModel;
     readonly value      : ValueT;
     readonly change    ?: FieldChangeCallback<ValueT>;
     readonly cancel    ?: VoidCallback;
     readonly submit    ?: VoidCallback;
-
 }
 
 export class ModelForm extends Component<ModelFormProps<any>, ModelFormState> {
@@ -100,13 +96,13 @@ export class ModelForm extends Component<ModelFormProps<any>, ModelFormState> {
         );
 
         return (
-            <div className={UserInterfaceClassName.MODEL_FORM}>
+            <div className={MODEL_FORM_CLASS_NAME}>
 
-                <header className={UserInterfaceClassName.MODEL_FORM + '-header'}>
+                <header className={MODEL_FORM_CLASS_NAME + '-header'}>
                     <h2>{mainTitle}</h2>
                 </header>
 
-                <section className={UserInterfaceClassName.MODEL_FORM + '-content'}>
+                <section className={MODEL_FORM_CLASS_NAME + '-content'}>
                     {map(pageItems, (item : FormFieldModel) => {
 
                         const globalIndex : number = allItems.indexOf(item);
@@ -138,7 +134,7 @@ export class ModelForm extends Component<ModelFormProps<any>, ModelFormState> {
                     })}
                 </section>
 
-                <footer className={UserInterfaceClassName.MODEL_FORM + '-footer'}>
+                <footer className={MODEL_FORM_CLASS_NAME + '-footer'}>
 
                     {hasCancelProp ? (
                         <Button click={cancelCallback}>{cancelLabel}</Button>

@@ -1,27 +1,24 @@
 // Copyright (c) 2020-2021 Sendanor. All rights reserved.
 
 import { Component } from "react";
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
-import {ReactComponent as LoadingIcon} from "./loading.svg";
+import { ReactComponent as LoadingIcon } from "./loading.svg";
 import "./Loader.scss";
+import { LOADER_CLASS_NAME } from "../../constants/hgClassName";
 
 export interface LoaderProps {
 
-    className?: string;
-
-    speed?: number;
+    readonly className?: string;
+    readonly speed?: number;
 
     /**
      * Time in milliseconds until the loader will be displayed to the user
      */
-    hiddenTime?: number;
+    readonly hiddenTime?: number;
 
 }
 
 export interface LoaderState {
-
-    hidden: boolean;
-
+    readonly hidden: boolean;
 }
 
 /**
@@ -30,11 +27,8 @@ export interface LoaderState {
 export class Loader extends Component<LoaderProps, LoaderState> {
 
     static defaultProps : Partial<LoaderProps> = {
-
         speed: 1.6,
-
         hiddenTime: 500
-
     };
 
     private hiddenTimeout : any;
@@ -85,12 +79,10 @@ export class Loader extends Component<LoaderProps, LoaderState> {
         const loadingIcon = this.state.hidden ? '' : <LoadingIcon />;
 
         return (
-            <div className={ UserInterfaceClassName.LOADER + ' ' + (this.props.className ?? '')}>
-
-                <div className={UserInterfaceClassName.LOADER + '-icon-container'}
+            <div className={ LOADER_CLASS_NAME + ' ' + (this.props.className ?? '')}>
+                <div className={LOADER_CLASS_NAME + '-icon-container'}
                      style={{animation: `spin ${this.props.speed}s linear infinite`}}
                 >{loadingIcon}</div>
-
             </div>
         );
 

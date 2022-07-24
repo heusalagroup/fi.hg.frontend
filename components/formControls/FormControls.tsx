@@ -1,8 +1,10 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+
 import { Component } from "react";
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { VoidCallback } from "../../../core/interfaces/callbacks";
 import { Button } from "../button/Button";
 import { LogService } from "../../../core/LogService";
+import { FORM_CONTROLS_CLASS_NAME } from "../../constants/hgClassName";
 import "./FormControls.scss";
 
 const LOG = LogService.createLogger('FormControls');
@@ -48,17 +50,17 @@ export class FormControls extends Component<FormControlsProps, FormControlsState
 
         return (
             <div className={
-                UserInterfaceClassName.FORM_CONTROLS + ' ' + (this.props.className ?? '')
-                + (hasErrors ? ' ' + UserInterfaceClassName.FORM_CONTROLS + '-with-errors' : '')
+                FORM_CONTROLS_CLASS_NAME + ' ' + (this.props.className ?? '')
+                + (hasErrors ? ' ' + FORM_CONTROLS_CLASS_NAME + '-with-errors' : '')
             }>
 
-                <div className={UserInterfaceClassName.FORM_CONTROLS + '-content'}>{this.props.children}</div>
+                <div className={FORM_CONTROLS_CLASS_NAME + '-content'}>{this.props.children}</div>
 
                 {hasCancel ? (
                     <Button
                         className={
-                              UserInterfaceClassName.FORM_CONTROLS + '-button '
-                            + UserInterfaceClassName.FORM_CONTROLS + '-cancel-button'
+                              FORM_CONTROLS_CLASS_NAME + '-button '
+                            + FORM_CONTROLS_CLASS_NAME + '-cancel-button'
                         }
                         click={this._cancelCallback}>{cancelLabel}</Button>
                 ) : null}
@@ -66,8 +68,8 @@ export class FormControls extends Component<FormControlsProps, FormControlsState
                 {hasSubmit ? (
                     <Button
                         className={
-                              UserInterfaceClassName.FORM_CONTROLS + '-button '
-                            + UserInterfaceClassName.FORM_CONTROLS + '-submit-button'
+                              FORM_CONTROLS_CLASS_NAME + '-button '
+                            + FORM_CONTROLS_CLASS_NAME + '-submit-button'
                         }
                         click={this._submitCallback}>{submitLabel}</Button>
                 ) : null}

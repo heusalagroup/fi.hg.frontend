@@ -1,99 +1,88 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Component, createRef, RefObject} from 'react';
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
+import {
+    ReactNode,
+    RefObject,
+    useEffect,
+    useRef
+} from 'react';
 import { DraggableElementManager } from "./DragManager";
 import { LogService } from "../../../core/LogService";
+import { DRAGGABLE_CLASS_NAME } from "../../constants/hgClassName";
 import './Draggable.scss';
 
 const LOG = LogService.createLogger('Draggable');
 
-export interface DraggableState {
-}
-
 export interface DraggableClickCallback {
-    () : void;
+    (): void;
 }
 
 export interface DraggableProps {
-
-    readonly id : string;
-
-    readonly data ?: any[];
-
+    readonly id: string;
+    readonly data?: any[];
 }
 
-export class Draggable extends Component<DraggableProps, DraggableState> {
+export interface DraggableProps {
+    readonly className?: string;
+    readonly id: string;
+    readonly data?: any[];
+    readonly children?: ReactNode;
+}
 
-    private readonly _ref : RefObject<HTMLDivElement>;
-    private _manager : DraggableElementManager<HTMLDivElement> | undefined;
+export function useDraggableElementManager (
+    ref   : RefObject<HTMLDivElement>,
+    id    : string,
+    data ?: any[]
+) : void {
 
-    constructor (props: DraggableProps) {
+    let manager : DraggableElementManager<HTMLDivElement> | undefined = undefined;
 
-        super(props);
+    useEffect(
+        () => {
 
-        this.state = {};
-
-        this._manager = undefined;
-        this._ref =
-            createRef<HTMLDivElement>();
-
-    }
-
-    componentDidMount() {
-
-        if (this._ref.current && this.props.id) {
-
-            this._manager = new DraggableElementManager<HTMLDivElement>(this.props.id, this._ref.current);
-
-            if (this.props.data) {
-                this._manager.setDropData(this.props.data);
-            }
-
-        } else {
-            LOG.warn('Warning! No reference to the DOM element or id: ', this._ref.current, this.props.id);
-        }
-
-
-    }
-
-    componentDidUpdate(prevProps: Readonly<DraggableProps>, prevState: Readonly<DraggableState>, snapshot?: any) {
-
-        if (this._manager) {
-            if (prevProps.data !== this.props.data) {
-                if (this.props.data) {
-                    this._manager.setDropData(this.props.data);
+            if (!manager) {
+                if ( ref.current && id ) {
+                    manager = new DraggableElementManager<HTMLDivElement>(id, ref.current);
+                    if ( data ) {
+                        manager.setDropData(data);
+                    }
                 } else {
-                    this._manager.setDropData([]);
+                    LOG.warn('Warning! No reference to the DOM element or id: ', ref.current, id);
                 }
+            } else if ( data ) {
+                manager.setDropData(data);
+            } else {
+                manager.setDropData([]);
             }
-        } else {
-            LOG.warn('Warning! No manager exists yet.');
-        }
 
-    }
+            return () => {
+                if ( manager ) {
+                    manager.destroy();
+                    manager = undefined;
+                }
+            };
 
-    componentWillUnmount() {
-
-        if (this._manager) {
-            this._manager.destroy();
-            this._manager = undefined;
-        }
-
-    }
-
-    render () {
-
-        return (
-            <div
-                ref={this._ref}
-                className={UserInterfaceClassName.DRAGGABLE}
-                draggable="true"
-            >{this.props.children}</div>
-        );
-
-    }
+        },
+        [
+            data
+        ]
+    );
 
 }
 
+export function Draggable (props: DraggableProps) {
+    const className = props?.className;
+    const id = props?.id;
+    const data = props?.data;
+    const ref = useRef<HTMLDivElement>(null);
+    useDraggableElementManager(ref, id, data);
+    return (
+        <div
+            ref={ref}
+            className={DRAGGABLE_CLASS_NAME + (className ? ` ${className}` : '')}
+            draggable="true"
+        >{props?.children}</div>
+    );
+}
 

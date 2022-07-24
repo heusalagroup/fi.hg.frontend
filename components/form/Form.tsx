@@ -1,8 +1,9 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { FormEvent, useCallback, ReactNode } from "react";
 import { LogService } from "../../../core/LogService";
+import { FORM_CLASS_NAME } from "../../constants/hgClassName";
+import "./Form.scss";
 
 const LOG = LogService.createLogger('Form');
 
@@ -40,7 +41,7 @@ export function Form (props: FormProps) {
     return (
         <form
             className={
-                UserInterfaceClassName.FORM
+                FORM_CLASS_NAME
                 + (className? ` ${className}` : '')
             }
             onSubmit={submitCallback}

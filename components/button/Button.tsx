@@ -1,138 +1,122 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { KeyboardEvent, Component, Children, MouseEvent, RefObject } from 'react';
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
+import {
+    KeyboardEvent,
+    Children,
+    MouseEvent,
+    RefObject,
+    ReactNode,
+    useCallback
+} from 'react';
 import { EventCallback, VoidCallback } from "../../../core/interfaces/callbacks";
-import { stringifyStyleScheme, StyleScheme } from "../../types/StyleScheme";
-import { ThemeService } from "../../services/ThemeService";
 import { ButtonType } from "./types/ButtonType";
-import { ButtonStyle } from "./types/ButtonStyle";
 import { LogService } from "../../../core/LogService";
+import { ButtonStyle } from "./types/ButtonStyle";
+import { BUTTON_CLASS_NAME } from "../../constants/hgClassName";
 import './Button.scss';
 
 const LOG = LogService.createLogger('Button');
 
-export interface ButtonState {
-}
-
-export interface ButtonClickCallback {
-    (): void;
-}
-
 export interface ButtonProps {
-
     readonly className?: string;
-    readonly themeStyle?: StyleScheme;
-    readonly style?: ButtonStyle;
-    readonly type: ButtonType;
-    readonly click: ButtonClickCallback;
+    readonly type ?: ButtonType;
+    readonly click ?: VoidCallback;
     readonly focus?: VoidCallback;
     readonly blur?: VoidCallback;
     readonly keyDown?: EventCallback<KeyboardEvent>;
     readonly buttonRef?: RefObject<HTMLButtonElement>;
+    readonly style ?: ButtonStyle;
     readonly enabled?: boolean;
-
+    readonly children?: ReactNode;
 }
 
-export interface OnClickCallback<T> {
-    (event: MouseEvent<T>): void;
-}
+export type ButtonClickCallback = VoidCallback;
 
-export class Button extends Component<ButtonProps, ButtonState> {
+export function Button (props: ButtonProps) {
 
-    public static defaultProps: Partial<ButtonProps> = {
-        type: ButtonType.DEFAULT
-    };
+    const type = props?.type ?? ButtonType.DEFAULT;
+    const className = props?.className;
+    const children = props?.children;
+    const buttonStyle = props?.style ?? ButtonStyle.SECONDARY;
+    const click = props?.click;
 
-    private readonly _handleClickCallback: OnClickCallback<HTMLButtonElement>;
+    const childCount = Children.count(children);
 
-    public constructor (props: ButtonProps) {
+    const buttonProps: {
+        onBlur?: any,
+        onFocus?: any,
+        onKeyDown?: any,
+        ref?: any,
+        disabled?: any
+    } = {};
 
-        super(props);
-
-        this.state = {};
-
-        this._handleClickCallback = this._onClick.bind(this);
-
+    const blurCallback = props?.blur;
+    if ( blurCallback ) {
+        buttonProps.onBlur = () => blurCallback();
     }
 
-    public render () {
-
-        const childCount = Children.count(this.props.children);
-
-        const buttonProps: {
-            onBlur?: any,
-            onFocus?: any,
-            onKeyDown?: any,
-            ref?: any,
-            disabled?: any
-        } = {};
-
-        const blurCallback = this.props?.blur;
-        if ( blurCallback ) {
-            buttonProps.onBlur = () => blurCallback();
-        }
-
-        const focusCallback = this.props?.focus;
-        if ( focusCallback ) {
-            buttonProps.onFocus = () => focusCallback();
-        }
-
-        const buttonRef = this.props?.buttonRef;
-        if ( buttonRef ) {
-            buttonProps.ref = buttonRef;
-        }
-
-        const keyDownCallback = this.props?.keyDown;
-        if ( keyDownCallback ) {
-            buttonProps.onKeyDown = keyDownCallback;
-        }
-
-        const enabled = this.props?.enabled ?? true;
-        if ( !enabled ) {
-            buttonProps.disabled = true;
-        }
-
-        const buttonStyle = this.props?.style ?? ButtonStyle.SECONDARY;
-        const styleScheme = this.props?.themeStyle ?? ThemeService.getStyleScheme();
-
-        return (
-            <button
-                className={
-                    UserInterfaceClassName.BUTTON
-                    + ` ${UserInterfaceClassName.BUTTON}-count-${childCount}`
-                    + ` ${UserInterfaceClassName.BUTTON}-${buttonStyle}`
-                    + ` ${UserInterfaceClassName.BUTTON}-style-${stringifyStyleScheme(styleScheme)}`
-                    + ` ${UserInterfaceClassName.BUTTON}-${enabled ? 'enabled' : 'disabled'}`
-                    + (this.props.className ? ` ${this.props.className}` : '')
-                }
-                type={this.props.type}
-                onClick={this._handleClickCallback}
-                {...buttonProps}
-            >{this.props.children}</button>
-        );
+    const focusCallback = props?.focus;
+    if ( focusCallback ) {
+        buttonProps.onFocus = () => focusCallback();
     }
 
-    private _onClick (event: MouseEvent<HTMLButtonElement>) {
+    const buttonRef = props?.buttonRef;
+    if ( buttonRef ) {
+        buttonProps.ref = buttonRef;
+    }
 
-        if ( event ) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+    const keyDownCallback = props?.keyDown;
+    if ( keyDownCallback ) {
+        buttonProps.onKeyDown = keyDownCallback;
+    }
 
-        if ( this.props.click ) {
-            try {
-                LOG.debug(`Triggering click handler`);
-                this.props.click();
-            } catch (err) {
-                LOG.error('Error in click callback: ', err);
+    const enabled = props?.enabled ?? true;
+    if ( !enabled ) {
+        buttonProps.disabled = true;
+    }
+
+    const onClick = useCallback(
+        (event: MouseEvent<HTMLButtonElement>) => {
+
+            if ( event ) {
+                event.preventDefault();
+                event.stopPropagation();
             }
-        } else {
-            LOG.warn(`No click handler defined`);
-        }
 
-    }
+            if ( click ) {
+                try {
+                    LOG.debug(`Triggering click handler`);
+                    click();
+                } catch (err) {
+                    LOG.error('Error in click callback: ', err);
+                }
+            } else {
+                LOG.warn(`No click handler defined`);
+            }
+
+        },
+        [
+            click
+        ]
+    );
+
+    return (
+        <button
+            className={
+                BUTTON_CLASS_NAME
+                + ` ${BUTTON_CLASS_NAME}-count-${childCount}`
+                + ` ${BUTTON_CLASS_NAME}-${buttonStyle}`
+                + ` ${BUTTON_CLASS_NAME}-${enabled ? 'enabled' : 'disabled'}`
+                + (className ? ` ${className}` : '')
+            }
+            type={type}
+            onClick={onClick}
+            {...buttonProps}
+        >{children}</button>
+    );
 
 }
+
 
 

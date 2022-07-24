@@ -1,8 +1,8 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-@import "src/fi/hg/frontend/stylesstyles/index";
+@import "src/fi/hg/frontend/styles/index";
 
-.integer-field {
+.hg-integer-field {
 
   background-color  : $field-background-color;
   border            : $field-border;
@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
 
-  & > .integer-field-label {
+  & > .hg-integer-field-label {
 
     flex-shrink: 1;
     padding: 0 1em 0 0.5em;
@@ -24,7 +24,7 @@
 
   }
 
-  & > .integer-field-input {
+  & > .hg-integer-field-input {
     flex-grow: 1;
     padding: 0.5em;
     border: 0;

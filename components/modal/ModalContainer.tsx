@@ -1,7 +1,6 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { Component , MouseEvent } from "react";
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { Modal } from "../../types/Modal";
 import { ModalService } from "../../services/ModalService";
 import { stringifyModalType } from "../../types/ModalType";
@@ -9,6 +8,7 @@ import { ChangeCallback, EventCallback, VoidCallback } from "../../../core/inter
 import { LogService } from "../../../core/LogService";
 import { stringifyStyleScheme, StyleScheme } from "../../types/StyleScheme";
 import { ThemeService } from "../../services/ThemeService";
+import { MODAL_CONTAINER_CLASS_NAME } from "../../constants/hgClassName";
 import "./ModalContainer.scss";
 
 const LOG = LogService.createLogger('ModalContainer');
@@ -67,15 +67,15 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
         return (
             <div
                 className={
-                    UserInterfaceClassName.MODAL_CONTAINER
+                    MODAL_CONTAINER_CLASS_NAME
                     + ' ' + (this.props.className ?? '')
-                    + ` ${UserInterfaceClassName.MODAL_CONTAINER}-style-${stringifyStyleScheme(styleScheme)}`
-                    + ' ' + UserInterfaceClassName.MODAL_CONTAINER + '-type-' + (stringifyModalType(type))
-                    + ' ' + UserInterfaceClassName.MODAL_CONTAINER + '-overlay-' + (hasOverlay ? 'enabled' : 'disabled')
+                    + ` ${MODAL_CONTAINER_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
+                    + ' ' + MODAL_CONTAINER_CLASS_NAME + '-type-' + (stringifyModalType(type))
+                    + ' ' + MODAL_CONTAINER_CLASS_NAME + '-overlay-' + (hasOverlay ? 'enabled' : 'disabled')
                 }
                 {...containerProps}
             >
-                <div className={UserInterfaceClassName.MODAL_CONTAINER + '-content'}
+                <div className={MODAL_CONTAINER_CLASS_NAME + '-content'}
                      onClick={this._modalClickCallback}
                 >{component}</div>
             </div>

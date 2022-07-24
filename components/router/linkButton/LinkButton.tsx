@@ -5,8 +5,8 @@ import { Icon } from "../../icon/Icon";
 import { Link } from "react-router-dom";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { ThemeService } from "../../../services/ThemeService";
-import { UserInterfaceClassName } from "../../constants/UserInterfaceClassName";
 import { ButtonStyle } from "../../button/types/ButtonStyle";
+import { BUTTON_CLASS_NAME, LINK_BUTTON_CLASS_NAME } from "../../../constants/hgClassName";
 import "./LinkButton.scss";
 
 export interface LinkButtonProps {
@@ -41,20 +41,20 @@ export class LinkButton extends Component<LinkButtonProps, LinkButtonState> {
         return (
             <Link to={this.props.to}
                   className={
-                      UserInterfaceClassName.LINK_BUTTON
-                      + ` ${UserInterfaceClassName.BUTTON}`
-                      + ` ${UserInterfaceClassName.BUTTON}-${buttonStyle}`
-                      + ` ${UserInterfaceClassName.BUTTON}-style-${stringifyStyleScheme(styleScheme)}`
+                      LINK_BUTTON_CLASS_NAME
+                      + ` ${BUTTON_CLASS_NAME}`
+                      + ` ${BUTTON_CLASS_NAME}-${buttonStyle}`
+                      + ` ${BUTTON_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
                       + ' ' + (this.props.className ?? '')
                   }
                   target={ this.props.target ?? "_blank" }
                   rel={ this.props.rel ?? "noreferrer" }
             >
                 {MyIcon ? (
-                    <Icon className={`${UserInterfaceClassName.BUTTON}-icon`}><MyIcon /></Icon>
+                    <Icon className={`${BUTTON_CLASS_NAME}-icon`}><MyIcon /></Icon>
                 ): null}
                 {label ? (
-                    <span className={`${UserInterfaceClassName.BUTTON}-text`}>{label}</span>
+                    <span className={`${BUTTON_CLASS_NAME}-text`}>{label}</span>
                 ): null}
                 {this.props.children}
             </Link>

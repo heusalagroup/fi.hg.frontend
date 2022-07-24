@@ -1,21 +1,38 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Component, RefObject, createRef, ChangeEvent, KeyboardEventHandler, KeyboardEvent  } from 'react';
-import { UserInterfaceClassName } from "../../constants/UserInterfaceClassName";
+import {
+    Component,
+    RefObject,
+    createRef,
+    ChangeEvent,
+    KeyboardEventHandler,
+    KeyboardEvent, ReactNode
+} from 'react';
 import { SelectFieldModel, SelectFieldItem} from "../../../types/items/SelectFieldModel";
-import { FieldProps } from '../FieldProps';
+import { FieldChangeCallback } from '../FieldProps';
 import { LogService } from "../../../../core/LogService";
-import {findIndex, map, some} from "../../../../core/modules/lodash";
+import {
+    findIndex,
+    map,
+    some
+} from "../../../../core/modules/lodash";
 import { Popup } from "../../popup/Popup";
-import {EventCallback, VoidCallback} from "../../../../core/interfaces/callbacks";
+import { EventCallback, VoidCallback } from "../../../../core/interfaces/callbacks";
 import { Button } from "../../button/Button";
 import { FormFieldState,  stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
-import { stringifyStyleScheme } from "../../../types/StyleScheme";
+import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
+import {
+    FIELD_CLASS_NAME,
+    SELECT_FIELD_CLASS_NAME
+} from "../../../constants/hgClassName";
 import './SelectField.scss';
+import { useStringField } from "../../../hooks/field/useStringField";
+import { useSelectField } from "../../../hooks/field/useSelectField";
 
 const LOG = LogService.createLogger('SelectField');
-const COMPONENT_CLASS_NAME = UserInterfaceClassName.SELECT_FIELD;
+const COMPONENT_CLASS_NAME = SELECT_FIELD_CLASS_NAME;
 const CLOSE_DROPDOWN_TIMEOUT_ON_BLUR = 100;
 const MOVE_TO_ITEM_ON_OPEN_DROPDOWN_TIMEOUT = 100;
 
@@ -24,11 +41,20 @@ export interface SelectFieldState {
     readonly dropdownOpen : boolean;
 }
 
-export interface SelectFieldProps<T> extends FieldProps<SelectFieldModel<T>, T> {
+export interface SelectFieldProps<T> {
+    readonly className   ?: string;
+    readonly style       ?: StyleScheme;
+    readonly label       ?: string;
+    readonly placeholder ?: string;
+    readonly model       ?: SelectFieldModel<T>;
+    readonly value       ?: T;
+    readonly change      ?: FieldChangeCallback<T | undefined>;
+    readonly changeState ?: FieldChangeCallback<FormFieldState>;
     readonly values : readonly SelectFieldItem<T>[];
+    readonly children?: ReactNode;
 }
 
-export class SelectField extends Component<SelectFieldProps<any>, SelectFieldState> {
+export class SelectFieldC extends Component<SelectFieldProps<any>, SelectFieldState> {
 
     private readonly _inputRef        : RefObject<HTMLInputElement>;
     private readonly _focusCallback   : VoidCallback;
@@ -39,7 +65,6 @@ export class SelectField extends Component<SelectFieldProps<any>, SelectFieldSta
     private _fieldState           : FormFieldState;
     private _closeDropdownTimeout : any;
     private _openDropdownTimeout  : any;
-
 
     public constructor(props: SelectFieldProps<any>) {
         super(props);
@@ -53,18 +78,6 @@ export class SelectField extends Component<SelectFieldProps<any>, SelectFieldSta
         this._focusCallback = this._onFocus.bind(this);
         this._blurCallback  = this._onBlur.bind(this);
         this._keyDownCallback = this._onKeyDown.bind(this);
-    }
-
-    public getKey () : string {
-        return this.props?.model?.key ?? '';
-    }
-
-    public getLabel () : string {
-        return this.props?.label ?? this.props.model?.label ?? '';
-    }
-
-    public getIdentifier () : string {
-        return `#${this.getKey()}: "${this.getLabel()}"`;
     }
 
     public componentDidMount () {
@@ -105,96 +118,6 @@ export class SelectField extends Component<SelectFieldProps<any>, SelectFieldSta
     }
 
     public render () {
-
-        const label        : string = this.props?.label          ?? this.props.model?.label       ?? '';
-        const placeholder  : string = this.props?.placeholder    ?? this.props.model?.placeholder ?? '';
-
-        const selectItems       : readonly SelectFieldItem<any>[] = this._getValues<any>();
-        const currentItemIndex  : number | undefined = this._getCurrentIndex();
-        const selectedItem      : SelectFieldItem<any> | undefined = currentItemIndex !== undefined ? selectItems[currentItemIndex] : undefined;
-        const selectedItemLabel : string = selectedItem?.label ?? '';
-
-        const fieldState        : string = stringifyFormFieldState( this._fieldState );
-        const styleScheme = this.props?.style ?? ThemeService.getStyleScheme();
-
-        LOG.debug(`${this.getIdentifier()}: render: selectedItem = `, selectedItem, selectedItemLabel);
-
-        return (
-            <div
-                className={
-                    `${COMPONENT_CLASS_NAME} ${UserInterfaceClassName.FIELD}`
-                    + ' ' + (this.props.className ?? '')
-                    + ` ${UserInterfaceClassName.FIELD}-style-${stringifyStyleScheme(styleScheme)}`
-                    + ` ${UserInterfaceClassName.FIELD}-state-${fieldState}`
-                }
-            >
-
-                <label className={
-                    COMPONENT_CLASS_NAME + '-label'
-                    + ` ${UserInterfaceClassName.FIELD}-label`
-                }>
-
-                    {label ? (
-                        <span className={COMPONENT_CLASS_NAME+'-label'}>{label}</span>
-                    ) : null}
-
-                    <input
-                       ref={this._inputRef}
-                       className={
-                           COMPONENT_CLASS_NAME+'-input'
-                           + ` ${UserInterfaceClassName.FIELD}-input`
-                       }
-                       type="text"
-                       autoComplete="off"
-                       placeholder={placeholder}
-                       value={selectedItemLabel}
-                       onFocus={this._focusCallback}
-                       onBlur={this._blurCallback}
-                       onChange={(event) => {
-                           SelectField._cancelKeyEvent(event);
-                       }}
-                       onKeyDown={this._keyDownCallback as KeyboardEventHandler<HTMLInputElement>}
-                    />
-
-                    {this.props.children}
-
-                </label>
-
-                <Popup open={this.state.dropdownOpen}>
-                    <div className={COMPONENT_CLASS_NAME + '-dropdown'}>
-                        {map(selectItems, (selectItem : SelectFieldItem<any>, itemIndex: number) : any => {
-
-                            const isCurrentButton = currentItemIndex !== undefined && itemIndex === currentItemIndex;
-
-                            const itemClickCallback = () => this._selectItem(itemIndex);
-
-                            if (itemIndex >= this._buttonRefs.length) {
-                                this._buttonRefs[itemIndex] = createRef<HTMLButtonElement>();
-                            }
-
-                            const itemButtonRef = this._buttonRefs[itemIndex];
-
-                            return (
-                                <Button
-                                    key={`dropdown-item-${itemIndex}-value-${selectItem.value}`}
-                                    buttonRef={itemButtonRef}
-                                    className={
-                                        COMPONENT_CLASS_NAME + '-dropdown-item'
-                                        + ' ' + (isCurrentButton ? COMPONENT_CLASS_NAME + '-dropdown-item-current' : '')
-                                    }
-                                    focus={this._focusCallback}
-                                    blur={this._blurCallback}
-                                    click={itemClickCallback}
-                                    keyDown={this._keyDownCallback}
-                                >{selectItem?.label ?? ''}</Button>
-                            );
-
-                        })}
-                    </div>
-                </Popup>
-
-            </div>
-        );
 
     }
 
@@ -610,3 +533,105 @@ export class SelectField extends Component<SelectFieldProps<any>, SelectFieldSta
 }
 
 
+
+
+export function SelectField (props: SelectFieldProps<any>) {
+
+    const className = props?.className;
+    const styleScheme = props?.style ?? ThemeService.getStyleScheme();
+    const placeholder = props.placeholder ?? props.model?.placeholder;
+    const label = props.label ?? props.model?.label ?? '';
+
+    const {
+        fieldState,
+        value,
+        onChangeCallback
+    } = useSelectField(
+        label,
+        props?.model?.key ?? '',
+        props?.change,
+        props?.changeState,
+        props?.value,
+        props?.model?.required ?? false,
+        props?.model?.minLength,
+        props?.model?.maxLength
+    );
+
+    return (
+        <div
+            className={
+                `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
+                + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
+                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${className ? ` ${className}` : ''}`
+            }
+        >
+
+            <label className={
+                COMPONENT_CLASS_NAME + '-label'
+                + ` ${FIELD_CLASS_NAME}-label`
+            }>
+
+                {label ? (
+                    <span className={COMPONENT_CLASS_NAME+'-label'}>{label}</span>
+                ) : null}
+
+                <input
+                    ref={this._inputRef}
+                    className={
+                        COMPONENT_CLASS_NAME+'-input'
+                        + ` ${FIELD_CLASS_NAME}-input`
+                    }
+                    type="text"
+                    autoComplete="off"
+                    placeholder={placeholder}
+                    value={selectedItemLabel}
+                    onFocus={this._focusCallback}
+                    onBlur={this._blurCallback}
+                    onChange={(event) => {
+                        SelectField._cancelKeyEvent(event);
+                    }}
+                    onKeyDown={this._keyDownCallback as KeyboardEventHandler<HTMLInputElement>}
+                />
+
+                {this.props.children}
+
+            </label>
+
+            <Popup open={this.state.dropdownOpen}>
+                <div className={COMPONENT_CLASS_NAME + '-dropdown'}>
+                    {map(selectItems, (selectItem : SelectFieldItem<any>, itemIndex: number) : any => {
+
+                        const isCurrentButton = currentItemIndex !== undefined && itemIndex === currentItemIndex;
+
+                        const itemClickCallback = () => this._selectItem(itemIndex);
+
+                        if (itemIndex >= this._buttonRefs.length) {
+                            this._buttonRefs[itemIndex] = createRef<HTMLButtonElement>();
+                        }
+
+                        const itemButtonRef = this._buttonRefs[itemIndex];
+
+                        return (
+                            <Button
+                                key={`dropdown-item-${itemIndex}-value-${selectItem.value}`}
+                                buttonRef={itemButtonRef}
+                                className={
+                                    COMPONENT_CLASS_NAME + '-dropdown-item'
+                                    + ' ' + (isCurrentButton ? COMPONENT_CLASS_NAME + '-dropdown-item-current' : '')
+                                }
+                                focus={this._focusCallback}
+                                blur={this._blurCallback}
+                                click={itemClickCallback}
+                                keyDown={this._keyDownCallback}
+                            >{selectItem?.label ?? ''}</Button>
+                        );
+
+                    })}
+                </div>
+            </Popup>
+
+        </div>
+    );
+
+}

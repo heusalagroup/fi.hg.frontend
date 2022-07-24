@@ -1,27 +1,27 @@
 
-.nor-member-list {
+.hg-member-list {
 
   box-sizing : border-box;
   padding    : 1em;
   margin     : 0;
 
-  & > .nor-member-list-member {
+  & > .hg-member-list-member {
 
     display        : flex;
     flex-direction : row;
     padding        : 0 1em;
 
-    & > .nor-member-list-member-name {
+    & > .hg-member-list-member-name {
       padding: 0.5em 0;
     }
 
-    & > .nor-member-list-member-id {
+    & > .hg-member-list-member-id {
       flex-grow: 1;
       padding: 0.5em 0;
       text-align: right;
     }
 
-    &.nor-member-list-member-even {
+    &.hg-member-list-member-even {
       background-color: #0000000c;
     }
 

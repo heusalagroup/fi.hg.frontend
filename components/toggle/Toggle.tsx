@@ -3,8 +3,8 @@
 import { Component, MouseEvent } from "react";
 import { ToggleOffIcon, ToggleOnIcon } from "./assets";
 import { LogService } from "../../../core/LogService";
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import "./Toggle.scss";
+import { TOGGLE_CLASS_NAME } from "../../constants/hgClassName";
 
 const LOG = LogService.createLogger('Toggle');
 
@@ -39,9 +39,9 @@ export class Toggle extends Component<ToggleProps, ToggleState> {
 
         return (
             <div className={
-                UserInterfaceClassName.TOGGLE
+                TOGGLE_CLASS_NAME
                 + ' ' + (this.props.className ?? '')
-                + ' ' + UserInterfaceClassName.TOGGLE + (value ? '-enabled' : '-disabled')
+                + ' ' + TOGGLE_CLASS_NAME + (value ? '-enabled' : '-disabled')
             }
             onClick={this._clickCallback}
             ><Icon /></div>

@@ -1,8 +1,8 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-@import "src/fi/hg/frontend/stylesstyles/index";
+@import "src/fi/hg/frontend/styles/index";
 
-.popup {
+.hg-popup {
 
   position: relative;
   display     : block;
@@ -20,14 +20,14 @@
   align-content: center;
   justify-content: center;
 
-  & > .popup-content {
+  & > .hg-popup-content {
     flex: 1 0 auto;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
 
-  & > .popup-window {
+  & > .hg-popup-window {
     margin: 0;
     padding: 0 0 4em 0; // The 4em is a quick fix for Save Controls problem
     box-sizing: border-box;

@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { ReactNode } from "react";
+import { SUBMIT_BUTTON_CLASS_NAME } from "../../constants/hgClassName";
 
 export interface SubmitButtonProps {
     readonly className ?: string;
@@ -14,7 +14,7 @@ export function SubmitButton (props: SubmitButtonProps) {
         <button
             type={"submit"}
             className={
-                UserInterfaceClassName.SUBMIT_BUTTON
+                SUBMIT_BUTTON_CLASS_NAME
                 + (className? ` ${className}` : '')
             }
         >{props.children}</button>

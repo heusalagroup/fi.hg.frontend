@@ -1,8 +1,8 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-@import "src/fi/hg/frontend/stylesstyles/index";
+@import "src/fi/hg/frontend/styles/index";
 
-.country-field {
+.hg-country-field {
 
   padding           : $field-padding;
   margin            : $field-margin;
@@ -12,7 +12,7 @@
   align-items       : center;
   justify-content   : center;
 
-  & > .country-field-label {
+  & > .hg-country-field-label {
 
     flex-shrink  : 1;
     padding      : 0 1em 0 0.5em;
@@ -21,7 +21,7 @@
 
   }
 
-  & > .country-field-input {
+  & > .hg-country-field-input {
     flex-grow     : 1;
     padding       : 0.5em;
     border        : 0;

@@ -1,19 +1,19 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-.model-form {
+.hg-model-form {
 
-  & > .model-form-header {
+  & > .hg-model-form-header {
     display: flex;
     flex-direction: column;
     //align-items: center;
     justify-content: center;
   }
 
-  & > .model-form-content {
+  & > .hg-model-form-content {
   }
 
-  & > .model-form-footer {
+  & > .hg-model-form-footer {
 
     display: flex;
     flex-direction: row;

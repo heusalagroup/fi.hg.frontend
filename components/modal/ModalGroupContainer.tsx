@@ -1,7 +1,6 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { Component } from "react";
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { Modal } from "../../types/Modal";
 import { ModalService,
     ModalEventCallback,
@@ -12,6 +11,7 @@ import { LogService } from "../../../core/LogService";
 import { map } from "../../../core/modules/lodash";
 import { ModalContainer } from "./ModalContainer";
 import { ChangeCallback } from "../../../core/interfaces/callbacks";
+import { MODAL_GROUP_CONTAINER_CLASS_NAME } from "../../constants/hgClassName";
 import "./ModalGroupContainer.scss";
 
 const LOG = LogService.createLogger('ModalGroupContainer');
@@ -87,7 +87,7 @@ export class ModalGroupContainer extends Component<ModalGroupContainerProps, Mod
 
         return (
             <div className={
-                UserInterfaceClassName.MODAL_GROUP_CONTAINER
+                MODAL_GROUP_CONTAINER_CLASS_NAME
                 + ' ' + (this.props.className ?? '')
             }
             >{map(modals, (item : Modal, itemIndex: number) => {
@@ -95,7 +95,7 @@ export class ModalGroupContainer extends Component<ModalGroupContainerProps, Mod
                 return (
                     <ModalContainer
                         key={`modal-${itemId}`}
-                        className={UserInterfaceClassName.MODAL_GROUP_CONTAINER + '-item'}
+                        className={MODAL_GROUP_CONTAINER_CLASS_NAME + '-item'}
                         modal={item}
                         close={this._closeCallback}
                     />

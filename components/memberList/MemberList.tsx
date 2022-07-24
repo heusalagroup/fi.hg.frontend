@@ -1,7 +1,9 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+
 import { Component } from "react";
-import { UserInterfaceClassName } from "../constants/UserInterfaceClassName";
 import { RepositoryMember } from "../../../core/simpleRepository/types/RepositoryMember";
 import { map } from "../../../core/modules/lodash";
+import { MEMBER_LIST_CLASS_NAME } from "../../constants/hgClassName";
 import "./MemberList.scss";
 
 export interface MemberListProps {
@@ -26,26 +28,26 @@ export class MemberList extends Component<MemberListProps, MemberListState> {
 
         if (list.length === 0) {
             return (
-                <div className={UserInterfaceClassName.MEMBER_LIST + ' ' + (this.props.className ?? '')}>
+                <div className={MEMBER_LIST_CLASS_NAME + ' ' + (this.props.className ?? '')}>
                     No members.
                 </div>
             );
         }
 
         return (
-            <div className={UserInterfaceClassName.MEMBER_LIST + ' ' + (this.props.className ?? '')}>{
+            <div className={MEMBER_LIST_CLASS_NAME + ' ' + (this.props.className ?? '')}>{
                 map(list, (item : RepositoryMember, index: number) : any => {
                     const id = item.id;
                     const displayName = item?.displayName ?? id;
                     return (
                         <div key={`member-${id}`}
                              className={
-                                 UserInterfaceClassName.MEMBER_LIST + '-member'
-                                 + ' ' + UserInterfaceClassName.MEMBER_LIST + `-member-${ index %2 === 1 ? 'even' : 'odd' }`
+                                 MEMBER_LIST_CLASS_NAME + '-member'
+                                 + ' ' + MEMBER_LIST_CLASS_NAME + `-member-${ index %2 === 1 ? 'even' : 'odd' }`
                              }
                         >
-                            <div className={UserInterfaceClassName.MEMBER_LIST + '-member-name'}>{displayName}</div>
-                            <div className={UserInterfaceClassName.MEMBER_LIST + '-member-id'}>{id}</div>
+                            <div className={MEMBER_LIST_CLASS_NAME + '-member-name'}>{displayName}</div>
+                            <div className={MEMBER_LIST_CLASS_NAME + '-member-id'}>{id}</div>
                         </div>
                     );
                 })

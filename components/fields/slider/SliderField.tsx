@@ -1,19 +1,19 @@
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { Component, ChangeEvent } from 'react';
-import { UserInterfaceClassName } from "../../constants/UserInterfaceClassName";
 import { SelectFieldModel, SelectFieldItem} from "../../../types/items/SelectFieldModel";
 import { FieldProps } from '../FieldProps';
 import { LogService } from "../../../../core/LogService";
-import {find, map} from "../../../../core/modules/lodash";
-import {EventCallback} from "../../../../core/interfaces/callbacks";
+import { find, map } from "../../../../core/modules/lodash";
+import { EventCallback } from "../../../../core/interfaces/callbacks";
 import { FormFieldState,  stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme } from "../../../types/StyleScheme";
+import { FIELD_CLASS_NAME, SLIDER_FIELD_CLASS_NAME } from "../../../constants/hgClassName";
 import './SliderField.scss';
 
 const LOG = LogService.createLogger('SliderField');
-const COMPONENT_CLASS_NAME = UserInterfaceClassName.SLIDER_FIELD;
+const COMPONENT_CLASS_NAME = SLIDER_FIELD_CLASS_NAME;
 const AUTOMATIC_FIELD_NAME_PREFIX = 'slider-field-';
 
 export interface SliderFieldState {
@@ -114,21 +114,21 @@ export class SliderField extends Component<SliderFieldProps<any>, SliderFieldSta
             <div className={
                 COMPONENT_CLASS_NAME
                 + ' ' + (this.props.className ?? '')
-                + ' ' + UserInterfaceClassName.FIELD
-                + ` ${UserInterfaceClassName.FIELD}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${UserInterfaceClassName.FIELD}-state-${fieldState}`
+                + ' ' + FIELD_CLASS_NAME
+                + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
+                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
             }>
 
                 {label ? (
                     <label className={
                         COMPONENT_CLASS_NAME+'-label'
-                        + ` ${UserInterfaceClassName.FIELD}-label`
+                        + ` ${FIELD_CLASS_NAME}-label`
                     }>{label}</label>
                 ) : null}
 
                 <div className={
                     COMPONENT_CLASS_NAME + '-options'
-                    + ` ${UserInterfaceClassName.FIELD}-options`
+                    + ` ${FIELD_CLASS_NAME}-options`
                 }>
                     {map(selectItems, (item : SelectFieldItem<any>, itemIndex: number) => {
 
@@ -148,24 +148,24 @@ export class SliderField extends Component<SliderFieldProps<any>, SliderFieldSta
                                 key={`slider-${this._id}-label-${itemIndex}`}
                                 className={
                                     COMPONENT_CLASS_NAME + '-option'
-                                    + ` ${UserInterfaceClassName.FIELD}-option`
+                                    + ` ${FIELD_CLASS_NAME}-option`
                                 }
                             >
 
                                 <div className={
                                     COMPONENT_CLASS_NAME + '-option-input'
-                                    + ` ${UserInterfaceClassName.FIELD}-option-input`
+                                    + ` ${FIELD_CLASS_NAME}-option-input`
                                 }>
                                     <div className={
                                         COMPONENT_CLASS_NAME + '-option-input-fill '
-                                        + ` ${UserInterfaceClassName.FIELD}-option-input-fill`
+                                        + ` ${FIELD_CLASS_NAME}-option-input-fill`
                                         + ' ' + COMPONENT_CLASS_NAME + '-option-input-fill-with-'
                                             + (itemIndex !== 0 ? 'line' : 'no-line')
                                     } />
                                     <input
                                         className={
                                             COMPONENT_CLASS_NAME+'-option-input-element'
-                                            + ` ${UserInterfaceClassName.FIELD}-option-input-element`
+                                            + ` ${FIELD_CLASS_NAME}-option-input-element`
                                         }
                                         type="radio"
                                         name={sliderName}
@@ -176,7 +176,7 @@ export class SliderField extends Component<SliderFieldProps<any>, SliderFieldSta
                                     />
                                     <div className={
                                         COMPONENT_CLASS_NAME + '-option-input-fill '
-                                        + ` ${UserInterfaceClassName.FIELD}-option-input-fill`
+                                        + ` ${FIELD_CLASS_NAME}-option-input-fill`
                                         + ' ' + COMPONENT_CLASS_NAME + '-option-input-fill-with-'
                                         + (itemIndex !== itemCount - 1 ? 'line' : 'no-line')
                                     } />
@@ -184,12 +184,12 @@ export class SliderField extends Component<SliderFieldProps<any>, SliderFieldSta
 
                                 <div className={
                                     COMPONENT_CLASS_NAME + '-option-label'
-                                    + ` ${UserInterfaceClassName.FIELD}-option-label`
+                                    + ` ${FIELD_CLASS_NAME}-option-label`
                                 }>
                                     {itemLabel ? (
                                         <span className={
                                             COMPONENT_CLASS_NAME+'-option-label-text'
-                                            + ` ${UserInterfaceClassName.FIELD}-option-label-text`
+                                            + ` ${FIELD_CLASS_NAME}-option-label-text`
                                         }>{itemLabel}</span>
                                     ) : null}
                                 </div>

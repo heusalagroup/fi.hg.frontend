@@ -1,8 +1,8 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-@import "src/fi/hg/frontend/stylesstyles/index";
+@import "src/fi/hg/frontend/styles/index";
 
-.email-field {
+.hg-email-field {
 
   padding           : $field-padding;
   margin            : $field-margin;
@@ -12,7 +12,7 @@
   align-items       : center;
   justify-content   : center;
 
-  & > .email-field-label {
+  & > .hg-email-field-label {
 
     flex-shrink: 1;
     padding: 0 1em 0 0.5em;
@@ -21,7 +21,7 @@
 
   }
 
-  & > .email-field-input {
+  & > .hg-email-field-input {
     flex-grow: 1;
     padding: 0.5em;
     border: 0;
