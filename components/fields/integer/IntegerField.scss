@@ -16,17 +16,17 @@
   justify-content: center;
 
   & > .hg-integer-field-label {
-
+    box-sizing: border-box;
     flex-shrink: 1;
-    padding: 0 1em 0 0.5em;
+    padding           : $field-padding;
     min-width: $field-label-min-width;
     text-align   : right;
-
   }
 
   & > .hg-integer-field-input {
+    box-sizing: border-box;
+    padding: 1em 0.75em;
     flex-grow: 1;
-    padding: 0.5em;
     border: 0;
     font-size: 1.25em;
     border-radius: 0.25em;

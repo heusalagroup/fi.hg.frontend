@@ -29,14 +29,14 @@
     }
 
     & > .hg-select-field-input {
+      box-sizing: border-box;
+      padding: 1em 0.75em;
       flex-grow: 1;
-      padding: 0.5em;
       border: 0;
       font-size: 1.25em;
       border-radius: 0.25em;
       max-width: 100%;
       min-width: 0;
-      box-sizing: border-box;
     }
 
   }
@@ -56,7 +56,7 @@
 
       & > .hg-select-field-dropdown {
 
-        background-color : #00000009;
+        //background-color : #00000009;
         border           : 1px solid #00000022;
         border-radius    : 0.5em;
         box-sizing       : border-box;
@@ -69,7 +69,7 @@
         & > .hg-select-field-dropdown-item {
 
           box-sizing       : border-box;
-          background-color : #ffffff;
+          //background-color : #ffffff;
           padding          : 0.5em;
           margin           : 0.25em 0.5em;
 

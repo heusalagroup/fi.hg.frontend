@@ -16,7 +16,6 @@
   min-width    : 0;
 
   & > .hg-slider-field-label {
-
     background-color  : $field-background-color;
     border-bottom     : $field-border;
     border-radius     : $field-border-radius $field-border-radius 0 0;
@@ -27,7 +26,6 @@
     align-items       : center;
     justify-content   : center;
     box-sizing        : border-box;
-
   }
 
   & > .hg-slider-field-options {
