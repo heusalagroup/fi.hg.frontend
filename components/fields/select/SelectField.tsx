@@ -11,7 +11,7 @@ import {
 } from "../../../../core/modules/lodash";
 import { Popup } from "../../popup/Popup";
 import { Button } from "../../button/Button";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import {
@@ -77,7 +77,7 @@ export function SelectField (props: SelectFieldProps<any>) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >

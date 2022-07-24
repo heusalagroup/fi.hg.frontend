@@ -251,7 +251,7 @@ export function CheckboxField (props: CheckboxFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
             onClick={toggleCallback}

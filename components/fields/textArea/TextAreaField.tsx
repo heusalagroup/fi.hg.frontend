@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { TextAreaFieldModel } from "../../../types/items/TextAreaFieldModel";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { FIELD_CLASS_NAME, TEXT_AREA_FIELD_CLASS_NAME } from "../../../constants/hgClassName";
@@ -52,7 +52,7 @@ export function TextAreaField (props: TextAreaFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >

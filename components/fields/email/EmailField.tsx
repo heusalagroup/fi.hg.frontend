@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { EmailFieldModel } from "../../../types/items/EmailFieldModel";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { EMAIL_FIELD_CLASS_NAME, FIELD_CLASS_NAME } from "../../../constants/hgClassName";
@@ -53,7 +53,7 @@ export function EmailField (props: EmailFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >

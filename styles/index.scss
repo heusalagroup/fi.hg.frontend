@@ -4,7 +4,7 @@
 
 $field-label-min-width : 5em;
 
-.theme-dark {
+.hg-theme-dark {
 
   input {
     background-color: #9d9d9d;
@@ -21,37 +21,37 @@ $field-label-min-width : 5em;
 
 // FLAT THEME
 
-.button.button-style-FLAT {
+.hg-button.hg-button-style-FLAT {
 
   background-color : $flat-button-background-color;
   border           : $flat-button-border;
 
 }
 
-.field.field-style-FLAT {
+.hg-field.hg-field-style-FLAT {
 
   background-color  : $field-background-color;
   border            : $field-border;
   border-radius     : $field-border-radius;
 
-  & > .field-label {
+  & > .hg-field-label {
     color: $field-label-text-color-light-mode;
   }
 
-  &.field-state-invalid {
+  &.hg-field-state-invalid {
     border            : $field-border-invalid;
   }
 
 }
 
 // Modals
-.nor-modal-container.nor-modal-container-style-FLAT {
+.hg-modal-container.hg-modal-container-style-FLAT {
 
-  &.nor-modal-container-overlay-enabled {
+  &.hg-modal-container-overlay-enabled {
     background-color: #22222222;
   }
 
-  & > .nor-modal-container-content {
+  & > .hg-modal-container-content {
 
     background-color : #ffffff;
     border           : 1px solid #dddddd;
@@ -63,67 +63,67 @@ $field-label-min-width : 5em;
 
 // NEUMORPHISM THEME
 
-.button.button-style-NEUMORPHISM {
+.hg-button.hg-button-style-NEUMORPHISM {
 
   border-radius    : $neumorphism-button-border-radius;
 
 }
 
-.field.field-style-NEUMORPHISM {
+.hg-field.hg-field-style-NEUMORPHISM {
 
   border-radius    : $neumorphism-field-border-radius;
 
-  & > :focus.field-input,
-  & > :focus-visible.field-input {
+  & > :focus.hg-field-input,
+  & > :focus-visible.hg-field-input {
     border           : none;
     outline          : none;
   }
 
-  &.field-state-invalid {
+  &.hg-field-state-invalid {
     border-radius    : $neumorphism-field-border-radius-invalid;
   }
 
 }
 
-.nor-modal-container.nor-modal-container-style-NEUMORPHISM {
+.hg-modal-container.hg-modal-container-style-NEUMORPHISM {
 
-  &.nor-modal-container-overlay-enabled {
+  &.hg-modal-container-overlay-enabled {
   }
 
-  & > .nor-modal-container-content {
+  & > .hg-modal-container-content {
     border-radius    : $neumorphism-field-border-radius;
   }
 
 }
 
-.theme-light {
+.hg-theme-light {
 
-  .button.button-style-NEUMORPHISM {
+  .hg-button.hg-button-style-NEUMORPHISM {
 
     box-shadow       : $light-neumorphism-button-box-shadow;
     border           : $light-neumorphism-button-border;
 
   }
 
-  .field.field-style-NEUMORPHISM {
+  .hg-field.hg-field-style-NEUMORPHISM {
 
     box-shadow       : $light-neumorphism-field-box-shadow;
     border           : $light-neumorphism-field-border;
 
-    & > .field-label {
+    & > .hg-field-label {
       color: $field-label-text-color-light-mode;
     }
 
-    & > .field-input {
+    & > .hg-field-input {
       background-color : $field-input-background-color-light-mode;
     }
 
-    & > :focus.field-input,
-    & > :focus-visible.field-input {
+    & > :focus.hg-field-input,
+    & > :focus-visible.hg-field-input {
       background-color : $field-input-background-color-light-mode;
     }
 
-    &.field-state-invalid {
+    &.hg-field-state-invalid {
       box-shadow       : $light-neumorphism-field-box-shadow-invalid;
       border           : $light-neumorphism-field-border-invalid;
     }
@@ -133,34 +133,34 @@ $field-label-min-width : 5em;
 }
 
 
-.theme-dark {
+.hg-theme-dark {
 
-  .button.button-style-NEUMORPHISM {
+  .hg-button.hg-button-style-NEUMORPHISM {
 
     box-shadow       : $dark-neumorphism-button-box-shadow;
     border           : $dark-neumorphism-button-border;
 
   }
 
-  .field.field-style-NEUMORPHISM {
+  .hg-field.hg-field-style-NEUMORPHISM {
 
     box-shadow       : $dark-neumorphism-field-box-shadow;
     border           : $dark-neumorphism-field-border;
 
-    & > .field-label {
+    & > .hg-field-label {
       color: $field-label-text-color-dark-mode;
     }
 
-    & > .field-input {
+    & > .hg-field-input {
       background-color : $field-input-background-color-dark-mode;
     }
 
-    & > :focus.field-input,
-    & > :focus-visible.field-input {
+    & > :focus.hg-field-input,
+    & > :focus-visible.hg-field-input {
       background-color : $field-input-background-color-dark-mode;
     }
 
-    &.field-state-invalid {
+    &.hg-field-state-invalid {
       box-shadow       : $dark-neumorphism-field-box-shadow-invalid;
       border           : $dark-neumorphism-field-border-invalid;
     }
@@ -171,7 +171,7 @@ $field-label-min-width : 5em;
 
 // BUTTON STYLES
 
-.button.button-primary   {
+.hg-button.hg-button-primary   {
   color: $button-primary-text-color;
   background-color: $button-primary-background-color;
   & > .icon > svg {
@@ -179,7 +179,7 @@ $field-label-min-width : 5em;
   }
 }
 
-.button.button-secondary {
+.hg-button.hg-button-secondary {
   color: $button-secondary-text-color;
   background-color: $button-secondary-background-color;
   & > .icon > svg {
@@ -187,7 +187,7 @@ $field-label-min-width : 5em;
   }
 }
 
-.button.button-success   {
+.hg-button.hg-button-success   {
   color: $button-success-text-color;
   background-color: $button-success-background-color;
   & > .icon > svg {
@@ -195,7 +195,7 @@ $field-label-min-width : 5em;
   }
 }
 
-.button.button-danger    {
+.hg-button.hg-button-danger    {
   color: $button-danger-text-color;
   background-color: $button-danger-background-color;
   & > .icon > svg {
@@ -203,7 +203,7 @@ $field-label-min-width : 5em;
   }
 }
 
-.button.button-warning   {
+.hg-button.hg-button-warning   {
   color: $button-warning-text-color;
   background-color: $button-warning-background-color;
   & > .icon > svg {
@@ -211,7 +211,7 @@ $field-label-min-width : 5em;
   }
 }
 
-.button.button-info      {
+.hg-button.hg-button-info      {
   color: $button-info-text-color;
   background-color: $button-info-background-color;
   & > .icon > svg {
@@ -219,7 +219,7 @@ $field-label-min-width : 5em;
   }
 }
 
-.button.button-link      {
+.hg-button.hg-button-link      {
   color: $button-link-text-color;
   background-color: $button-link-background-color;
   & > .icon > svg {

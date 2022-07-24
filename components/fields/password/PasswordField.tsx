@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { PasswordFieldModel } from "../../../types/items/PasswordFieldModel";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { ThemeService } from "../../../services/ThemeService";
 import {
@@ -56,7 +56,7 @@ export function PasswordField (props: PasswordFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >

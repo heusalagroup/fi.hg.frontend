@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
 import { LogService } from "../../../../core/LogService";
 import { isSafeInteger, trim } from "../../../../core/modules/lodash";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import {
@@ -65,7 +65,7 @@ export function IntegerField (props: IntegerFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >

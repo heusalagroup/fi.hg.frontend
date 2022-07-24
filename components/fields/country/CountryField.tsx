@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { CountryFieldModel } from "../../../types/items/CountryFieldModel";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { CountryCode } from "../../../../core/types/CountryCode";
@@ -61,7 +61,7 @@ export function CountryField (props: CountryFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >

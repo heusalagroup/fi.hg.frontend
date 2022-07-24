@@ -2,7 +2,7 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { JsonFieldModel } from "../../../types/items/JsonFieldModel";
-import { FormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { JsonAny, ReadonlyJsonAny } from "../../../../core/Json";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
@@ -57,7 +57,7 @@ export function JsonField (props: JsonFieldProps) {
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${fieldState}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >
