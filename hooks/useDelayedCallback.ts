@@ -30,6 +30,7 @@ export function useDelayedCallback (
             cancelCallback();
             timeoutRef.current = setTimeout(() => {
                 try {
+                    timeoutRef.current = undefined;
                     callback();
                 } catch (err) {
                     LOG.error(`Error: `, err);

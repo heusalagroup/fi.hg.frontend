@@ -13,18 +13,20 @@ const LOG = LogService.createLogger('useMountEffect');
  * @param unmountCallback
  */
 export function useMountEffect (
-    identifier: string,
-    mountCallback : VoidCallback,
-    unmountCallback : VoidCallback
+    identifier       : string,
+    mountCallback    : VoidCallback,
+    unmountCallback ?: VoidCallback
 ) {
     useEffect(
         () => {
             LOG.debug(`${identifier}: Mount`);
             mountCallback();
-            return () => {
-                LOG.debug(`${identifier}: Unmount`);
-                unmountCallback();
-            };
+            if ( unmountCallback ) {
+                return () => {
+                    LOG.debug(`${identifier}: Unmount`);
+                    unmountCallback();
+                };
+            }
         },
         [
             identifier,

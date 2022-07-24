@@ -1,10 +1,10 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Component } from 'react';
+import { Component, useCallback, useState } from 'react';
 import { FormModel } from "../../types/FormModel";
-import { FormFieldModel,  isFormFieldModel } from "../../types/FormFieldModel";
-import { Button,  ButtonClickCallback} from "../button/Button";
+import { FormFieldModel, isFormFieldModel } from "../../types/FormFieldModel";
+import { Button } from "../button/Button";
 import { FormUtils } from "../fields/FormUtils";
 import {
     every,
@@ -22,6 +22,7 @@ import { FormFieldState } from "../../types/FormFieldState";
 import { ButtonType } from "../button/types/ButtonType";
 import { MODEL_FORM_CLASS_NAME } from "../../constants/hgClassName";
 import { FieldChangeCallback } from "../../hooks/field/useFieldChangeCallback";
+import { TranslationFunction } from "../../../core/types/TranslationFunction";
 import './ModelForm.scss';
 
 const LOG = LogService.createLogger('Form');
@@ -30,287 +31,287 @@ export interface ModelFormFieldStateObject {
     readonly [key: string]: FormFieldState;
 }
 
-export interface ModelFormState {
-    readonly page        : number;
-    readonly fieldStates : ModelFormFieldStateObject;
-}
-
 export interface ModelFormProps<ValueT> {
+    readonly t          : TranslationFunction;
     readonly className ?: string;
-    readonly model      : FormModel;
-    readonly value      : ValueT;
-    readonly change    ?: FieldChangeCallback<ValueT>;
-    readonly cancel    ?: VoidCallback;
-    readonly submit    ?: VoidCallback;
+    readonly model: FormModel;
+    readonly value: ValueT;
+    readonly change?: FieldChangeCallback<ValueT>;
+    readonly cancel?: VoidCallback;
+    readonly submit?: VoidCallback;
+    readonly submitLabel ?: string;
+    readonly cancelLabel ?: string;
+    readonly backLabel ?: string;
+    readonly nextPageLabel ?: string;
+    readonly titleLabel ?: string;
 }
 
-export class ModelForm extends Component<ModelFormProps<any>, ModelFormState> {
+export function ModelForm (props: ModelFormProps<any>) {
 
-    private readonly _cancelCallback    : ButtonClickCallback;
-    private readonly _submitCallback    : ButtonClickCallback;
-    private readonly _backPageCallback  : ButtonClickCallback;
-    private readonly _nextPageCallback  : ButtonClickCallback;
+    const t = props?.t;
+    const className = props?.className;
+    const propsValue = props?.value;
+    const propsCancel = props?.cancel;
+    const propsSubmit = props?.submit;
+    const propsChange = props?.change;
+    const defaultSubmitLabel = props?.submitLabel ?? 'fi.hg.modelForm.submitLabel';
+    const defaultCancelLabel = props?.cancelLabel ?? 'fi.hg.modelForm.cancelLabel';
+    const defaultBackLabel   = props?.backLabel   ?? 'fi.hg.modelForm.backLabel';
+    const defaultNextPageLabel   = props?.nextPageLabel   ?? 'fi.hg.modelForm.nextPageLabel';
 
+    const [ page, setPage ] = useState<number>(0);
+    const [ fieldStates, setFieldStates ] = useState<ModelFormFieldStateObject>(() => ({}));
 
-    public constructor(props: ModelFormProps<any>) {
+    const spec: FormModel = props?.model;
+    const mainTitle: string = props?.titleLabel ?? spec.title ?? 'fi.hg.modelForm.mainTitle';
+    const allItems: FormItem[] = spec.items;
 
-        super(props);
+    const pageCount = FormUtils.getPageCount(allItems);
 
-        this.state = {
-            page: 0,
-            fieldStates: {}
-        };
-
-        this._cancelCallback   = this._onCancelButton.bind(this);
-        this._submitCallback   = this._onSubmitButton.bind(this);
-        this._nextPageCallback = this._onNextButton.bind(this);
-        this._backPageCallback = this._onBackButton.bind(this);
-
+    if ( page >= pageCount ) {
+        LOG.warn(`Warning! Page ${page} is invalid: We only had ${pageCount} pages`);
+        return null;
     }
 
-    public render () {
+    const pageItems: FormItem[] = pageCount === 1 ? allItems : FormUtils.getPageItems(page, allItems);
+    const pageBreak: PageBreakModel | undefined = pageCount === 1 ? undefined : FormUtils.getPageBreak(page, allItems);
+    const prevPageBreak: PageBreakModel | undefined = pageCount === 1 || page <= 0 ? undefined : FormUtils.getPageBreak(page - 1, allItems);
 
-        const pageNumber : number                     = this.state.page;
-        const spec       : FormModel                  = this.props.model;
-        const mainTitle  : string = spec.title;
-        const allItems   : FormItem[]                 = spec.items;
+    const isFirstPage: boolean = page === 0;
+    const isLastPage: boolean = page === pageCount - 1;
 
-        const pageCount = FormUtils.getPageCount(allItems);
+    const cancelLabel: string = isFirstPage ? (spec?.cancelLabel ?? defaultCancelLabel) : (prevPageBreak?.backLabel ?? defaultBackLabel);
+    const hasCancelProp: boolean = isFirstPage ? !!propsCancel : true;
 
-        if (pageNumber >= pageCount) {
-            LOG.warn(`Warning! Page ${pageNumber} is invalid: We only had ${pageCount} pages`);
-            return null;
-        }
+    const submitLabel: string = isLastPage ? (spec?.submitLabel ?? defaultSubmitLabel) : (pageBreak?.nextLabel ?? defaultNextPageLabel);
+    const hasSubmitProp: boolean = isLastPage ? !!propsSubmit : true;
 
-        const pageItems     : FormItem[] = pageCount === 1 ? allItems : FormUtils.getPageItems(pageNumber, allItems);
-        const pageBreak     : PageBreakModel | undefined = pageCount === 1 ? undefined : FormUtils.getPageBreak(pageNumber, allItems);
-        const prevPageBreak : PageBreakModel | undefined = pageCount === 1 || pageNumber <= 0 ? undefined : FormUtils.getPageBreak(pageNumber - 1, allItems);
+    const fieldState: FormFieldState = getCombinedFieldState(
+        fieldStates,
+        spec
+    );
 
-        const isFirstPage : boolean = pageNumber === 0;
-        const isLastPage  : boolean = pageNumber === pageCount - 1;
+    const onCancelButtonCallback = useCallback(
+        () => {
+            try {
+                if ( propsCancel ) {
+                    propsCancel();
+                } else {
+                    LOG.warn('No cancel prop defined!');
+                }
+            } catch (err) {
+                LOG.error('Error while executing cancel prop: ' + err);
+            }
+        },
+        [
+            propsCancel
+        ]
+    );
 
-        const cancelCallback          = isFirstPage ? this._cancelCallback            : this._backPageCallback;
-        const cancelLabel   : string  = isFirstPage ? (spec?.cancelLabel ?? 'Cancel') : (prevPageBreak?.backLabel ?? 'Back');
-        const hasCancelProp : boolean = isFirstPage ? !!this.props.cancel             : true;
+    const onSubmitButtonCallback = useCallback(
+        () => {
+            try {
+                if ( propsSubmit ) {
+                    propsSubmit();
+                } else {
+                    LOG.warn('No submit prop defined!');
+                }
+            } catch (err) {
+                LOG.error('Error while executing submit prop: ' + err);
+            }
+        },
+        [
+            propsSubmit
+        ]
+    );
 
-        const submitCallback          = isLastPage  ? this._submitCallback            : this._nextPageCallback;
-        const submitLabel   : string  = isLastPage  ? (spec?.submitLabel ?? 'Submit') : (pageBreak?.nextLabel ?? 'Next page');
-        const hasSubmitProp : boolean = isLastPage  ? !!this.props.submit             : true;
+    const onNextButtonCallback = useCallback(
+        () => {
+            setPage((currentPage: number) => {
+                const pageCount = FormUtils.getPageCount(props?.model?.items);
+                const nextPage = currentPage + 1;
+                if ( nextPage < pageCount ) {
+                    return nextPage;
+                } else {
+                    return currentPage;
+                }
+            });
+        },
+        [
+            props?.model?.items,
+            setPage
+        ]
+    );
 
-        const fieldState : FormFieldState = ModelForm.getCombinedFieldState(
-            this.state.fieldStates,
-            spec
-        );
+    const onBackButtonCallback = useCallback(
+        () => {
+            setPage((currentPage: number) => currentPage - 1 >= 0 ? currentPage - 1 : 0);
+        },
+        [
+            setPage
+        ]
+    );
 
-        return (
-            <div className={MODEL_FORM_CLASS_NAME}>
+    const changeFormValueCallback = useCallback(
+        (newValue: any) => {
+            try {
+                if ( propsChange ) {
+                    propsChange(newValue);
+                } else {
+                    LOG.warn('No change prop defined!');
+                }
+            } catch (err) {
+                LOG.error('Error while executing change prop: ' + err);
+            }
+        },
+        [
+            propsChange
+        ]
+    );
 
-                <header className={MODEL_FORM_CLASS_NAME + '-header'}>
-                    <h2>{mainTitle}</h2>
-                </header>
+    const setItemValueCallback = useCallback(
+        (key: string, newValue: any) => {
 
-                <section className={MODEL_FORM_CLASS_NAME + '-content'}>
-                    {map(pageItems, (item : FormFieldModel) => {
+            LOG.debug('setItemValue: ', key, newValue);
 
-                        const globalIndex : number = allItems.indexOf(item);
-                        const itemKey     : string = item?.key ?? `${globalIndex}`;
-                        const Component   : any    = FormUtils.getComponentForModel(item);
+            const prevValue = get(propsValue, key, undefined);
 
-                        if (Component) {
+            LOG.debug('setItemValue: propsValue = ', propsValue);
+            LOG.debug('setItemValue: prevValue = ', prevValue);
 
-                            const valueModel : any = this.props.value;
-                            const componentValue = get(valueModel, itemKey, undefined);
+            if ( prevValue !== newValue ) {
+                const newModel = {
+                    ...propsValue
+                };
+                set(newModel, key, newValue);
+                return changeFormValueCallback(newModel);
+            } else {
+                LOG.debug('The form value did not change: ', key, newValue, prevValue, propsValue);
+            }
 
-                            return (
-                                <Component
-                                    key={`form-item-${globalIndex}`}
-                                    model={item}
-                                    value={componentValue}
-                                    change={(value: any) => this._setItemValue(itemKey, value)}
-                                    changeState={(value: FormFieldState) => this._setItemState(itemKey, value)}
-                                />
-                            );
-                        }
+        },
+        [
+            propsValue,
+            changeFormValueCallback
+        ]
+    );
+
+    const setItemStateCallback = useCallback(
+        (key: string, newState: FormFieldState) => {
+            LOG.debug('setItemState: ', key, newState);
+            if ( fieldStates[key] !== newState ) {
+                LOG.info(`_setItemState: State for "${key}" changed as ${newState}`);
+                const newStates = {
+                    ...fieldStates,
+                    [key]: newState
+                };
+                setFieldStates(newStates);
+            } else {
+                LOG.debug(`_setItemState: State for "${key}" was already ${newState}`);
+            }
+        },
+        [
+            setFieldStates,
+            fieldStates
+        ]
+    );
+
+    const submitCallback = isLastPage  ? onSubmitButtonCallback : onNextButtonCallback;
+    const cancelCallback = isFirstPage ? onCancelButtonCallback : onBackButtonCallback;
+
+    return (
+        <div className={
+            MODEL_FORM_CLASS_NAME
+            + (className ? ` ${className}` : '')
+        }>
+
+            <header className={MODEL_FORM_CLASS_NAME + '-header'}>
+                <h2>{t(mainTitle)}</h2>
+            </header>
+
+            <section className={MODEL_FORM_CLASS_NAME + '-content'}>
+                {map(pageItems, (item: FormFieldModel) => {
+
+                    const globalIndex: number = allItems.indexOf(item);
+                    const itemKey: string = item?.key ?? `${globalIndex}`;
+                    const Component: any = FormUtils.getComponentForModel(item);
+
+                    if ( Component ) {
+
+                        const componentValue = get(propsValue, itemKey, undefined);
 
                         return (
-                            <div
+                            <Component
                                 key={`form-item-${globalIndex}`}
+                                model={item}
+                                value={componentValue}
+                                change={(value: any) => setItemValueCallback(itemKey, value)}
+                                changeState={(value: FormFieldState) => setItemStateCallback(itemKey, value)}
                             />
                         );
+                    }
 
-                    })}
-                </section>
+                    return (
+                        <div key={`form-item-${globalIndex}`} />
+                    );
 
-                <footer className={MODEL_FORM_CLASS_NAME + '-footer'}>
+                })}
+            </section>
 
-                    {hasCancelProp ? (
-                        <Button click={cancelCallback}>{cancelLabel}</Button>
-                    ) : null}
+            <footer className={MODEL_FORM_CLASS_NAME + '-footer'}>
 
-                    {hasSubmitProp ? (
-                        <Button
-                            type={ButtonType.SUBMIT}
-                            enabled={ fieldState !== FormFieldState.INVALID }
-                            click={submitCallback}
-                        >{submitLabel}</Button>
-                    ) : null}
+                {hasCancelProp ? (
+                    <Button click={cancelCallback}>{t(cancelLabel)}</Button>
+                ) : null}
 
-                </footer>
+                {hasSubmitProp ? (
+                    <Button
+                        type={ButtonType.SUBMIT}
+                        enabled={fieldState !== FormFieldState.INVALID}
+                        click={submitCallback}
+                    >{t(submitLabel)}</Button>
+                ) : null}
 
-            </div>
-        );
+            </footer>
 
-    }
-
-
-    private _onCancelButton () {
-
-        try {
-            if (this.props.cancel) {
-                this.props.cancel();
-            } else {
-                LOG.warn('No cancel prop defined!');
-            }
-        } catch(err) {
-            LOG.error('Error while executing cancel prop: ' + err);
-        }
-
-    }
-
-    private _onSubmitButton () {
-
-        try {
-            if (this.props.submit) {
-                this.props.submit();
-            } else {
-                LOG.warn('No submit prop defined!');
-            }
-        } catch(err) {
-            LOG.error('Error while executing submit prop: ' + err);
-        }
-
-    }
-
-    private _onNextButton () {
-
-        this.setState((state : ModelFormState) => {
-
-            const pageCount = FormUtils.getPageCount(this.props.model.items);
-            const nextPage  = state.page + 1;
-
-            if (nextPage < pageCount) {
-                return {page: nextPage};
-            } else {
-                return {page: state.page};
-            }
-
-        });
-
-    }
-
-    private _onBackButton () {
-        this.setState((state : ModelFormState) => ({page: state.page - 1 >= 0 ? state.page - 1 : 0 }));
-    }
-
-    private _changeFormValue (newValue: any) {
-        try {
-            if (this.props.change) {
-                this.props.change(newValue);
-            } else {
-                LOG.warn('No change prop defined!');
-            }
-        } catch(err) {
-            LOG.error('Error while executing change prop: ' + err);
-        }
-    }
-
-    private _setItemValue (key: string, newValue: any) {
-
-        LOG.debug('_setItemValue: ', key, newValue);
-
-        const valueModel : any = this.props.value;
-        const prevValue = get(valueModel, key, undefined);
-
-        LOG.debug('_setItemValue: valueModel = ', valueModel);
-        LOG.debug('_setItemValue: prevValue = ', prevValue);
-
-        if (prevValue !== newValue) {
-            const newModel = {
-                ...valueModel
-            };
-            set(newModel, key, newValue);
-            return this._changeFormValue(newModel);
-        } else {
-            LOG.debug('The form value did not change: ', key, newValue, prevValue, valueModel);
-        }
-
-    }
-
-    private _setItemState (key : string, newState: FormFieldState) {
-
-        LOG.debug('_setItemState: ', key, newState);
-
-        const prevStates : ModelFormFieldStateObject = this.state.fieldStates;
-
-        if (prevStates[key] !== newState) {
-
-            LOG.info(`_setItemState: State for "${key}" changed as ${newState}`);
-
-            const newStates = {
-                ...prevStates,
-                [key]: newState
-            };
-
-            this.setState({
-                fieldStates: newStates
-            });
-
-
-
-        } else {
-            LOG.debug(`_setItemState: State for "${key}" was already ${newState}`);
-        }
-
-    }
-
-
-    public static getCombinedFieldState (
-        states : ModelFormFieldStateObject,
-        model  : FormModel
-    ) : FormFieldState {
-
-        const modelKeys : string[] = map(
-            model.items,
-            (item : FormItem, index: number) : string => {
-                return isFormFieldModel(item) ? ( item?.key ?? `${index}` ) : `${index}`;
-            }
-        );
-        LOG.debug(`getCombinedFieldState: modelKeys = `, modelKeys);
-
-        const stateKeys : string[] = filter(
-            keys(states),
-            (key : string) => modelKeys.includes(key)
-        );
-        LOG.debug(`getCombinedFieldState: stateKeys = `, stateKeys);
-
-        const activeFieldStates : FormFieldState[] = map(
-            stateKeys,
-            (key: string) : FormFieldState => states[key]
-        );
-        LOG.debug(`getCombinedFieldState: activeFieldStates = `, activeFieldStates);
-
-        if ( activeFieldStates.includes(FormFieldState.INVALID) ) {
-            return FormFieldState.INVALID;
-        }
-
-        if ( every(activeFieldStates, (item : FormFieldState ) : boolean => item === FormFieldState.VALID) ) {
-            return FormFieldState.VALID;
-        }
-
-        return FormFieldState.CONSTRUCTED;
-
-    }
+        </div>
+    );
 
 }
 
+function getCombinedFieldState (
+    states: ModelFormFieldStateObject,
+    model: FormModel
+): FormFieldState {
 
+    const modelKeys: string[] = map(
+        model.items,
+        (item: FormItem, index: number): string => {
+            return isFormFieldModel(item) ? (item?.key ?? `${index}`) : `${index}`;
+        }
+    );
+    LOG.debug(`getCombinedFieldState: modelKeys = `, modelKeys);
+
+    const stateKeys: string[] = filter(
+        keys(states),
+        (key: string) => modelKeys.includes(key)
+    );
+    LOG.debug(`getCombinedFieldState: stateKeys = `, stateKeys);
+
+    const activeFieldStates: FormFieldState[] = map(
+        stateKeys,
+        (key: string): FormFieldState => states[key]
+    );
+    LOG.debug(`getCombinedFieldState: activeFieldStates = `, activeFieldStates);
+
+    if ( activeFieldStates.includes(FormFieldState.INVALID) ) {
+        return FormFieldState.INVALID;
+    }
+
+    if ( every(activeFieldStates, (item: FormFieldState): boolean => item === FormFieldState.VALID) ) {
+        return FormFieldState.VALID;
+    }
+
+    return FormFieldState.CONSTRUCTED;
+
+}

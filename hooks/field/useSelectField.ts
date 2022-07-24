@@ -122,8 +122,8 @@ export function useSelectField<T> (
         },
         [
             identifier,
-            setDropdownOpen,
-            inputRef
+            setDropdownOpen
+            // , inputRef // See above comment
         ]
     );
 

@@ -1,9 +1,15 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2020-2021 Sendanor. All rights reserved.
 
-import { Component } from "react";
 import { ReactComponent as LoadingIcon } from "./loading.svg";
-import "./Loader.scss";
 import { LOADER_CLASS_NAME } from "../../constants/hgClassName";
+import { useCallback, useState } from "react";
+import { useDelayedCallback } from "../../hooks/useDelayedCallback";
+import { useMountEffect } from "../../hooks/useMountEffect";
+import "./Loader.scss";
+
+const DEFAULT_LOADER_SPEED = 1.6;
+const DEFAULT_HIDDEN_TIME = 500;
 
 export interface LoaderProps {
 
@@ -17,77 +23,46 @@ export interface LoaderProps {
 
 }
 
-export interface LoaderState {
-    readonly hidden: boolean;
-}
-
 /**
  * Loader component.
  */
-export class Loader extends Component<LoaderProps, LoaderState> {
+export function Loader (props: LoaderProps) {
 
-    static defaultProps : Partial<LoaderProps> = {
-        speed: 1.6,
-        hiddenTime: 500
-    };
+    const className = props?.className;
+    const speed = props?.speed ?? DEFAULT_LOADER_SPEED;
+    const hiddenTime = props?.hiddenTime ?? DEFAULT_HIDDEN_TIME;
 
-    private hiddenTimeout : any;
+    const [hidden, setHidden] = useState<boolean>( (hiddenTime ?? -1) >= 0 );
 
-    constructor(props : LoaderProps) {
+    const setVisibleCallback = useCallback(
+        () => {
+            setHidden(false);
+        },
+        [
+            setHidden
+        ]
+    );
 
-        super(props);
+    const [delayedSetVisibleCallback, cancelDelayedSetVisibleCallback] = useDelayedCallback(
+        setVisibleCallback,
+        hiddenTime > 0 ? hiddenTime : 0
+    );
 
-        this.state = {
-            hidden: (this.props.hiddenTime ?? -1) >= 0
-        };
+    useMountEffect(
+        'Loader',
+        delayedSetVisibleCallback,
+        cancelDelayedSetVisibleCallback
+    );
 
-        this.hiddenTimeout = undefined;
-
-    }
-
-    componentDidMount() {
-
-        const hiddenTime = this.props.hiddenTime ?? -1;
-
-        if (hiddenTime >= 0) {
-
-            this.hiddenTimeout = setTimeout(() => {
-
-                this.hiddenTimeout = undefined;
-
-                this.setState({
-                    hidden: false
-                });
-
-            }, hiddenTime);
-
-        }
-
-    }
-
-    componentWillUnmount() {
-
-        if (this.hiddenTimeout !== undefined) {
-            clearTimeout(this.hiddenTimeout);
-            this.hiddenTimeout = undefined;
-        }
-
-    }
-
-    render () {
-
-        const loadingIcon = this.state.hidden ? '' : <LoadingIcon />;
-
-        return (
-            <div className={ LOADER_CLASS_NAME + ' ' + (this.props.className ?? '')}>
-                <div className={LOADER_CLASS_NAME + '-icon-container'}
-                     style={{animation: `spin ${this.props.speed}s linear infinite`}}
-                >{loadingIcon}</div>
-            </div>
-        );
-
-    }
+    return (
+        <div className={
+            LOADER_CLASS_NAME
+            + (className ? ` ${className}` : '')
+        }>
+            <div className={LOADER_CLASS_NAME + '-icon-container'}
+                 style={{animation: `spin ${speed}s linear infinite`}}
+            >{hidden ? null : <LoadingIcon />}</div>
+        </div>
+    );
 
 }
-
-
