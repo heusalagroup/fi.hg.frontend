@@ -4,14 +4,14 @@ import { useCallback, useEffect, useState } from "react";
 import { FormFieldState } from "../../types/FormFieldState";
 import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
-import { FieldChangeCallback } from "../../components/fields/FieldProps";
 import { useFieldStringChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
 import { useFieldIdentifier } from "./useFieldIdentifier";
-import { useFieldMountEffect } from "./useFieldMountEffect";
+import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
 import { useFieldNumberStateUpdateCallback } from "./number/useFieldNumberStateUpdateCallback";
 import { useFieldNumberInternalValueUpdateCallback } from "./number/useFieldNumberInternalValueUpdateCallback";
 import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
 import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
+import { FieldChangeCallback } from "./useFieldChangeCallback";
 
 const LOG = LogService.createLogger('useNumberField');
 
@@ -88,7 +88,7 @@ export function useNumberField (
         parseAndChangeCallback
     );
 
-    useFieldMountEffect(
+    useFieldMountEffectWithInternalState(
         identifier,
         setFieldState,
         updateValueStateCallback,

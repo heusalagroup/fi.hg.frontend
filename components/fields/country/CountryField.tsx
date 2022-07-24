@@ -3,7 +3,6 @@
 
 import { ReactNode } from 'react';
 import { CountryFieldModel } from "../../../types/items/CountryFieldModel";
-import { FieldChangeCallback, FieldProps } from '../FieldProps';
 import { FormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
@@ -11,13 +10,14 @@ import { CountryCode } from "../../../../core/types/CountryCode";
 import { CountryAutoCompleteMapping } from "../../../../core/CountryUtils";
 import { COUNTRY_FIELD_CLASS_NAME, FIELD_CLASS_NAME } from "../../../constants/hgClassName";
 import { useCountryCodeField } from "../../../hooks/field/useCountryCodeField";
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './CountryField.scss';
 
 const COMPONENT_CLASS_NAME = COUNTRY_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "text";
 const DEFAULT_COUNTRY_CODE : CountryCode = CountryCode.FI;
 
-export interface CountryFieldProps extends FieldProps<CountryFieldModel, CountryCode> {
+export interface CountryFieldProps {
     readonly className   ?: string;
     readonly style       ?: StyleScheme;
     readonly label       ?: string;

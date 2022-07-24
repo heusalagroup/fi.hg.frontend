@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 
-const LOG = LogService.createLogger('useFieldValidateValueCallback');
+const LOG = LogService.createLogger('useFieldValidateStringValueCallback');
 
 export interface FieldValidateStringValueCallback {
     (

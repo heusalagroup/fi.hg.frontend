@@ -3,7 +3,6 @@
 
 import { ReactNode } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
-import { FieldChangeCallback } from '../FieldProps';
 import { LogService } from "../../../../core/LogService";
 import { isSafeInteger, trim } from "../../../../core/modules/lodash";
 import { FormFieldState } from "../../../types/FormFieldState";
@@ -14,6 +13,7 @@ import {
     INTEGER_FIELD_CLASS_NAME
 } from "../../../constants/hgClassName";
 import { useNumberField } from "../../../hooks/field/useNumberField";
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './IntegerField.scss';
 
 const LOG = LogService.createLogger('IntegerField');

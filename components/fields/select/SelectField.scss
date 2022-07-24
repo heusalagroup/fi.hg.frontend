@@ -1,13 +1,13 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 @import "src/fi/hg/frontend/styles/index";
 
-.select-field {
+.hg-select-field {
 
   box-sizing   : border-box;
   padding      : 0;
   margin       : $field-margin;
 
-  & > .select-field-label {
+  & > .hg-select-field-label {
 
     padding           : $field-padding;
     margin            : 0;
@@ -19,7 +19,7 @@
 
     box-sizing: border-box;
 
-    & > .select-field-label {
+    & > .hg-select-field-label {
 
       flex-shrink: 1;
       padding: 0 1em 0 0.5em;
@@ -29,7 +29,7 @@
 
     }
 
-    & > .select-field-input {
+    & > .hg-select-field-input {
       flex-grow: 1;
       padding: 0.5em;
       border: 0;
@@ -55,7 +55,7 @@
       box-sizing     : border-box;
       min-width      : 15em;
 
-      & > .select-field-dropdown {
+      & > .hg-select-field-dropdown {
 
         background-color : #00000009;
         border           : 1px solid #00000022;
@@ -67,14 +67,14 @@
         display          : flex;
         flex-direction   : column;
 
-        & > .select-field-dropdown-item {
+        & > .hg-select-field-dropdown-item {
 
           box-sizing       : border-box;
           background-color : #ffffff;
           padding          : 0.5em;
           margin           : 0.25em 0.5em;
 
-          //&.select-field-dropdown-item-current {
+          //&.hg-select-field-dropdown-item-current {
           //  background-color : #ffffffff;
           //}
 

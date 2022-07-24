@@ -11,7 +11,6 @@ import {
     useEffect
 } from 'react';
 import { CheckboxFieldModel } from "../../../types/items/CheckboxFieldModel";
-import { FieldChangeCallback } from '../FieldProps';
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { LogService } from "../../../../core/LogService";
 import { ThemeService } from "../../../services/ThemeService";
@@ -22,11 +21,11 @@ import {
 } from "../../../constants/hgClassName";
 import './CheckboxField.scss';
 import { useFieldChangeState } from "../../../hooks/field/useFieldChangeState";
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 
 const LOG = LogService.createLogger('CheckboxField');
 const COMPONENT_CLASS_NAME = CHECKBOX_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "checkbox";
-type InternalValueType = boolean;
 
 export interface CheckboxFieldProps {
     readonly className?: string;
@@ -34,8 +33,8 @@ export interface CheckboxFieldProps {
     readonly label?: string;
     readonly placeholder?: string;
     readonly model?: CheckboxFieldModel;
-    readonly value?: InternalValueType;
-    readonly change?: FieldChangeCallback<InternalValueType | undefined>;
+    readonly value?: boolean;
+    readonly change?: FieldChangeCallback<boolean | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
     readonly children?: ReactNode;
 }
@@ -51,13 +50,13 @@ export function CheckboxField (props: CheckboxFieldProps) {
     const identifier = `#${key}: "${label}"`;
 
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [ value, setValue ] = useState<InternalValueType>(false);
+    const [ value, setValue ] = useState<boolean>(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
     const validateValueCallback = useCallback(
         (
-            internalValue: InternalValueType | undefined,
+            internalValue: boolean | undefined,
             required: boolean
         ): boolean => {
             LOG.debug(`${identifier}: validateValueCallback: `, required, internalValue);
@@ -70,8 +69,8 @@ export function CheckboxField (props: CheckboxFieldProps) {
 
     const validateWithStateValueCallback = useCallback(
         (
-            stateValue: InternalValueType,
-            propValue: InternalValueType | undefined,
+            stateValue: boolean,
+            propValue: boolean | undefined,
             required: boolean
         ): boolean => {
 
@@ -125,7 +124,7 @@ export function CheckboxField (props: CheckboxFieldProps) {
     );
 
     const setStateValue = useCallback(
-        (newValue: InternalValueType) => {
+        (newValue: boolean) => {
             if ( newValue !== value ) {
                 setValue(newValue);
                 updateFieldStateCallback();
@@ -165,7 +164,7 @@ export function CheckboxField (props: CheckboxFieldProps) {
                 event.preventDefault();
                 event.stopPropagation();
             }
-            const newValue: InternalValueType = event?.target?.checked ?? false;
+            const newValue: boolean = event?.target?.checked ?? false;
             LOG.debug(`${identifier}: _onChange: newValue = `, newValue);
             setValue(newValue);
         },

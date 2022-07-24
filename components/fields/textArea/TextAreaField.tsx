@@ -3,12 +3,12 @@
 
 import { ReactNode } from 'react';
 import { TextAreaFieldModel } from "../../../types/items/TextAreaFieldModel";
-import { FieldChangeCallback } from '../FieldProps';
 import { FormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { FIELD_CLASS_NAME, TEXT_AREA_FIELD_CLASS_NAME } from "../../../constants/hgClassName";
 import { useStringField } from "../../../hooks/field/useStringField";
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './TextAreaField.scss';
 
 const COMPONENT_CLASS_NAME = TEXT_AREA_FIELD_CLASS_NAME;

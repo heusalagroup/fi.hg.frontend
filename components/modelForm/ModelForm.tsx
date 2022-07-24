@@ -6,8 +6,14 @@ import { FormModel } from "../../types/FormModel";
 import { FormFieldModel,  isFormFieldModel } from "../../types/FormFieldModel";
 import { Button,  ButtonClickCallback} from "../button/Button";
 import { FormUtils } from "../fields/FormUtils";
-import { FieldChangeCallback } from "../fields/FieldProps";
-import { every, filter, get, keys, map, set } from "../../../core/modules/lodash";
+import {
+    every,
+    filter,
+    get,
+    keys,
+    map,
+    set
+} from "../../../core/modules/lodash";
 import { LogService } from "../../../core/LogService";
 import { FormItem } from "../../types/FormItem";
 import { PageBreakModel } from "../../types/items/PageBreakModel";
@@ -15,6 +21,7 @@ import { VoidCallback } from "../../../core/interfaces/callbacks";
 import { FormFieldState } from "../../types/FormFieldState";
 import { ButtonType } from "../button/types/ButtonType";
 import { MODEL_FORM_CLASS_NAME } from "../../constants/hgClassName";
+import { FieldChangeCallback } from "../../hooks/field/useFieldChangeCallback";
 import './ModelForm.scss';
 
 const LOG = LogService.createLogger('Form');

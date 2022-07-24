@@ -3,7 +3,6 @@
 
 import { ReactNode } from 'react';
 import { PasswordFieldModel } from "../../../types/items/PasswordFieldModel";
-import { FieldChangeCallback, FieldProps } from '../FieldProps';
 import { FormFieldState } from "../../../types/FormFieldState";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { ThemeService } from "../../../services/ThemeService";
@@ -12,12 +11,13 @@ import {
     PASSWORD_FIELD_CLASS_NAME
 } from "../../../constants/hgClassName";
 import { useStringField } from "../../../hooks/field/useStringField";
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './PasswordField.scss';
 
 const COMPONENT_CLASS_NAME = PASSWORD_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "password";
 
-export interface PasswordFieldProps extends FieldProps<PasswordFieldModel, string> {
+export interface PasswordFieldProps {
     readonly className   ?: string;
     readonly style       ?: StyleScheme;
     readonly label       ?: string;
@@ -26,11 +26,7 @@ export interface PasswordFieldProps extends FieldProps<PasswordFieldModel, strin
     readonly value       ?: string;
     readonly change      ?: FieldChangeCallback<string | undefined>;
     readonly changeState ?: FieldChangeCallback<FormFieldState>;
-    readonly children?: ReactNode;
-}
-
-export interface PasswordFieldProps {
-    readonly className ?: string;
+    readonly children    ?: ReactNode;
 }
 
 export function PasswordField (props: PasswordFieldProps) {

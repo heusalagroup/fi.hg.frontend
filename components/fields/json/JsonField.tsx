@@ -2,7 +2,6 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { JsonFieldModel } from "../../../types/items/JsonFieldModel";
-import { FieldChangeCallback } from '../FieldProps';
 import { FormFieldState } from "../../../types/FormFieldState";
 import { JsonAny, ReadonlyJsonAny } from "../../../../core/Json";
 import { ThemeService } from "../../../services/ThemeService";
@@ -14,6 +13,7 @@ import {
 import { useJsonField } from "../../../hooks/field/useJsonField";
 import { ReactNode } from "react";
 import './JsonField.scss';
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 
 const COMPONENT_CLASS_NAME = JSON_FIELD_CLASS_NAME;
 

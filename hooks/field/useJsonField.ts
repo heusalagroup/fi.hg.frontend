@@ -4,9 +4,8 @@ import { useFieldIdentifier } from "./useFieldIdentifier";
 import { useCallback, useEffect, useState } from "react";
 import { FormFieldState } from "../../types/FormFieldState";
 import { useFieldStringChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
-import { useFieldMountEffect } from "./useFieldMountEffect";
+import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
 import { useFieldChangeState } from "./useFieldChangeState";
-import { FieldChangeCallback } from "../../components/fields/FieldProps";
 import { LogService } from "../../../core/LogService";
 import { parseJson, ReadonlyJsonAny } from "../../../core/Json";
 import { useFieldValidateStringValueCallback } from "./string/useFieldValidateStringValueCallback";
@@ -14,6 +13,7 @@ import { useFieldJsonStateUpdateCallback } from "./json/useFieldJsonStateUpdateC
 import { useFieldValidateJsonWithStateValueCallback } from "./json/useFieldValidateJsonWithStateValueCallback";
 import { useFieldValidateJsonValueCallback } from "./json/useFieldValidateJsonValueCallback";
 import { useFieldJsonInternalValueUpdateCallback } from "./json/useFieldJsonInternalValueUpdateCallback";
+import { FieldChangeCallback } from "./useFieldChangeCallback";
 
 const LOG = LogService.createLogger('useJsonField');
 
@@ -81,7 +81,7 @@ export function useJsonField (
         parseAndChangeCallback
     );
 
-    useFieldMountEffect(
+    useFieldMountEffectWithInternalState(
         identifier,
         setFieldState,
         updateValueStateCallback,

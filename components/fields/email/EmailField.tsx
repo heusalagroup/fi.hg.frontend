@@ -3,12 +3,12 @@
 
 import { ReactNode } from 'react';
 import { EmailFieldModel } from "../../../types/items/EmailFieldModel";
-import { FieldChangeCallback } from '../FieldProps';
 import { FormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { EMAIL_FIELD_CLASS_NAME, FIELD_CLASS_NAME } from "../../../constants/hgClassName";
 import { useStringField } from "../../../hooks/field/useStringField";
+import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './EmailField.scss';
 
 const COMPONENT_CLASS_NAME = EMAIL_FIELD_CLASS_NAME;

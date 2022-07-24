@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { LogService } from "../../../core/LogService";
 import { FormFieldState } from "../../types/FormFieldState";
-import { FieldChangeCallback } from "../../components/fields/FieldProps";
+import { FieldChangeCallback } from "./useFieldChangeCallback";
 
 const LOG = LogService.createLogger('useFieldChangeState');
 

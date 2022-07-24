@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { FormFieldState } from "../../types/FormFieldState";
 import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
-import { FieldChangeCallback } from "../../components/fields/FieldProps";
 import { useFieldStringChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
 import { useFieldStringStateUpdateCallback } from "./string/useFieldStringStateUpdateCallback";
 import { useFieldIdentifier } from "./useFieldIdentifier";
-import { useFieldMountEffect } from "./useFieldMountEffect";
+import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
 import { useFieldStringInternalValueUpdateCallback } from "./string/useFieldStringInternalValueUpdateCallback";
 import { useFieldValidateStringValueCallback } from "./string/useFieldValidateStringValueCallback";
 import { useFieldValidateStringWithStateValueCallback } from "./string/useFieldValidateStringWithStateValueCallback";
+import { FieldChangeCallback } from "./useFieldChangeCallback";
 
 const LOG = LogService.createLogger('useStringField');
 
@@ -60,7 +60,7 @@ export function useStringField (
         change
     );
 
-    useFieldMountEffect(
+    useFieldMountEffectWithInternalState(
         identifier,
         setFieldState,
         updateValueStateCallback,
