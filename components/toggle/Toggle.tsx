@@ -1,74 +1,57 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Component, MouseEvent } from "react";
+import { MouseEvent, useCallback } from "react";
 import { ToggleOffIcon, ToggleOnIcon } from "./assets";
-import { LogService } from "../../../core/LogService";
-import "./Toggle.scss";
 import { TOGGLE_CLASS_NAME } from "../../constants/hgClassName";
+import { ChangeCallback } from "../../../core/interfaces/callbacks";
+import { useFieldChangeCallback } from "../../hooks/field/useFieldChangeCallback";
+import "./Toggle.scss";
 
-const LOG = LogService.createLogger('Toggle');
-
-export interface ToggleChangeCallback {
-    (value: boolean) : void;
-}
+export type ToggleChangeCallback = ChangeCallback<boolean>;
 
 export interface ToggleProps {
-    readonly className ?: string;
-    readonly value      : boolean;
-    readonly change    ?: ToggleChangeCallback;
+    readonly className?: string;
+    readonly value: boolean;
+    readonly change?: ChangeCallback<boolean>;
 }
 
-export interface ToggleState {
-}
+export function Toggle (props: ToggleProps) {
 
-export class Toggle extends Component<ToggleProps, ToggleState> {
+    const className = props?.className;
+    const propsValue = props?.value;
+    const propsChange = props?.change;
 
-    private readonly _clickCallback : (e: MouseEvent<HTMLDivElement>) => void;
+    const Icon = propsValue ? ToggleOnIcon : ToggleOffIcon;
 
-    public static defaultProps: Partial<ToggleProps> = {};
+    const changeCallback = useFieldChangeCallback<boolean>(
+        'Toggle',
+        propsChange
+    );
 
-    public constructor (props: ToggleProps) {
-        super(props);
-        this._clickCallback = this._onClick.bind(this);
-    }
+    const onClickCallback = useCallback(
+        (e: MouseEvent<HTMLDivElement>) => {
+            if ( e ) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            changeCallback( !propsValue );
+        },
+        [
+            propsValue,
+            changeCallback
+        ]
+    );
 
-    public render () {
-
-        const value = this.props.value;
-        const Icon = value ? ToggleOnIcon : ToggleOffIcon;
-
-        return (
-            <div className={
+    return (
+        <div
+            className={
                 TOGGLE_CLASS_NAME
-                + ' ' + (this.props.className ?? '')
-                + ' ' + TOGGLE_CLASS_NAME + (value ? '-enabled' : '-disabled')
+                + ' ' + TOGGLE_CLASS_NAME + (propsValue ? '-enabled' : '-disabled')
+                + (className ? ` ${className}` : '')
             }
-            onClick={this._clickCallback}
-            ><Icon /></div>
-        );
-
-    }
-
-    private _onClick (e: MouseEvent<HTMLDivElement>) {
-
-        if (e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        const value = !this.props.value;
-        if (this.props.change) {
-            try {
-                this.props.change(value);
-            } catch (err) {
-                LOG.error(`Error on click handler: `, err);
-            }
-        } else {
-            LOG.warn(`Warning! No click handler defined!`);
-        }
-
-    }
+            onClick={onClickCallback}
+        ><Icon /></div>
+    );
 
 }
-
-

@@ -1,91 +1,76 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Component } from 'react';
-import {SelectFieldItem} from "../../types/items/SelectFieldModel";
+import { SelectFieldItem } from "../../types/items/SelectFieldModel";
 import { Button } from "../button/Button";
-import {map} from "../../../core/modules/lodash";
-import {ChangeCallback} from "../../../core/interfaces/callbacks";
+import { map } from "../../../core/modules/lodash";
+import { ChangeCallback } from "../../../core/interfaces/callbacks";
 import { LogService } from "../../../core/LogService";
 import { TAB_CLASS_NAME } from "../../constants/hgClassName";
+import { ReactNode, useCallback } from "react";
 import './Tab.scss';
+import { useFieldChangeCallback } from "../../hooks/field/useFieldChangeCallback";
 
 const LOG = LogService.createLogger('Tab');
 
 export interface TabProps {
-    readonly children  ?: any;
-    readonly className ?: string;
-    readonly value      : any;
-    readonly values     : SelectFieldItem<any>[];
-    readonly change    ?: ChangeCallback<any>;
+    readonly className?: string;
+    readonly value: any;
+    readonly values: SelectFieldItem<any>[];
+    readonly change?: ChangeCallback<any>;
+    readonly children?: ReactNode;
 }
 
-export interface TabState {
+export function Tab (props: TabProps) {
 
-}
+    const className = props?.className;
+    const propsValues = props?.values;
+    const propsChange = props?.change;
 
-export class Tab extends Component<TabProps, TabState> {
+    const changeCallback = useFieldChangeCallback<any>(
+        'Tab',
+        propsChange
+    );
 
-    static defaultProps : Partial<TabProps> = {
-    };
-
-    constructor (props: TabProps) {
-
-        super(props);
-
-        this.state = {};
-
-    }
-
-    public render () {
-
-        return (
-            <div className={
-                TAB_CLASS_NAME +
-                ' ' + (this.props.className ?? '')
-            }>
-                {map(this.props.values, (item : SelectFieldItem<any>, tabIndex: number) => {
-                    const tabClickCallback = () => this._onTabClick(tabIndex);
-                    return (
-                        <Button
-                            className={
-                                TAB_CLASS_NAME + '-item'
-                                + ((this.props.value === item.value) ? ' ' + TAB_CLASS_NAME + '-item-selected' : '')
-                            }
-                            click={tabClickCallback}
-                        >{item.label}</Button>
-                    );
-                })}
-                {this.props.children}
-            </div>
-        );
-
-    }
-
-    private _onTabClick (tabIndex: number) {
-
-        const values = this.props.values;
-
-        if (tabIndex < values.length) {
-
-            const tabItem : SelectFieldItem<any> = values[tabIndex];
-
-            const changeCallback = this.props?.change;
-            if (changeCallback) {
-                try {
-                    changeCallback(tabItem.value);
-                } catch (err) {
-                    LOG.error('Error while executing change prop: ', err);
-                }
+    const onTabClickCallback = useCallback(
+        (tabIndex: number) => {
+            if ( tabIndex < propsValues.length ) {
+                const tabItem: SelectFieldItem<any> = propsValues[tabIndex];
+                changeCallback(tabItem.value);
             } else {
-                LOG.warn('No change prop defined');
+                LOG.error('Could not change tab: no such index as ' + tabIndex);
             }
+        },
+        [
+            propsValues,
+            changeCallback
+        ]
+    );
 
-        } else {
-            LOG.error('Could not change tab: no such index as ' + tabIndex);
-        }
+    return (
+        <div
+            className={
+                TAB_CLASS_NAME +
+                +(className ? ` ${className}` : '')
+            }
+        >
 
-    }
+            {map(propsValues, (item: SelectFieldItem<any>, tabIndex: number) => {
+                return (
+                    <Button
+                        className={
+                            TAB_CLASS_NAME + '-item'
+                            + ((propsValues === item.value) ? ' ' + TAB_CLASS_NAME + '-item-selected' : '')
+                        }
+                        click={() => onTabClickCallback(tabIndex)}
+                    >{item.label}</Button>
+                );
+            })}
+
+            {props?.children}
+
+        </div>
+    );
 
 }
-
 

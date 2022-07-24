@@ -16,16 +16,19 @@ export interface FieldChangeCallback<T> {
  */
 export function useFieldChangeCallback<T> (
     identifier: string,
-    change: FieldChangeCallback<T | undefined> | undefined
+    change: FieldChangeCallback<T> | undefined
 ) : FieldChangeCallback<T> {
     return useCallback(
         (value: T) => {
             if ( change ) {
                 try {
+                    LOG.debug(`${identifier}: Calling change callback on parent for value: `, value);
                     change(value);
                 } catch (err) {
                     LOG.error(`${identifier}: Error: `, err);
                 }
+            } else {
+                LOG.debug(`${identifier}: No change callback defined`);
             }
         },
         [

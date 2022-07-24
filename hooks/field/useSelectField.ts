@@ -20,6 +20,7 @@ import { useFieldArrayUpdateCallback } from "./array/useFieldArrayUpdateCallback
 import { FieldChangeCallback, useFieldChangeCallback } from "./useFieldChangeCallback";
 import { useDelayedCallback } from "../useDelayedCallback";
 import { useMountEffect } from "../useMountEffect";
+import { useSelectItemCallback } from "./array/useSelectItemCallback";
 
 const LOG = LogService.createLogger('useSelectField');
 
@@ -127,26 +128,11 @@ export function useSelectField<T> (
         ]
     );
 
-    const selectItemCallback = useCallback(
-        (index: number) => {
-
-            LOG.debug(`${identifier}: _selectItem: Selecting index `, index);
-
-            const selectItems: readonly SelectFieldItem<T>[] = propsValues;
-            if ( index >= 0 && index < selectItems.length ) {
-                changeCallback(selectItems[index].value);
-                closeDropdownCallback();
-            } else {
-                LOG.error('_selectItem: Index out of range:', index);
-            }
-
-        },
-        [
-            identifier,
-            changeCallback,
-            closeDropdownCallback,
-            propsValues
-        ]
+    const selectItemCallback = useSelectItemCallback(
+        identifier,
+        propsValues,
+        changeCallback,
+        closeDropdownCallback
     );
 
     const inputHasFocusCallback = useCallback(

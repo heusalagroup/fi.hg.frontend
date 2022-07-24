@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Component, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FormModel } from "../../types/FormModel";
 import { FormFieldModel, isFormFieldModel } from "../../types/FormFieldModel";
 import { Button } from "../button/Button";

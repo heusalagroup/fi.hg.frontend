@@ -16,7 +16,7 @@ export interface FieldValidateArrayValueCallback<T> {
 
 export function useFieldValidateArrayValueCallback<T> (
     identifier: string,
-    propsValues: readonly SelectFieldItem<T>[]
+    propsValues: readonly SelectFieldItem<T>[] | undefined
 ): FieldValidateArrayValueCallback<T> {
     return useCallback(
         (
@@ -31,10 +31,10 @@ export function useFieldValidateArrayValueCallback<T> (
                 return !required;
             }
 
-            const values : T[] = map(
+            const values : T[] = propsValues ? map(
                 propsValues,
                 (item: SelectFieldItem<T>): T => item.value
-            );
+            ) : [];
 
             const matches: boolean = values.includes(internalValue);
             LOG.debug(`${identifier}: "${internalValue}": matches= `, matches, values);
