@@ -11,7 +11,7 @@ import { map } from "../../../core/modules/lodash";
 import { ModalContainer } from "./ModalContainer";
 import { MODAL_GROUP_CONTAINER_CLASS_NAME } from "../../constants/hgClassName";
 import { useCallback, useState } from "react";
-import { useServiceEvent } from "../../../../../hooks/useServiceEvent";
+import { useServiceEvent } from "../../hooks/useServiceEvent";
 import { useMountEffect } from "../../hooks/useMountEffect";
 import "./ModalGroupContainer.scss";
 
