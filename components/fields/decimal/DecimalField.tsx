@@ -1,5 +1,4 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
-// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { ReactNode } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
@@ -10,33 +9,31 @@ import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import {
     FIELD_CLASS_NAME,
-    INTEGER_FIELD_CLASS_NAME
+    DECIMAL_FIELD_CLASS_NAME
 } from "../../../constants/hgClassName";
-import { useIntegerField } from "../../../hooks/field/useIntegerField";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
-import './IntegerField.scss';
+import { useDecimalField } from "../../../hooks/field/useDecimalField";
+import './DecimalField.scss';
+import { isNaN } from "lodash";
 
-const LOG = LogService.createLogger('IntegerField');
-const DEFAULT_PLACEHOLDER = '123';
-const COMPONENT_CLASS_NAME = INTEGER_FIELD_CLASS_NAME;
+const LOG = LogService.createLogger('DecimalField');
+const DEFAULT_PLACEHOLDER = '123.00';
+const COMPONENT_CLASS_NAME = DECIMAL_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "text";
 
-export interface IntegerFieldProps {
-    readonly className   ?: string;
-    readonly style       ?: StyleScheme;
-    readonly label       ?: string;
-    readonly placeholder ?: string;
-    readonly model       ?: IntegerFieldModel;
-    readonly value       ?: number;
-    readonly change      ?: FieldChangeCallback<number | undefined>;
-    readonly changeState ?: FieldChangeCallback<FormFieldState>;
-    readonly children    ?: ReactNode;
+export interface DecimalFieldProps {
+    readonly className?: string;
+    readonly style?: StyleScheme;
+    readonly label?: string;
+    readonly placeholder?: string;
+    readonly model?: IntegerFieldModel;
+    readonly value?: number;
+    readonly change?: FieldChangeCallback<number | undefined>;
+    readonly changeState?: FieldChangeCallback<FormFieldState>;
+    readonly children?: ReactNode;
 }
 
-export interface IntegerFieldProps {
-}
-
-export function IntegerField (props: IntegerFieldProps) {
+export function DecimalField (props: DecimalFieldProps) {
 
     const className = props?.className;
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
@@ -47,7 +44,7 @@ export function IntegerField (props: IntegerFieldProps) {
         fieldState,
         value,
         onChangeCallback
-    } = useIntegerField(
+    } = useDecimalField(
         label,
         props?.model?.key ?? '',
         props?.change,
@@ -56,7 +53,7 @@ export function IntegerField (props: IntegerFieldProps) {
         props?.model?.required ?? false,
         props?.model?.minValue,
         props?.model?.maxValue,
-        toInteger,
+        toNumber,
         stringifyInteger
     );
 
@@ -70,14 +67,16 @@ export function IntegerField (props: IntegerFieldProps) {
             }
         >
             {label ? (
-                <span className={
-                    COMPONENT_CLASS_NAME+'-label'
-                    + ` ${FIELD_CLASS_NAME}-label`
-                }>{label}</span>
+                <span
+                    className={
+                        COMPONENT_CLASS_NAME + '-label'
+                        + ` ${FIELD_CLASS_NAME}-label`
+                    }
+                >{label}</span>
             ) : null}
             <input
                 className={
-                    COMPONENT_CLASS_NAME+'-input'
+                    COMPONENT_CLASS_NAME + '-input'
                     + ` ${FIELD_CLASS_NAME}-input`
                 }
                 type={COMPONENT_INPUT_TYPE}
@@ -85,7 +84,7 @@ export function IntegerField (props: IntegerFieldProps) {
                 placeholder={placeholder}
                 value={value}
                 onChange={onChangeCallback}
-                readOnly={ props?.change === undefined }
+                readOnly={props?.change === undefined}
             />
             {props?.children}
         </label>
@@ -93,20 +92,16 @@ export function IntegerField (props: IntegerFieldProps) {
 
 }
 
-function toInteger (value : string | undefined) : number | undefined {
+function toNumber (value: string | undefined): number | undefined {
     try {
-
-        if (value === undefined) return undefined;
+        if ( value === undefined ) return undefined;
         value = trim(value);
-        if (value === '') return undefined;
 
-        const parsedValue = parseInt(value, 10);
+        if ( value === '' ) return undefined;
 
-        if ( !isSafeInteger(parsedValue) ) {
-            return undefined;
-        }
+        const parsedValue = parseFloat(value);
 
-        return parsedValue;
+        return isNaN(parsedValue) ? undefined : parsedValue;
 
     } catch (err) {
         LOG.warn(`Error while parsing string as integer "${value}": `, err);
@@ -114,6 +109,6 @@ function toInteger (value : string | undefined) : number | undefined {
     }
 }
 
-function stringifyInteger (value: number | undefined) : string {
+function stringifyInteger (value: number | undefined): string {
     return `${value ?? ''}`;
 }

@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 import { FieldValidateNumberValueCallback } from "./useFieldValidateNumberValueCallback";
-import { ToNumberCallback } from "../useNumberField";
+import { ToNumberCallback } from "../useIntegerField";
 
 const LOG = LogService.createLogger('useFieldValidateNumberWithStateValueCallback');
 

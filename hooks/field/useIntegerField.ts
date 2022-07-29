@@ -8,12 +8,12 @@ import { useFieldStringChangeEventCallback } from "./string/useFieldStringChange
 import { useFieldIdentifier } from "./useFieldIdentifier";
 import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
 import { useFieldNumberStateUpdateCallback } from "./number/useFieldNumberStateUpdateCallback";
-import { useFieldNumberInternalValueUpdateCallback } from "./number/useFieldNumberInternalValueUpdateCallback";
 import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
 import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
+import { useFieldIntegerNumberInternalValueUpdateCallback } from "./number/useFieldIntegerNumberInternalValueUpdateCallback";
 
-const LOG = LogService.createLogger('useNumberField');
+const LOG = LogService.createLogger('useIntegerField');
 
 type InternalValueType = string;
 
@@ -25,7 +25,7 @@ export interface StringifyNumberCallback {
     (value: number | undefined) : string;
 }
 
-export function useNumberField (
+export function useIntegerField (
     label: string,
     key: string,
     change: FieldChangeCallback<number | undefined> | undefined,
@@ -43,7 +43,7 @@ export function useNumberField (
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
     const [ value, setValue ] = useState<InternalValueType>(stringifyNumber(propsValue));
 
-    const updateValueStateCallback = useFieldNumberInternalValueUpdateCallback(
+    const updateValueStateCallback = useFieldIntegerNumberInternalValueUpdateCallback(
         identifier,
         setValue,
         propsValue,

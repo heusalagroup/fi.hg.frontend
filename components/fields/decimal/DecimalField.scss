@@ -1,11 +1,10 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 @import "src/fi/hg/frontend/styles/index";
 
-.hg-integer-field {
+.hg-decimal-field {
 
-  //background-color  : $field-background-color;
-  //border            : $field-border;
   padding           : $field-padding;
   margin            : $field-margin;
   border-radius     : $field-border-radius;
@@ -15,16 +14,16 @@
   align-items: center;
   justify-content: center;
 
-  & > .hg-integer-field-label {
+  & > .hg-decimal-field-label {
     box-sizing: border-box;
     flex-shrink: 1;
     padding           : $field-padding;
     min-width: $field-label-min-width;
     text-align   : right;
-    
+
   }
 
-  & > .hg-integer-field-input {
+  & > .hg-decimal-field-input {
     box-sizing: border-box;
     padding: 1em 0.75em;
     flex-grow: 1;

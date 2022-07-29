@@ -3,11 +3,11 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 import { VoidCallback } from "../../../../core/interfaces/callbacks";
-import { StringifyNumberCallback } from "../useNumberField";
+import { StringifyNumberCallback } from "../useIntegerField";
 
-const LOG = LogService.createLogger('useFieldNumberInternalValueUpdateCallback');
+const LOG = LogService.createLogger('useFieldDecimalNumberInternalValueUpdateCallback');
 
-export function useFieldNumberInternalValueUpdateCallback (
+export function useFieldDecimalNumberInternalValueUpdateCallback (
     identifier: string,
     setValue: Dispatch<SetStateAction<string>>,
     propsValue: number | undefined,
@@ -16,7 +16,9 @@ export function useFieldNumberInternalValueUpdateCallback (
     return useCallback(
         () => {
             LOG.debug(`${identifier}: Changing internal value: `, propsValue);
-            setValue(() => stringifyNumber(propsValue));
+            setValue((prevValue: string) => {
+                return stringifyNumber(propsValue);
+            });
         }, [
             identifier,
             propsValue,
