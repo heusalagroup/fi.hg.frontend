@@ -3,9 +3,10 @@
 
 import {
     createRef,
-    ReactNode
+    ReactNode,
+    RefObject
 } from 'react';
-import { SelectFieldModel, SelectFieldItem} from "../../../types/items/SelectFieldModel";
+import { SelectFieldModel, SelectFieldItem } from "../../../types/items/SelectFieldModel";
 import {
     map
 } from "../../../../core/modules/lodash";
@@ -15,105 +16,86 @@ import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFiel
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import {
-    FIELD_CLASS_NAME,
-    SELECT_FIELD_CLASS_NAME
+    SELECT_FIELD_TEMPLATE_CLASS_NAME
 } from "../../../constants/hgClassName";
-import { useSelectField } from "../../../hooks/field/useSelectField";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
-import './SelectField.scss';
-import { SelectFieldTemplate } from './SelectFieldTemplate';
+import { VoidCallback } from '../../../../core/interfaces/callbacks';
+import { LogService } from "../../../../core/LogService";
+import { SelectItemCallback } from '../../../hooks/field/array/useSelectItemCallback';
+import './SelectFieldTemplate.scss';
 
-const COMPONENT_CLASS_NAME = SELECT_FIELD_CLASS_NAME;
-const CLOSE_DROPDOWN_TIMEOUT_ON_BLUR = 100;
-const MOVE_TO_ITEM_ON_OPEN_DROPDOWN_TIMEOUT = 100;
+const LOG = LogService.createLogger('SelectFieldTemplate');
 
-export interface SelectFieldProps<T> {
-    readonly className   ?: string;
-    readonly style       ?: StyleScheme;
-    readonly label       ?: string;
-    readonly placeholder ?: string;
-    readonly model       ?: SelectFieldModel<T>;
-    readonly value       ?: T;
-    readonly change      ?: FieldChangeCallback<T | undefined>;
-    readonly changeState ?: FieldChangeCallback<FormFieldState>;
-    readonly values       : readonly SelectFieldItem<T>[];
-    readonly children    ?: ReactNode;
+const COMPONENT_CLASS_NAME = SELECT_FIELD_TEMPLATE_CLASS_NAME;
+
+export interface SelectFieldTemplateProps<T> {
+    readonly className?: string;
+    readonly style?: StyleScheme;
+    readonly label?: string;
+    readonly placeholder?: string;
+    readonly model?: SelectFieldModel<T>;
+    readonly value?: T;
+    readonly change?: FieldChangeCallback<T>;
+    readonly changeState?: FieldChangeCallback<FormFieldState>;
+    readonly values: readonly SelectFieldItem<T>[];
+    readonly children?: ReactNode;
+    readonly inputRef?: RefObject<HTMLInputElement>;
+    readonly buttonRefs?: RefObject<HTMLButtonElement>[];
+    readonly onFocusCallback?: VoidCallback;
+    readonly onBlurCallback?: VoidCallback;
+    readonly onChangeCallback?: FieldChangeCallback<T>;
+    readonly onKeyDownCallback?: FieldChangeCallback<T>;
+    readonly dropdownOpen?: boolean;
+    readonly fieldState: FormFieldState;
+    readonly currentItemLabel?: string;
+    readonly currentItemIndex?: number | undefined;
+    readonly selectItemCallback: SelectItemCallback;
+
 }
 
-export function SelectField (props: SelectFieldProps<any>) {
+export function SelectFieldTemplate(props: SelectFieldTemplateProps<any>) {
 
-    /*const className = props?.className;
+    const className = props?.className;
+
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
-    const placeholder = props.placeholder ?? props.model?.placeholder;*/
+    const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
-
+    const inputRef = props.inputRef;
+    const buttonRefs = props.buttonRefs ? props.buttonRefs : [];
+    const onFocusCallback = props.onFocusCallback;
+    const onBlurCallback = props.onBlurCallback;
+    const onChangeCallback = props.onChangeCallback;
+    const onKeyDownCallback = props.onKeyDownCallback;
+    const currentItemLabel = props.currentItemLabel;
+    const currentItemIndex = props.currentItemIndex;
+    const dropdownOpen = props.dropdownOpen ? props.dropdownOpen : false;
+    const selectItemCallback = props.selectItemCallback;
     const selectItems = props?.values ?? props?.model?.values ?? [];
-
-    const {
-        fieldState,
-        inputRef,
-        currentItemLabel,
-        currentItemIndex,
-        selectItemCallback,
-        onFocusCallback,
-        onBlurCallback,
-        onChangeCallback,
-        onKeyDownCallback,
-        dropdownOpen,
-        buttonRefs
-    } = useSelectField<any>(
-        label,
-        props?.model?.key ?? '',
-        props?.change,
-        props?.changeState,
-        props?.value,
-        selectItems,
-        props?.model?.required ?? false,
-        CLOSE_DROPDOWN_TIMEOUT_ON_BLUR,
-        MOVE_TO_ITEM_ON_OPEN_DROPDOWN_TIMEOUT
-    );
+    const fieldState = props.fieldState;
 
     return (
-        <SelectFieldTemplate
-            values={selectItems}
-            fieldState={fieldState}
-            inputRef={inputRef}
-            label={label}
-            currentItemLabel={currentItemLabel}
-            currentItemIndex={currentItemIndex}
-            selectItemCallback={selectItemCallback}
-            onFocusCallback={onFocusCallback}
-            onBlurCallback={onBlurCallback}
-            onChangeCallback={onChangeCallback}
-            onKeyDownCallback={onKeyDownCallback}
-            dropdownOpen={dropdownOpen}
-            buttonRefs={buttonRefs}
-        />
-    )
-
-    /*return (
         <div
             className={
-                `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
-                + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
+                `${COMPONENT_CLASS_NAME} ${SELECT_FIELD_TEMPLATE_CLASS_NAME}`
+                + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
+                + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
         >
             <label className={
                 COMPONENT_CLASS_NAME + '-label'
-                + ` ${FIELD_CLASS_NAME}-label`
+                + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-label`
             }>
 
                 {label ? (
-                    <span className={COMPONENT_CLASS_NAME+'-label-text'}>{label}</span>
+                    <span className={COMPONENT_CLASS_NAME + '-label-text'}>{label}</span>
                 ) : null}
 
                 <input
                     ref={inputRef}
                     className={
-                        COMPONENT_CLASS_NAME+'-input'
-                        + ` ${FIELD_CLASS_NAME}-input`
+                        COMPONENT_CLASS_NAME + '-input'
+                        + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-input`
                     }
                     type="text"
                     autoComplete="off"
@@ -131,7 +113,7 @@ export function SelectField (props: SelectFieldProps<any>) {
 
             <Popup open={dropdownOpen}>
                 <div className={COMPONENT_CLASS_NAME + '-dropdown'}>
-                    {map(selectItems, (selectItem : SelectFieldItem<any>, itemIndex: number) : any => {
+                    {map(selectItems, (selectItem: SelectFieldItem<any>, itemIndex: number): any => {
 
                         const isCurrentButton = currentItemIndex !== undefined && itemIndex === currentItemIndex;
 
@@ -163,5 +145,6 @@ export function SelectField (props: SelectFieldProps<any>) {
             </Popup>
 
         </div>
-    );*/
+    );
+
 }
