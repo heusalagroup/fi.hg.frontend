@@ -13,51 +13,46 @@ import {
 import { Popup } from "../../popup/Popup";
 import { Button } from "../../button/Button";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
-import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import {
-    SELECT_FIELD_TEMPLATE_CLASS_NAME
+    FIELD_CLASS_NAME,
+    SELECT_TEMPLATE_CLASS_NAME
 } from "../../../constants/hgClassName";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import { VoidCallback } from '../../../../core/interfaces/callbacks';
-import { LogService } from "../../../../core/LogService";
 import { SelectItemCallback } from '../../../hooks/field/array/useSelectItemCallback';
-import './SelectFieldTemplate.scss';
+import './SelectTemplate.scss';
 
-const LOG = LogService.createLogger('SelectFieldTemplate');
-
-const COMPONENT_CLASS_NAME = SELECT_FIELD_TEMPLATE_CLASS_NAME;
+const COMPONENT_CLASS_NAME = SELECT_TEMPLATE_CLASS_NAME;
 
 export interface SelectFieldTemplateProps<T> {
-    readonly className?: string;
-    readonly style?: StyleScheme;
-    readonly label?: string;
-    readonly placeholder?: string;
-    readonly model?: SelectFieldModel<T>;
-    readonly value?: T;
-    readonly change?: FieldChangeCallback<T>;
-    readonly changeState?: FieldChangeCallback<FormFieldState>;
-    readonly values: readonly SelectFieldItem<T>[];
-    readonly children?: ReactNode;
-    readonly inputRef?: RefObject<HTMLInputElement>;
-    readonly buttonRefs?: RefObject<HTMLButtonElement>[];
-    readonly onFocusCallback?: VoidCallback;
-    readonly onBlurCallback?: VoidCallback;
-    readonly onChangeCallback?: FieldChangeCallback<T>;
-    readonly onKeyDownCallback?: FieldChangeCallback<T>;
-    readonly dropdownOpen?: boolean;
-    readonly fieldState: FormFieldState;
-    readonly currentItemLabel?: string;
-    readonly currentItemIndex?: number | undefined;
-    readonly selectItemCallback: SelectItemCallback;
-
+    readonly className          ?: string;
+    readonly style              ?: StyleScheme;
+    readonly label              ?: string;
+    readonly placeholder        ?: string;
+    readonly model              ?: SelectFieldModel<T>;
+    readonly value              ?: T;
+    readonly change             ?: FieldChangeCallback<T>;
+    readonly changeState        ?: FieldChangeCallback<FormFieldState>;
+    readonly values             ?: readonly SelectFieldItem<T>[];
+    readonly children           ?: ReactNode;
+    readonly inputRef           ?: RefObject<HTMLInputElement>;
+    readonly buttonRefs         ?: RefObject<HTMLButtonElement>[];
+    readonly onFocusCallback    ?: VoidCallback;
+    readonly onBlurCallback     ?: VoidCallback;
+    readonly onChangeCallback   ?: FieldChangeCallback<T>;
+    readonly onKeyDownCallback  ?: FieldChangeCallback<T>;
+    readonly dropdownOpen       ?: boolean;
+    readonly fieldState         ?: FormFieldState;
+    readonly currentItemLabel   ?: string;
+    readonly currentItemIndex   ?: number | undefined;
+    readonly selectItemCallback  : SelectItemCallback;
 }
 
-export function SelectFieldTemplate(props: SelectFieldTemplateProps<any>) {
+export function SelectTemplate(props: SelectFieldTemplateProps<any>) {
 
     const className = props?.className;
-
-    const styleScheme = props?.style ?? ThemeService.getStyleScheme();
+    const styleScheme = props?.style;
     const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
     const inputRef = props.inputRef;
@@ -70,21 +65,21 @@ export function SelectFieldTemplate(props: SelectFieldTemplateProps<any>) {
     const currentItemIndex = props.currentItemIndex;
     const dropdownOpen = props.dropdownOpen ? props.dropdownOpen : false;
     const selectItemCallback = props.selectItemCallback;
-    const selectItems = props?.values ?? props?.model?.values ?? [];
-    const fieldState = props.fieldState;
+    const selectItems = props?.values ?? props?.model?.values;
+    const fieldState = props?.fieldState;
 
     return (
         <div
             className={
-                `${COMPONENT_CLASS_NAME} ${SELECT_FIELD_TEMPLATE_CLASS_NAME}`
-                + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
+                `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
+                + ( styleScheme ? ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}` : '')
+                + ( fieldState  ? ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}` : '')
                 + ` ${className ? ` ${className}` : ''}`
             }
         >
             <label className={
                 COMPONENT_CLASS_NAME + '-label'
-                + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-label`
+                + ` ${FIELD_CLASS_NAME}-label`
             }>
 
                 {label ? (
@@ -95,7 +90,7 @@ export function SelectFieldTemplate(props: SelectFieldTemplateProps<any>) {
                     ref={inputRef}
                     className={
                         COMPONENT_CLASS_NAME + '-input'
-                        + ` ${SELECT_FIELD_TEMPLATE_CLASS_NAME}-input`
+                        + ` ${FIELD_CLASS_NAME}-input`
                     }
                     type="text"
                     autoComplete="off"
@@ -113,7 +108,7 @@ export function SelectFieldTemplate(props: SelectFieldTemplateProps<any>) {
 
             <Popup open={dropdownOpen}>
                 <div className={COMPONENT_CLASS_NAME + '-dropdown'}>
-                    {map(selectItems, (selectItem: SelectFieldItem<any>, itemIndex: number): any => {
+                    { selectItems ? map(selectItems, (selectItem: SelectFieldItem<any>, itemIndex: number): any => {
 
                         const isCurrentButton = currentItemIndex !== undefined && itemIndex === currentItemIndex;
 
@@ -140,7 +135,7 @@ export function SelectFieldTemplate(props: SelectFieldTemplateProps<any>) {
                             >{selectItem?.label ?? ''}</Button>
                         );
 
-                    })}
+                    }) : null}
                 </div>
             </Popup>
 

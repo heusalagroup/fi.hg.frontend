@@ -1,13 +1,12 @@
-// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 @import "src/fi/hg/frontend/styles/index";
 
-.hg-select-field-template {
+.hg-select-template {
 
   box-sizing   : border-box;
   padding      : 0;
-  margin       : $form-field-margin;
+  margin       : $field-margin;
 
-  & > .hg-select-field-template-label {
+  & > .hg-select-template-label {
 
     padding           : 0;
     margin            : 0;
@@ -18,7 +17,7 @@
     box-sizing: border-box;
     width: 100%;
 
-    & > .hg-select-field-template-label-text {
+    & > .hg-select-template-label-text {
 
       flex-shrink: 1;
       padding: 0 1em 0 0.5em;
@@ -28,7 +27,7 @@
 
     }
 
-    & > .hg-select-field-template-input {
+    & > .hg-select-template-input {
       box-sizing: border-box;
       padding: 1em 0.75em;
       flex-grow: 1;
@@ -54,7 +53,7 @@
       box-sizing     : border-box;
       min-width      : 15em;
 
-      & > .hg-select-field-template-dropdown {
+      & > .hg-select-template-dropdown {
 
         //background-color : #00000009;
         border           : 1px solid #00000022;
@@ -66,7 +65,7 @@
         display          : flex;
         flex-direction   : column;
 
-        & > .hg-select-field-template-dropdown-item {
+        & > .hg-select-template-dropdown-item {
 
           box-sizing       : border-box;
           //background-color : #ffffff;

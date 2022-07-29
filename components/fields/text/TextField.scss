@@ -11,13 +11,17 @@
   flex-direction    : row;
   align-items       : center;
   justify-content   : center;
+  overflow          : hidden;
 
   & > .hg-text-field-label {
-    box-sizing: border-box;
+    box-sizing   : border-box;
     flex-shrink  : 1;
-    padding           : $field-padding;
+    padding      : $field-label-padding;
     min-width    : $field-label-min-width;
+    max-width    : 100%;
     text-align   : right;
+    text-wrap    : normal;
+    flex-wrap    : wrap;
   }
 
   & > .hg-text-field-input {

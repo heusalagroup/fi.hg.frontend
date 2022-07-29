@@ -32,3 +32,4 @@ export const LOADER_CLASS_NAME                  = 'hg-loader';
 export const TOGGLE_CLASS_NAME                  = 'hg-toggle';
 export const FORM_CONTROLS_CLASS_NAME           = 'hg-form-controls';
 export const MEMBER_LIST_CLASS_NAME             = 'hg-member-list';
+export const SELECT_TEMPLATE_CLASS_NAME             = 'hg-select-template';
