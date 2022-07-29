@@ -17,7 +17,7 @@
   & > .hg-json-field-label {
     box-sizing: border-box;
     flex-shrink : 1;
-    padding           : $field-padding;
+    padding     : $textarea-field-label-padding;
     min-width: $field-label-min-width;
     text-align   : right;
   }

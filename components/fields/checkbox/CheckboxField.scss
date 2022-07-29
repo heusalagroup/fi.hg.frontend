@@ -14,20 +14,16 @@
   justify-content   : flex-start;
 
   & > .hg-checkbox-field-input {
-
     flex-shrink    : 0;
     padding        : 0 1em 0 0.5em;
-
   }
 
   & > .hg-checkbox-field-label {
-
     flex-grow      : 1;
-    padding        : 0.5em;
+    padding        : $checkbox-field-label-padding;
     border         : 0;
     font-size      : 1.25em;
     border-radius  : 0.25em;
-
   }
 
   &.hg-field-state-invalid {
