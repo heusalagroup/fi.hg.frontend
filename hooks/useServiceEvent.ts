@@ -1,6 +1,6 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { LogService } from "../../core/LogService";
 import { VoidCallback } from "../../core/interfaces/callbacks";
 import { isPromise } from "../../core/modules/lodash";
@@ -24,28 +24,34 @@ export function useServiceEvent<T extends keyof any> (
     event: T,
     callback: VoidCallback
 ) {
-    return useEffect(
+    const onEventCallback = useCallback(
         () => {
-            return Service.on(
-                event,
-                () => {
-                    LOG.debug(`Event "${event.toString()}": Calling callback`);
-                    try {
-                        const p = callback();
-                        if ( isPromise(p) ) {
-                            p.catch((err: any) => {
-                                LOG.error(`Event "${event.toString()}": Callback error: `, err);
-                            });
-                        }
-                    } catch (err: any) {
-                        LOG.error(`Event "${event.toString()}": Callback exception: `, err);
-                    }
+            LOG.debug(`Event "${event.toString()}": Calling callback`);
+            try {
+                const p = callback();
+                if ( isPromise(p) ) {
+                    p.catch((err: any) => {
+                        LOG.error(`Event "${event.toString()}": Callback error: `, err);
+                    });
                 }
-            );
+            } catch (err: any) {
+                LOG.error(`Event "${event.toString()}": Callback exception: `, err);
+            }
         },
         [
+            event,
+            callback
+        ]
+    );
+    return useEffect(
+        () =>
+            Service.on(
+                event,
+                onEventCallback
+            ),
+        [
+            onEventCallback,
             Service,
-            callback,
             event
         ]
     );

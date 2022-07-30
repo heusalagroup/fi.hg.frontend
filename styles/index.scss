@@ -174,7 +174,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-primary   {
   color: $button-primary-text-color;
   background-color: $button-primary-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-primary-text-color;
   }
 }
@@ -182,7 +182,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-secondary {
   color: $button-secondary-text-color;
   background-color: $button-secondary-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-secondary-text-color;
   }
 }
@@ -190,7 +190,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-success   {
   color: $button-success-text-color;
   background-color: $button-success-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-success-text-color;
   }
 }
@@ -198,7 +198,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-danger    {
   color: $button-danger-text-color;
   background-color: $button-danger-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-danger-text-color;
   }
 }
@@ -206,7 +206,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-warning   {
   color: $button-warning-text-color;
   background-color: $button-warning-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-warning-text-color;
   }
 }
@@ -214,7 +214,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-info      {
   color: $button-info-text-color;
   background-color: $button-info-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-info-text-color;
   }
 }
@@ -222,7 +222,7 @@ $field-label-min-width : 40%;
 .hg-button.hg-button-link      {
   color: $button-link-text-color;
   background-color: $button-link-background-color;
-  & > .icon > svg {
+  & > .hg-icon > svg {
     fill: $button-link-text-color;
   }
 }

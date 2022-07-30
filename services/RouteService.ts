@@ -6,20 +6,17 @@ import { Observer,  ObserverCallback, ObserverDestructor } from "../../core/Obse
 const LOG = LogService.createLogger('RouteService');
 
 export enum RouteServiceEvent {
-
     PUSH_HISTORY = "RouteService:pushHistory"
-
 }
 
 export type RouteServiceDestructor = ObserverDestructor;
 
 /**
- * See also HistoryServiceSwitch from ../components/router/HistoryServiceSwitch.tsx
+ * See also `useRouteServiceWithNavigate()` or `HistoryServiceSwitch`
  */
 export class RouteService {
 
     private static _observer: Observer<RouteServiceEvent> = new Observer<RouteServiceEvent>("RouteService");
-
     private static _nextHistory : string | undefined;
 
     public static Event = RouteServiceEvent;
@@ -43,12 +40,11 @@ export class RouteService {
     }
 
     /**
-     * To use this you need to use `HistoryServiceSwitch` component from
-     *    ../components/router/HistoryServiceSwitch.tsx
-     * or implement your own `RouteServiceEvent.PUSH_HISTORY` implementation in your app.
+     * To use this you need to use `useRouteService()` hook.
+     *
+     * ...or implement your own `RouteServiceEvent.PUSH_HISTORY` implementation in your app.
      */
     public static setRoute (value : string) {
-
         if (this._observer.hasCallbacks(RouteServiceEvent.PUSH_HISTORY)) {
             LOG.debug(`Triggering route to: ${value}`);
             this._observer.triggerEvent(RouteServiceEvent.PUSH_HISTORY, value);
@@ -56,7 +52,6 @@ export class RouteService {
             LOG.debug(`Route saved for later use: ${value}`);
             this._nextHistory = value;
         }
-
     }
 
 }

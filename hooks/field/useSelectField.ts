@@ -30,7 +30,7 @@ export function useSelectField<T> (
     change: FieldChangeCallback<T | undefined> | undefined,
     changeState: FieldChangeCallback<FormFieldState> | undefined,
     propsValue: T | undefined,
-    propsValues: readonly SelectFieldItem<T>[],
+    propsValues: readonly SelectFieldItem<T>[] | undefined,
     isRequired: boolean,
     closeDropdownTimeoutOnBlur: number,
     moveToItemOnOpenDropdownTimeout: number
@@ -42,7 +42,7 @@ export function useSelectField<T> (
     const [ dropdownOpen, setDropdownOpen ] = useState<boolean>(false);
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
 
-    const currentItem: SelectFieldItem<T> | undefined = currentItemIndex !== undefined ? propsValues[currentItemIndex] : undefined;
+    const currentItem: SelectFieldItem<T> | undefined = currentItemIndex !== undefined && propsValues !== undefined ? propsValues[currentItemIndex] : undefined;
     const currentItemLabel: string = currentItem?.label ?? '';
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -54,17 +54,14 @@ export function useSelectField<T> (
     const findValueIndexCallback = useCallback(
         (value: any): number | undefined => {
 
-            LOG.debug(`${identifier}: _findValueIndex: value: `, value);
+            LOG.debug(`${identifier}: _findValueIndex: value: `, value, propsValues);
 
-            const items: readonly SelectFieldItem<T>[] = propsValues;
-            LOG.debug(`${identifier}: _findValueIndex: items: `, items);
-
-            const index: number = findIndex(
-                items,
+            const index: number = propsValues !== undefined ? findIndex(
+                propsValues,
                 (item: SelectFieldItem<T>): boolean => item.value === value
-            );
+            ) : -1;
 
-            if ( index >= 0 && index < items.length ) {
+            if ( index >= 0 && index < (propsValues?.length ?? 0) ) {
                 LOG.debug(`${identifier}: _findValueIndex: found: `, index);
                 return index;
             }
@@ -199,17 +196,15 @@ export function useSelectField<T> (
 
     const moveCurrentItemToCallback = useCallback(
         (nextItem: number) => {
-
-            if ( !(nextItem >= 0 && nextItem < propsValues.length) ) {
+            if ( propsValues !== undefined && nextItem >= 0 && nextItem < (propsValues?.length ?? 0) ) {
+                LOG.debug(`${identifier}: _moveCurrentItemTo: Selecting ${nextItem}`);
+                setButtonFocusCallback(nextItem);
+                changeCallback(propsValues[nextItem].value);
+                openDropdownIfNotOpenCallback();
+            } else {
                 LOG.warn(`Could not change to out of range index ${nextItem}`);
                 return;
             }
-
-            LOG.debug(`${identifier}: _moveCurrentItemTo: Selecting ${nextItem}`);
-            setButtonFocusCallback(nextItem);
-            changeCallback(propsValues[nextItem].value);
-            openDropdownIfNotOpenCallback();
-
         },
         [
             identifier,
@@ -249,7 +244,6 @@ export function useSelectField<T> (
                 return;
             }
 
-            const items: readonly SelectFieldItem<T>[] = propsValues;
             const currentItem: number | undefined = getCurrentIndexCallback();
             const buttonIndex: number = findIndex(buttonRefsRef.current, (item: RefObject<HTMLButtonElement>): boolean => {
                 const currentElement: HTMLButtonElement | null | undefined = item?.current;
@@ -266,14 +260,12 @@ export function useSelectField<T> (
                 return;
             }
 
-            if ( !(buttonIndex >= 0 && buttonIndex < items.length) ) {
+            if ( propsValues !== undefined && buttonIndex >= 0 && buttonIndex < propsValues.length ) {
+                LOG.debug(`${identifier}: _updateCurrentItemFromFocus: Selecting item: `, buttonIndex);
+                changeCallback(propsValues[buttonIndex].value);
+            } else {
                 LOG.warn(`${identifier}: _updateCurrentItemFromFocus: Could not change to out of range index ${buttonIndex}`);
-                return;
             }
-
-            LOG.debug(`${identifier}: _updateCurrentItemFromFocus: Selecting item: `, buttonIndex);
-
-            changeCallback(items[buttonIndex].value);
 
         },
         [
@@ -332,11 +324,11 @@ export function useSelectField<T> (
 
     const onBlurCallback = useCallback(
         () => {
-            if ( !dropdownOpen ) {
+            if ( dropdownOpen ) {
+                delayedCloseDropdownIfOpenCallback();
+            } else {
                 LOG.debug(`${identifier}:_onBlur: Dropdown not open`);
-                return;
             }
-            delayedCloseDropdownIfOpenCallback();
         },
         [
             dropdownOpen,
@@ -348,24 +340,20 @@ export function useSelectField<T> (
     const moveNextItemCallback = useCallback(
         () => {
 
-            const items: readonly SelectFieldItem<T>[] = propsValues;
-            const totalItems: number = items.length;
+            const totalItems: number = propsValues?.length ?? 0;
             const currentItem: number | undefined = getCurrentIndexCallback();
-
             const nextItem: number = currentItem !== undefined ? currentItem + 1 : 0;
             const nextCurrentIndex: number = nextItem < totalItems ? nextItem : 0;
 
-            if ( !(nextCurrentIndex >= 0 && nextCurrentIndex < items.length) ) {
+            if ( propsValues !== undefined && nextCurrentIndex >= 0 && nextCurrentIndex < totalItems ) {
+                const itemValue = propsValues[nextCurrentIndex].value;
+                LOG.debug(`${identifier}: _moveNextItem: Selecting ${nextCurrentIndex}: `, itemValue);
+                changeCallback(itemValue);
+                setButtonFocusCallback(nextCurrentIndex);
+                openDropdownIfNotOpenCallback();
+            } else {
                 LOG.warn(`_moveNextItem: Could not change to out of range index ${nextCurrentIndex}`);
-                return;
             }
-
-            const itemValue = items[nextCurrentIndex].value;
-            LOG.debug(`${identifier}: _moveNextItem: Selecting ${nextCurrentIndex}: `, itemValue);
-
-            changeCallback(itemValue);
-            setButtonFocusCallback(nextCurrentIndex);
-            openDropdownIfNotOpenCallback();
 
         },
         [
@@ -380,24 +368,18 @@ export function useSelectField<T> (
 
     const movePrevItemCallback = useCallback(
         () => {
-
-            const items: readonly SelectFieldItem<T>[] = propsValues;
-            const totalItems: number = items.length;
+            const totalItems: number = propsValues?.length ?? 0;
             const currentItem: number | undefined = getCurrentIndexCallback();
             const nextItem: number = currentItem !== undefined ? currentItem - 1 : totalItems - 1;
             const nextCurrentIndex: number = nextItem >= 0 ? nextItem : totalItems - 1;
-
-            if ( !(nextCurrentIndex >= 0 && nextCurrentIndex < items.length) ) {
+            if ( propsValues !== undefined && nextCurrentIndex >= 0 && nextCurrentIndex < totalItems ) {
+                LOG.debug(`${identifier}: _movePrevItem: Selecting ${nextCurrentIndex}`);
+                setButtonFocusCallback(nextCurrentIndex);
+                changeCallback(propsValues[nextCurrentIndex].value);
+                openDropdownIfNotOpenCallback();
+            } else {
                 LOG.warn(`${identifier}: _movePrevItem: Could not change to out of range index ${nextCurrentIndex}`);
-                return;
             }
-
-            LOG.debug(`${identifier}: _movePrevItem: Selecting ${nextCurrentIndex}`);
-
-            setButtonFocusCallback(nextCurrentIndex);
-            changeCallback(items[nextCurrentIndex].value);
-            openDropdownIfNotOpenCallback();
-
         },
         [
             changeCallback,
