@@ -12,7 +12,7 @@ import { useFieldDecimalNumberInternalValueUpdateCallback } from "./number/useFi
 import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
 import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
-import { StringifyNumberCallback, ToNumberCallback } from "./useIntegerField";
+import { StringifyNumberCallback, ToNumberCallback } from "./useNumberField";
 
 const LOG = LogService.createLogger('useDecimalField');
 
@@ -28,14 +28,17 @@ export function useDecimalField (
     propsMinValue: number | undefined,
     propsMaxValue: number | undefined,
     toNumber: ToNumberCallback,
-    stringifyNumber: StringifyNumberCallback
+    stringifyNumber: StringifyNumberCallback,
+    focus:boolean,
+    tempVal:string
 ) {
 
-    const identifier = useFieldIdentifier(key, label);
+    const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
     const [ value, setValue ] = useState<InternalValueType>(stringifyNumber(propsValue));
 
+    // if any of the parameter values change, action will be logged and number propvalue converted to string
     const updateValueStateCallback = useFieldDecimalNumberInternalValueUpdateCallback(
         identifier,
         setValue,
@@ -43,9 +46,9 @@ export function useDecimalField (
         stringifyNumber
     );
 
-    const validateNumberValueCallback = useFieldValidateNumberValueCallback(identifier);
+    const validateNumberValueCallback = useFieldValidateNumberValueCallback(identifier); // returns curried callback function 
 
-    const validateWithStateValueCallback = useFieldValidateNumberWithStateValueCallback(
+    const validateWithStateValueCallback = useFieldValidateNumberWithStateValueCallback( // Validates string and returns false or number
         identifier,
         validateNumberValueCallback,
         toNumber
@@ -63,10 +66,13 @@ export function useDecimalField (
         validateWithStateValueCallback
     );
 
-    const parseAndChangeCallback = useCallback(
-        (newValue: string | undefined) => {
-            if (change) {
-                change(toNumber(newValue));
+    const parseAndChangeCallback = useCallback(     // converts string to number and changes state with it
+        (newValue: string | undefined) => {         // Had to do 'double' change operation in-order to get onchange to work in-sync
+            if (change && focus && tempVal) {   
+                change(toNumber(tempVal));
+            } 
+            if(change) {
+                change(toNumber(newValue))
             }
         },
         [

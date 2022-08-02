@@ -1,6 +1,6 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { ReactNode } from 'react';
+import { ReactNode, useRef, useEffect, useState, useCallback } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
 import { LogService } from "../../../../core/LogService";
 import { isSafeInteger, trim } from "../../../../core/modules/lodash";
@@ -15,6 +15,7 @@ import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback
 import { useDecimalField } from "../../../hooks/field/useDecimalField";
 import './DecimalField.scss';
 import { isNaN } from "lodash";
+import { NumberFieldUtils } from '../../../../core/utils/NumberFieldUtils';
 
 const LOG = LogService.createLogger('DecimalField');
 const DEFAULT_PLACEHOLDER = '123.00';
@@ -39,11 +40,16 @@ export function DecimalField (props: DecimalFieldProps) {
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder ?? DEFAULT_PLACEHOLDER;
     const label = props.label ?? props.model?.label ?? '';
+    
+    const inputReference = useRef<HTMLInputElement>(null);
+    const [focus, setFocus] = useState(false);
+    const [tempVal, setTempVal] = useState('');
+    const [validation, setValidation] = useState(true);
 
     const {
         fieldState,
-        value,
-        onChangeCallback
+        onChangeCallback,
+        value
     } = useDecimalField(
         label,
         props?.model?.key ?? '',
@@ -53,9 +59,47 @@ export function DecimalField (props: DecimalFieldProps) {
         props?.model?.required ?? false,
         props?.model?.minValue,
         props?.model?.maxValue,
-        toNumber,
-        stringifyInteger
+        toNumberClass,
+        stringifyInteger,
+        focus,
+        tempVal
     );
+
+    useEffect(() => {
+        LOG.debug('debugging temp & internal value', tempVal, ' ', value)
+        simpleDecimalValidationCallback()
+    }, [tempVal]);
+
+    const handleBlur = () => {
+    setFocus(false);
+    }
+    const handleFocus = () => {
+    setFocus(true);
+    }
+
+    const handleChange = (e:any) => {
+        const value = e.target.value;
+        const parsedTempValue = value.replace(',', '.')
+        setTempVal(parsedTempValue)
+        onChangeCallback(e)
+    }
+    const simpleDecimalValidationCallback = useCallback(
+    () => {
+    const regexVal = /[^0-9.]/g;
+    const validated = regexVal.test(tempVal)
+    console.log('validation state', validated)
+    if(validated) {
+        setValidation(true)
+        setTempVal(value)           // If validation ok, setting tempvalue to 'internal value' as a guard
+    } else {
+        setValidation(false)
+    }
+    }, 
+    [
+        tempVal,
+        focus
+    ]
+    )
 
     return (
         <label
@@ -78,12 +122,16 @@ export function DecimalField (props: DecimalFieldProps) {
                 className={
                     COMPONENT_CLASS_NAME + '-input'
                     + ` ${FIELD_CLASS_NAME}-input`
+                    + ` ${validation ? 'error' : ''}`
                 }
+                ref={inputReference}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 type={COMPONENT_INPUT_TYPE}
                 autoComplete="off"
                 placeholder={placeholder}
-                value={value}
-                onChange={onChangeCallback}
+                value={tempVal}
+                onChange={handleChange}
                 readOnly={props?.change === undefined}
             />
             {props?.children}
@@ -92,22 +140,8 @@ export function DecimalField (props: DecimalFieldProps) {
 
 }
 
-function toNumber (value: string | undefined): number | undefined {
-    try {
-        if ( value === undefined ) return undefined;
-        value = trim(value);
+const toNumberClass = NumberFieldUtils.toNumber         // toNumber moved to core/utils
 
-        if ( value === '' ) return undefined;
-
-        const parsedValue = parseFloat(value);
-
-        return isNaN(parsedValue) ? undefined : parsedValue;
-
-    } catch (err) {
-        LOG.warn(`Error while parsing string as integer "${value}": `, err);
-        return undefined;
-    }
-}
 
 function stringifyInteger (value: number | undefined): string {
     return `${value ?? ''}`;
