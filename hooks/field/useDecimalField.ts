@@ -18,7 +18,7 @@ const LOG = LogService.createLogger('useDecimalField');
 
 type InternalValueType = string;
 
-export function useDecimalField (
+export function useDecimalField(
     label: string,
     key: string,
     change: FieldChangeCallback<number | undefined> | undefined,
@@ -29,14 +29,14 @@ export function useDecimalField (
     propsMaxValue: number | undefined,
     toNumber: ToNumberCallback,
     stringifyNumber: StringifyNumberCallback,
-    focus:boolean,
-    tempVal:string
+    focus: boolean,
+    tempVal: string
 ) {
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
-    const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [ value, setValue ] = useState<InternalValueType>(stringifyNumber(propsValue));
+    const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
+    const [value, setValue] = useState<InternalValueType>(stringifyNumber(propsValue));
 
     // if any of the parameter values change, action will be logged and number propvalue converted to string
     const updateValueStateCallback = useFieldDecimalNumberInternalValueUpdateCallback(
@@ -68,10 +68,10 @@ export function useDecimalField (
 
     const parseAndChangeCallback = useCallback(     // converts string to number and changes state with it
         (newValue: string | undefined) => {         // Had to do 'double' change operation in-order to get onchange to work in-sync
-            if (change && focus && tempVal) {   
+            if (change && focus && tempVal) {
                 change(toNumber(tempVal));
-            } 
-            if(change) {
+            }
+            if (change) {
                 change(toNumber(newValue))
             }
         },

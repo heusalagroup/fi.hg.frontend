@@ -3,7 +3,6 @@
 import { ReactNode, useRef, useEffect, useState, useCallback } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
 import { LogService } from "../../../../core/LogService";
-import { isSafeInteger, trim } from "../../../../core/modules/lodash";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
@@ -14,7 +13,6 @@ import {
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import { useDecimalField } from "../../../hooks/field/useDecimalField";
 import './DecimalField.scss';
-import { isNaN } from "lodash";
 import { NumberFieldUtils } from '../../../../core/utils/NumberFieldUtils';
 
 const LOG = LogService.createLogger('DecimalField');
@@ -34,13 +32,13 @@ export interface DecimalFieldProps {
     readonly children?: ReactNode;
 }
 
-export function DecimalField (props: DecimalFieldProps) {
+export function DecimalField(props: DecimalFieldProps) {
 
     const className = props?.className;
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder ?? DEFAULT_PLACEHOLDER;
     const label = props.label ?? props.model?.label ?? '';
-    
+
     const inputReference = useRef<HTMLInputElement>(null);
     const [focus, setFocus] = useState(false);
     const [tempVal, setTempVal] = useState('');
@@ -71,34 +69,33 @@ export function DecimalField (props: DecimalFieldProps) {
     }, [tempVal]);
 
     const handleBlur = () => {
-    setFocus(false);
+        setFocus(false);
     }
     const handleFocus = () => {
-    setFocus(true);
+        setFocus(true);
     }
 
-    const handleChange = (e:any) => {
+    const handleChange = (e: any) => {
         const value = e.target.value;
         const parsedTempValue = value.replace(',', '.')
         setTempVal(parsedTempValue)
         onChangeCallback(e)
     }
     const simpleDecimalValidationCallback = useCallback(
-    () => {
-    const regexVal = /[^0-9.]/g;
-    const validated = regexVal.test(tempVal)
-    console.log('validation state', validated)
-    if(validated) {
-        setValidation(true)
-        setTempVal(value)           // If validation ok, setting tempvalue to 'internal value' as a guard
-    } else {
-        setValidation(false)
-    }
-    }, 
-    [
-        tempVal,
-        focus
-    ]
+        () => {
+            const regexVal = /[^0-9.]/g;
+            const validated = regexVal.test(tempVal)
+            if (validated) {
+                setValidation(true)
+                setTempVal(value)           // If validation ok, setting tempvalue to 'internal value' as a guard
+            } else {
+                setValidation(false)
+            }
+        },
+        [
+            tempVal,
+            focus
+        ]
     )
 
     return (
@@ -143,6 +140,6 @@ export function DecimalField (props: DecimalFieldProps) {
 const toNumberClass = NumberFieldUtils.toNumber         // toNumber moved to core/utils
 
 
-function stringifyInteger (value: number | undefined): string {
+function stringifyInteger(value: number | undefined): string {
     return `${value ?? ''}`;
 }
