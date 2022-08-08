@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 import { VoidCallback } from "../../../../core/interfaces/callbacks";
-import { StringifyNumberCallback } from "../useIntegerField";
+import { StringifyNumberCallback } from "../useNumberField";
 
 const LOG = LogService.createLogger('useFieldDecimalNumberInternalValueUpdateCallback');
 

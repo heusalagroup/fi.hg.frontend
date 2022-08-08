@@ -13,7 +13,7 @@ import {
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import { useDecimalField } from "../../../hooks/field/useDecimalField";
 import './DecimalField.scss';
-import { NumberFieldUtils } from '../../../../core/utils/NumberFieldUtils';
+import { trim } from 'lodash';
 
 const LOG = LogService.createLogger('DecimalField');
 const DEFAULT_PLACEHOLDER = '123.00';
@@ -57,7 +57,7 @@ export function DecimalField(props: DecimalFieldProps) {
         props?.model?.required ?? false,
         props?.model?.minValue,
         props?.model?.maxValue,
-        toNumberClass,
+        toNumber,
         stringifyInteger,
         focus,
         tempVal
@@ -137,7 +137,25 @@ export function DecimalField(props: DecimalFieldProps) {
 
 }
 
-const toNumberClass = NumberFieldUtils.toNumber         // toNumber moved to core/utils
+function toNumber (value: string | undefined, focus?:boolean): number | undefined { // validates string and returns float 
+    try {
+                LOG.debug('Focus Value', focus)
+                
+                if ( value === undefined ) return undefined;
+                value = trim(value);
+                
+                if ( value === '' ) return undefined;
+                
+                const parsedValue = parseFloat(value as string); 
+                
+                return isNaN(parsedValue) ? undefined : parsedValue;
+            
+        } catch (err) {
+            LOG.warn(`Error while parsing string as integer "${value}": `, err);
+            return undefined;
+        }
+    
+}
 
 
 function stringifyInteger(value: number | undefined): string {
