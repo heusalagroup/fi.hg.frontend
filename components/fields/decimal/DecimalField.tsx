@@ -127,7 +127,7 @@ export function DecimalField(props: DecimalFieldProps) {
                 type={COMPONENT_INPUT_TYPE}
                 autoComplete="off"
                 placeholder={placeholder}
-                value={tempVal}
+                value={tempVal}                 
                 onChange={handleChange}
                 readOnly={props?.change === undefined}
             />
