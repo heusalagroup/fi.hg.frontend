@@ -83,8 +83,8 @@ export function DecimalField(props: DecimalFieldProps) {
     }
     const simpleDecimalValidationCallback = useCallback(
         () => {
-            const regexVal = /[^0-9.]/g;
-            const validated = regexVal.test(tempVal)
+            const regexVal = /^\d+(\.\d{0,2})?$/;
+            const validated = !regexVal.test(tempVal)
             if (validated) {
                 setValidation(true)
                 setTempVal(value)           // If validation ok, setting tempvalue to 'internal value' as a guard
@@ -127,7 +127,7 @@ export function DecimalField(props: DecimalFieldProps) {
                 type={COMPONENT_INPUT_TYPE}
                 autoComplete="off"
                 placeholder={placeholder}
-                value={tempVal}                 
+                value={tempVal}
                 onChange={handleChange}
                 readOnly={props?.change === undefined}
             />
@@ -137,24 +137,24 @@ export function DecimalField(props: DecimalFieldProps) {
 
 }
 
-function toNumber (value: string | undefined, focus?:boolean): number | undefined { // validates string and returns float 
+function toNumber(value: string | undefined, focus?: boolean): number | undefined { // validates string and returns float 
     try {
-                LOG.debug('Focus Value', focus)
-                
-                if ( value === undefined ) return undefined;
-                value = trim(value);
-                
-                if ( value === '' ) return undefined;
-                
-                const parsedValue = parseFloat(value as string); 
-                
-                return isNaN(parsedValue) ? undefined : parsedValue;
-            
-        } catch (err) {
-            LOG.warn(`Error while parsing string as integer "${value}": `, err);
-            return undefined;
-        }
-    
+        LOG.debug('Focus Value', focus)
+
+        if (value === undefined) return undefined;
+        value = trim(value);
+
+        if (value === '') return undefined;
+
+        const parsedValue = parseFloat(value as string);
+
+        return isNaN(parsedValue) ? undefined : parsedValue;
+
+    } catch (err) {
+        LOG.warn(`Error while parsing string as integer "${value}": `, err);
+        return undefined;
+    }
+
 }
 
 
