@@ -13,7 +13,7 @@ import {
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import { useDecimalField } from "../../../hooks/field/useDecimalField";
 import './DecimalField.scss';
-import { trim } from 'lodash';
+import { NumberUtils } from '../../../../core/utils/NumberUtils';
 
 const LOG = LogService.createLogger('DecimalField');
 const DEFAULT_PLACEHOLDER = '123.00';
@@ -57,7 +57,7 @@ export function DecimalField(props: DecimalFieldProps) {
         props?.model?.required ?? false,
         props?.model?.minValue,
         props?.model?.maxValue,
-        toNumber,
+        toNumberClass,
         stringifyInteger,
         focus,
         tempVal
@@ -83,7 +83,7 @@ export function DecimalField(props: DecimalFieldProps) {
     }
     const simpleDecimalValidationCallback = useCallback(
         () => {
-            const regexVal = /^\d+(\.\d{0,2})?$/;
+            const regexVal = /^\d+(\.\d{0,2})?$/;       
             const validated = !regexVal.test(tempVal)
             if (validated) {
                 setValidation(true)
@@ -127,7 +127,7 @@ export function DecimalField(props: DecimalFieldProps) {
                 type={COMPONENT_INPUT_TYPE}
                 autoComplete="off"
                 placeholder={placeholder}
-                value={tempVal}
+                value={tempVal}                 
                 onChange={handleChange}
                 readOnly={props?.change === undefined}
             />
@@ -137,25 +137,8 @@ export function DecimalField(props: DecimalFieldProps) {
 
 }
 
-function toNumber(value: string | undefined, focus?: boolean): number | undefined { // validates string and returns float 
-    try {
-        LOG.debug('Focus Value', focus)
+const toNumberClass = NumberUtils.parseNumber        // toNumber moved to core/utils
 
-        if (value === undefined) return undefined;
-        value = trim(value);
-
-        if (value === '') return undefined;
-
-        const parsedValue = parseFloat(value as string);
-
-        return isNaN(parsedValue) ? undefined : parsedValue;
-
-    } catch (err) {
-        LOG.warn(`Error while parsing string as integer "${value}": `, err);
-        return undefined;
-    }
-
-}
 
 
 function stringifyInteger(value: number | undefined): string {
