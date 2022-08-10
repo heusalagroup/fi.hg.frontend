@@ -18,6 +18,7 @@ export enum FormItemType {
     TEXT_AREA_FIELD  = "text-area-field",
     JSON_FIELD       = "json-field",
     INTEGER_FIELD    = "integer-field",
+    DATE_FIELD       = "date-field",
 
     // Non-fields
     PAGE_BREAK = "page-break"

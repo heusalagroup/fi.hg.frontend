@@ -1,0 +1,117 @@
+// Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
+
+@import "src/fi/hg/frontend/styles/index";
+
+.datepicker-container {
+    display: flex;
+    flex-direction: column;
+}
+.hg-date-picker-field {
+
+    padding: $field-padding;
+    margin: $field-margin;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    &>.hg-date-picker-field-label {
+        box-sizing: border-box;
+        flex-direction: column;
+        flex-shrink: 1;
+        padding: $field-label-padding;
+        min-width: $field-label-min-width;
+        max-width: 100%;
+        text-align: right;
+        text-wrap: normal;
+        flex-wrap: wrap;
+    }
+
+    &>.hg-date-picker-field-input {
+        box-sizing: border-box;
+        padding: 1em 0.75em;
+        flex-grow: 1;
+        border: 0;
+        font-size: 1.25em;
+        border-radius: 0.25em;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+}
+
+.datepicker-form-container {
+    position: relative;
+    flex-direction:column;
+    justify-content: space-evenly;
+    min-width: 200px;
+    cursor: pointer;
+    align-self: center;
+
+    & > .datepicker-header{
+        display: flex;
+        justify-content: center;
+        align-self: center;
+        background-color: lightblue;
+        & > .previous {
+            margin-right:auto;
+            float:left;
+        }
+        & > .current {
+
+        }
+        & > .next {
+            margin-left: auto;
+            float: right;
+        }
+    }
+
+    & > .week-container {
+        display: flex;
+        flex-direction: row;
+        &>.datepicker-day-container {
+          position: relative;
+          flex-direction: row;
+          width: calc(100% / 7);
+          height: 30px;
+          display: inline-block;
+          background-color: white;
+          padding: 0;
+          margin: 0;
+          box-sizing: border-box;
+          z-index:2;
+          text-align: center;
+
+          &:hover {
+            .children {
+                background-color: red;
+            }
+        }
+    
+        // for the active class you write
+        &.is-active {
+            .children {
+               background-color: red;
+            }
+        }
+
+          & > .before {
+            opacity: 0.5;
+            }
+
+          & > .selected {
+              background-color: red;
+              border: 1px transparent solid;
+              border-radius: 10px;
+          }
+
+          & > .today {
+            background-color: grey;
+        }
+        }
+
+    }
+    
+}

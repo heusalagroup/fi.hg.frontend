@@ -31,3 +31,23 @@ export function useFieldStringChangeEventCallback (
         ]
     );
 }
+
+export function useFieldDateChangeEventCallback (       // Had trouble calling from own component
+    identifier: string,
+    setValue: Dispatch<SetStateAction<string>>,
+    change: FieldChangeCallback<string | undefined> | undefined
+) {
+    const changeCallback = useFieldChangeCallback<string>(identifier, change);
+    return useCallback(
+        (value: string) => {
+
+            const eventTargetValue = moment(value).format('YYYY/MM/DD') ?? '';
+            setValue(eventTargetValue);
+            changeCallback(eventTargetValue);
+        },
+        [
+            changeCallback,
+            setValue
+        ]
+    );
+}

@@ -13,6 +13,7 @@ export type FormFieldType = (
     | FormItemType.EMAIL_FIELD
     | FormItemType.SELECT_FIELD
     | FormItemType.SLIDER_FIELD
+    | FormItemType.DATE_FIELD
 );
 
 export function isFormFieldType (value: any): value is FormFieldType {
