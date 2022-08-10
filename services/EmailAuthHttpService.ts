@@ -32,7 +32,7 @@ export class EmailAuthHttpService {
         language ?: Language
     ) : Promise<EmailTokenDTO> {
         const lang : Language = language ?? LanguageService.getCurrentLanguage();
-        const item = await HttpService.postJson(AUTHENTICATE_EMAIL_URL(lang), {
+        const item = await HttpService.postJson(this._authenticateEmailUrl(lang), {
             email
         });
         if (!isEmailTokenDTO(item)) {
@@ -47,7 +47,7 @@ export class EmailAuthHttpService {
         language ?: Language
     ) : Promise<EmailTokenDTO | undefined> {
         const lang : Language = language ?? LanguageService.getCurrentLanguage();
-        const response : any = await HttpService.postJson(VERIFY_EMAIL_TOKEN_URL(lang), {
+        const response : any = await HttpService.postJson(this._verifyEmailTokenUrl(lang), {
             emailToken
         });
         const token : EmailTokenDTO | undefined = response;
@@ -64,7 +64,7 @@ export class EmailAuthHttpService {
             token,
             code
         } as VerifyEmailCodeDTO;
-        const response : any = await HttpService.postJson(VERIFY_EMAIL_CODE_URL(lang), body as unknown as ReadonlyJsonAny);
+        const response : any = await HttpService.postJson(this._verifyEmailTokenUrl(lang), body as unknown as ReadonlyJsonAny);
         const newToken : EmailTokenDTO | undefined = response;
         return newToken && isEmailTokenDTO(newToken) ? newToken : undefined;
     }
