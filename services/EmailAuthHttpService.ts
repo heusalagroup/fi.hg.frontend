@@ -7,11 +7,25 @@ import { HttpService } from "../../core/HttpService";
 import { LogService } from "../../core/LogService";
 import { VerifyEmailCodeDTO } from "../../core/auth/email/types/VerifyEmailCodeDTO";
 import { ReadonlyJsonAny } from "../../core/Json";
-import { AUTHENTICATE_EMAIL_URL, VERIFY_EMAIL_CODE_URL, VERIFY_EMAIL_TOKEN_URL } from "../../core/auth/email/constants";
+import { CallbackWithLanguage, AUTHENTICATE_EMAIL_URL, VERIFY_EMAIL_CODE_URL, VERIFY_EMAIL_TOKEN_URL } from "../../core/auth/email/constants";
 
 const LOG = LogService.createLogger('EmailAuthHttpService');
 
 export class EmailAuthHttpService {
+
+    private static _authenticateEmailUrl : CallbackWithLanguage = AUTHENTICATE_EMAIL_URL;
+    private static _verifyEmailCodeUrl   : CallbackWithLanguage = VERIFY_EMAIL_CODE_URL;
+    private static _verifyEmailTokenUrl  : CallbackWithLanguage = VERIFY_EMAIL_TOKEN_URL;
+
+    public static initialize (
+        authenticateEmailUrl : CallbackWithLanguage = AUTHENTICATE_EMAIL_URL,
+        verifyEmailCodeUrl   : CallbackWithLanguage = VERIFY_EMAIL_CODE_URL,
+        verifyEmailTokenUrl  : CallbackWithLanguage = VERIFY_EMAIL_TOKEN_URL
+    ) {
+        this._authenticateEmailUrl = authenticateEmailUrl;
+        this._verifyEmailCodeUrl = verifyEmailCodeUrl;
+        this._verifyEmailTokenUrl = verifyEmailTokenUrl;
+    }
 
     public static async authenticateEmailAddress (
         email : string,
