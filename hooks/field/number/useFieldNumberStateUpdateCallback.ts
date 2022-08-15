@@ -25,7 +25,7 @@ export function useFieldNumberStateUpdateCallback (
             if ( fieldState < FormFieldState.MOUNTED ) return;
             if ( fieldState >= FormFieldState.UNMOUNTED ) return;
             setFieldState(() => {
-                const isValid = validateWithStateValueCallback(                         // Validations and returns boolean
+                const isValid = validateWithStateValueCallback(                     // Validations and returns boolean
                     value,
                     propsValue,
                     isRequired,

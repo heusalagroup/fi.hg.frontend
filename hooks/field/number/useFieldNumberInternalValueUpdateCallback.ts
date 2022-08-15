@@ -3,11 +3,11 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 import { VoidCallback } from "../../../../core/interfaces/callbacks";
-import { StringifyNumberCallback } from "../useIntegerField";
+import { StringifyNumberCallback } from "../useNumberField";
 
-const LOG = LogService.createLogger('useFieldIntegerNumberInternalValueUpdateCallback');
+const LOG = LogService.createLogger('useFieldNumberInternalValueUpdateCallback');
 
-export function useFieldIntegerNumberInternalValueUpdateCallback (
+export function useFieldNumberInternalValueUpdateCallback (
     identifier: string,
     setValue: Dispatch<SetStateAction<string>>,
     propsValue: number | undefined,

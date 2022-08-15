@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 import { FieldValidateNumberValueCallback } from "./useFieldValidateNumberValueCallback";
-import { ToNumberCallback } from "../useIntegerField";
+import { ToNumberCallback } from "../useNumberField";
 
 const LOG = LogService.createLogger('useFieldValidateNumberWithStateValueCallback');
 
@@ -22,7 +22,7 @@ export function useFieldValidateNumberWithStateValueCallback (
     validateValueCallback : FieldValidateNumberValueCallback,
     toNumber: ToNumberCallback
 ) : FieldValidateNumberWithStateValueCallback {
-    return useCallback(                                         
+    return useCallback(                                        
         (
             stateValueString: string,
             propValue: number | undefined,

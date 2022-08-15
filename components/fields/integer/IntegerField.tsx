@@ -12,7 +12,7 @@ import {
     FIELD_CLASS_NAME,
     INTEGER_FIELD_CLASS_NAME
 } from "../../../constants/hgClassName";
-import { useIntegerField } from "../../../hooks/field/useIntegerField";
+import { useNumberField } from "../../../hooks/field/useNumberField";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './IntegerField.scss';
 
@@ -47,7 +47,7 @@ export function IntegerField (props: IntegerFieldProps) {
         fieldState,
         value,
         onChangeCallback
-    } = useIntegerField(
+    } = useNumberField(
         label,
         props?.model?.key ?? '',
         props?.change,
