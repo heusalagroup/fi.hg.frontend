@@ -59,7 +59,6 @@ export function DecimalField(props: DecimalFieldProps) {
         props?.model?.maxValue,
         toNumberClass,
         stringifyInteger,
-        focus,
         tempVal
     );
 
@@ -83,7 +82,7 @@ export function DecimalField(props: DecimalFieldProps) {
     }
     const simpleDecimalValidationCallback = useCallback(
         () => {
-            const regexVal = /^\d+(\.\d{0,2})?$/;       
+            const regexVal = /^\d+(\.\d{0,2})?$/;
             const validated = !regexVal.test(tempVal)
             if (validated) {
                 setValidation(true)

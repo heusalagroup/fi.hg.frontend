@@ -29,7 +29,6 @@ export function useDecimalField(
     propsMaxValue: number | undefined,
     toNumber: ToNumberCallback,
     stringifyNumber: StringifyNumberCallback,
-    focus: boolean,
     tempVal: string
 ) {
 
@@ -68,17 +67,14 @@ export function useDecimalField(
 
     const parseAndChangeCallback = useCallback(     // converts string to number and changes state with it
         (newValue: string | undefined) => {         // Had to do 'double' change operation in-order to get onchange to work in-sync
-            newValue = tempVal.toLowerCase().replace('e', '');
-            if (change && focus && tempVal) {
-                change(toNumber(tempVal));
-            }
             if (change) {
                 change(toNumber(newValue))
             }
         },
         [
             change,
-            toNumber
+            toNumber,
+            tempVal
         ]
     );
 
