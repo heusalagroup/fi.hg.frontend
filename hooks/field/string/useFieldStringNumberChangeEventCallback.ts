@@ -35,29 +35,3 @@ export function useFieldStringNumberChangeEventCallback (
         ]
     );
 }
-
-// const onChangeHandler = (event: any) => {
-//
-//     let validInput = eventVal.replace(/\s\[A-Za-z]/g, '');
-//     let regexValidation = /^\d+\.?(?:\d{1,2})?$/; // change decimal digit count here
-//
-//     if ( !isNaN(validInput) && !isNaN(parseFloat(validInput)) ) {
-//         setDecimalValue(validInput);
-//     } else {
-//         setDecimalValue(eventVal);
-//     }
-//
-//     if ( isNaN(parseFloat(eventVal)) && eventVal.length > 0 ) {
-//         setIsValid(false);
-//     } else if ( regexValidation.test(eventVal) || eventVal.length <= 1 ) {
-//         setIsValid(true);
-//     } else {
-//         setIsValid(false);
-//     }
-//
-//     onChangeCallback(event); // Only changes value if integer
-//
-//     toNumber(decimalValue); // returns false if decimal
-// };
-
-
