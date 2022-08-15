@@ -9,9 +9,9 @@ import { useFieldIdentifier } from "./useFieldIdentifier";
 import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
 import { useFieldNumberStateUpdateCallback } from "./number/useFieldNumberStateUpdateCallback";
 import { useFieldNumberInternalValueUpdateCallback } from "./number/useFieldNumberInternalValueUpdateCallback";
+import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
 import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
-import { useFieldIntegerNumberInternalValueUpdateCallback } from "./number/useFieldNumberInternalValueUpdateCallback";
 
 const LOG = LogService.createLogger('useNumberField');
 
