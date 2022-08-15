@@ -1,0 +1,12 @@
+.hg-table-header {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+
+  & > .hg-table-header-row {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+}

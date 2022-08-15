@@ -1,0 +1,14 @@
+.hg-table-column {
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+
+  & > .hg-table-column-content {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0.25em 0.75em;
+  }
+
+}
