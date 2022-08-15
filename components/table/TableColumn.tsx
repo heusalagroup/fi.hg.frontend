@@ -8,16 +8,22 @@ export interface TableColumnProps {
     readonly className ?: string;
     readonly children ?: ReactNode;
     readonly colSpan ?: number;
+    readonly first ?: boolean;
+    readonly last ?: boolean;
 }
 
 export function TableColumn (props: TableColumnProps) {
     const className = props?.className;
     const children = props?.children;
     const colSpan = props?.colSpan;
+    const first = props?.first;
+    const last = props?.last;
     return (
         <td className={
             TABLE_COLUMN_CLASS_NAME
             + (className? ` ${className}` : '')
+            + (first ? ' ' + TABLE_COLUMN_CLASS_NAME + '-first' : '')
+            + (last ? ' ' + TABLE_COLUMN_CLASS_NAME + '-last' : '')
         }
             colSpan={colSpan}
         >
