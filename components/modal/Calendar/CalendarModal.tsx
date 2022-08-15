@@ -1,12 +1,12 @@
 import moment from "moment-timezone"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { LogService } from "../../../../core/LogService";
 import { CalendarProps } from "../../fields/datePicker/DatePickerField";
 
 interface CalendarModalProps extends CalendarProps {
     readonly onChangeCallback?: (value:string) => void;
     readonly calendarStyling?: (value: moment.Moment) => "" | "before" | "today";
-    readonly focus?: boolean;
+    readonly focus?: (value:boolean) => void;
 }
 
 const LOG = LogService.createLogger('CalendarModal');
@@ -17,9 +17,11 @@ export function Calendar(props: CalendarModalProps) {
     const [value, setValue] = useState(moment())
     const [calendar, setCalendar] = useState<any[]>([])
 
+    const inputReference = useRef<HTMLInputElement>(null);
+
 
     useEffect(() => {
-        buildMonth()
+        buildMonth();
         console.log('building month')
     }, [value, focus])
 
@@ -65,10 +67,16 @@ export function Calendar(props: CalendarModalProps) {
         } 
         handleDateData(curr)
     }
-    
+
+    const handleBlur = () => {
+        if(focus) focus(false);
+    }
+    const handleFocus = () => {
+        if(focus) focus(true);
+    }
 
     return (                                            // Calendar component
-        <div className='datepicker-form-container'>
+        <div className='datepicker-form-container' onBlur={handleBlur} tabIndex={1} ref={inputReference} onFocus={handleFocus}>
             <div className='datepicker-header'>
                 <div className='previous' onClick={() => setValue(prevMonth())}>{String.fromCharCode(171)}</div>
                 <div className='current'>{currMonthName()} {currYear()}</div>
