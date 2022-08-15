@@ -4,88 +4,61 @@ import { useCallback, useEffect, useState } from "react";
 import { FormFieldState } from "../../types/FormFieldState";
 import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
-import { useFieldStringChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
+import { useFieldDateChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
 import { useFieldIdentifier } from "./useFieldIdentifier";
 import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
-import { useFieldNumberStateUpdateCallback } from "./number/useFieldNumberStateUpdateCallback";
-import { useFieldNumberInternalValueUpdateCallback } from "./number/useFieldNumberInternalValueUpdateCallback";
-import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
-import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
+import moment from "moment-timezone";
+import { useFieldStringStateUpdateCallback } from "./string/useFieldStringStateUpdateCallback";
+import { useFieldValidateStringWithStateValueCallback } from "./string/useFieldValidateStringWithStateValueCallback";
+import { useFieldValidateStringValueCallback } from "./string/useFieldValidateStringValueCallback";
+import { useFieldStringInternalValueUpdateCallback } from "./string/useFieldStringInternalValueUpdateCallback";
 
-const LOG = LogService.createLogger('useNumberField');
+const LOG = LogService.createLogger('useDatepickerField');
 
 type InternalValueType = string;
 
-export interface ToNumberCallback {
-    (value: string | undefined) : number | undefined;
-}
-
-export interface StringifyNumberCallback {
-    (value: number | undefined) : string;
-}
-
-export function useDatepickerField (
+export function useDateField(
     label: string,
     key: string,
-    change: FieldChangeCallback<number | undefined> | undefined,
+    change: FieldChangeCallback<InternalValueType | undefined> | undefined,
     changeState: FieldChangeCallback<FormFieldState> | undefined,
-    propsValue: number | undefined,
+    propsValue: string | undefined,
     isRequired: boolean,
-    propsMinValue: number | undefined,
-    propsMaxValue: number | undefined,
-    toNumber: ToNumberCallback,
-    stringifyNumber: StringifyNumberCallback
+    propsMinLength: number | undefined,
+    propsMaxLength: number | undefined
 ) {
 
-    const identifier = useFieldIdentifier(key, label);
+    const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [ value, setValue ] = useState<InternalValueType>(stringifyNumber(propsValue));
+    const [ value, setValue ] = useState<InternalValueType>(propsValue ?? '');
 
-    const updateValueStateCallback = useFieldNumberInternalValueUpdateCallback(
+    const updateValueStateCallback = useFieldStringInternalValueUpdateCallback(
         identifier,
         setValue,
-        propsValue,
-        stringifyNumber
+        propsValue
     );
 
-    const validateNumberValueCallback = useFieldValidateNumberValueCallback(identifier);
+    const validateStringValueCallback = useFieldValidateStringValueCallback(identifier);
+    const validateWithStateValueCallback = useFieldValidateStringWithStateValueCallback(identifier, validateStringValueCallback);
 
-    const validateWithStateValueCallback = useFieldValidateNumberWithStateValueCallback(
-        identifier,
-        validateNumberValueCallback,
-        toNumber
-    );
-
-    const updateFieldStateCallback = useFieldNumberStateUpdateCallback(
+    const updateFieldStateCallback = useFieldStringStateUpdateCallback(
         identifier,
         fieldState,
         setFieldState,
         value,
         propsValue,
         isRequired,
-        propsMinValue,
-        propsMaxValue,
+        propsMinLength,
+        propsMaxLength,
         validateWithStateValueCallback
     );
 
-    const parseAndChangeCallback = useCallback(
-        (newValue: string | undefined) => {
-            if (change) {
-                change(toNumber(newValue));
-            }
-        },
-        [
-            change,
-            toNumber
-        ]
-    );
-
-    const onChangeCallback = useFieldStringChangeEventCallback(
+    const onChangeCallback = useFieldDateChangeEventCallback(
         identifier,
         setValue,
-        parseAndChangeCallback
+        change
     );
 
     useFieldMountEffectWithInternalState(
@@ -94,6 +67,46 @@ export function useDatepickerField (
         updateValueStateCallback,
         updateFieldStateCallback
     );
+
+    const buildCalendar = (value: any): any => {
+        const startDay = value.clone().startOf("month").startOf("week");
+        const endDay = value.clone().endOf("month").endOf("week");
+
+        const day = startDay.clone().subtract(1, "day");
+        const calendarArray: any = []
+        while (day.isBefore(endDay, "day")) {
+            calendarArray.push(
+                Array(7).fill(0).map(() => day.add(1, "day").clone())
+            );
+        }
+        return calendarArray
+    }
+
+
+    const calendarStyling = useCallback((day: moment.Moment) => {
+
+        function beforeToday(day: moment.Moment) {
+            return day.isBefore(new Date(), "day");
+        }
+
+        function isToday(day: moment.Moment) {
+            return day.isSame(new Date(), "day");
+        }
+
+        function dayStyles(day: moment.Moment) {
+            if (beforeToday(day)) return "before"
+            if (isToday(day)) return "today"
+            return ""
+        }
+        return dayStyles(day)
+    },
+        [
+            value,
+            onChangeCallback,
+            buildCalendar,
+            updateFieldStateCallback
+        ]
+    )
 
     // Update field state when internal value changes
     useEffect(
@@ -104,7 +117,8 @@ export function useDatepickerField (
         [
             identifier,
             value,
-            updateFieldStateCallback
+            updateFieldStateCallback,
+            onChangeCallback,
         ]
     );
 
@@ -113,13 +127,12 @@ export function useDatepickerField (
         () => {
             LOG.debug(`${identifier}: Props value changed: `, propsValue);
             updateValueStateCallback();
-            updateFieldStateCallback();
         },
         [
             identifier,
             propsValue,
             updateValueStateCallback,
-            updateFieldStateCallback
+            updateFieldStateCallback,
         ]
     );
 
@@ -132,11 +145,13 @@ export function useDatepickerField (
         [
             identifier,
             isRequired,
-            propsMinValue,
-            propsMaxValue,
-            updateFieldStateCallback
+            propsMinLength,
+            propsMaxLength,
+            updateFieldStateCallback,
         ]
     );
+
+    
 
     useFieldChangeState(changeState, fieldState);
 
@@ -144,8 +159,9 @@ export function useDatepickerField (
         fieldState,
         label,
         value,
-        onChangeCallback
+        onChangeCallback,
+        buildCalendar,
+        calendarStyling
     };
-
-}
+};
 

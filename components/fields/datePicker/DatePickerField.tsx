@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { DatePickerFieldModel } from "../../../types/items/DatepickerModel";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
@@ -14,11 +14,16 @@ import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback
 import './DatePickerField.scss';
 import moment from 'moment-timezone';
 import { useDateField } from '../../../hooks/field/useDatepickerField';
+import { trim } from 'lodash';
 import { TranslationFunction } from "../../../../../../fi/hg/core/types/TranslationFunction";
+import { LogService } from '../../../../core/LogService';
 import { Calendar } from '../../modal/Calendar/CalendarModal';
 
 const COMPONENT_CLASS_NAME = DATE_PICKER_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "text";
+
+const LOG = LogService.createLogger('DatepickerField');
+
 
 
 export interface DatePickerFieldProps {
@@ -47,6 +52,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
     const label = props.label ?? props.model?.label ?? '';
 
     const [showCalendar, setShowCalendar] = useState(false);
+    const [focus, setFocus] = useState(false);
 
     const {
         fieldState,
@@ -101,7 +107,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
                 {props.children}
             </label>
             {value !== undefined && showCalendar ? 
-            <Calendar onChangeCallback={onChangeCallback} buildCalendar={buildCalendar} calendarStyling={calendarStyling}   /> : ''}
+            <Calendar onChangeCallback={onChangeCallback} buildCalendar={buildCalendar} calendarStyling={calendarStyling} focus={focus} /> : ''}
         </div>
     );
 
