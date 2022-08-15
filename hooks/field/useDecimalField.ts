@@ -68,6 +68,7 @@ export function useDecimalField(
 
     const parseAndChangeCallback = useCallback(     // converts string to number and changes state with it
         (newValue: string | undefined) => {         // Had to do 'double' change operation in-order to get onchange to work in-sync
+            newValue = tempVal.toLowerCase().replace('e', '');
             if (change && focus && tempVal) {
                 change(toNumber(tempVal));
             }
