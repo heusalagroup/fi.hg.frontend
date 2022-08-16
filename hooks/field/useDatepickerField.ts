@@ -31,8 +31,8 @@ export function useDateField(
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
-    const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [ value, setValue ] = useState<InternalValueType>(propsValue ?? '');
+    const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
+    const [value, setValue] = useState<InternalValueType>(propsValue ?? '');
 
     const updateValueStateCallback = useFieldStringInternalValueUpdateCallback(
         identifier,
@@ -68,11 +68,11 @@ export function useDateField(
         updateFieldStateCallback
     );
 
-    const buildCalendar = (value: any): any => {
+    const buildCalendar = useCallback((value: moment.Moment): moment.Moment[] => {
         const startDay = value.clone().startOf("month").startOf("week");
         const endDay = value.clone().endOf("month").endOf("week");
 
-        const day = startDay.clone().subtract(1, "day");
+        const day = startDay.clone();
         const calendarArray: any = []
         while (day.isBefore(endDay, "day")) {
             calendarArray.push(
@@ -80,7 +80,11 @@ export function useDateField(
             );
         }
         return calendarArray
-    }
+    },
+        [
+            
+        ]
+    )
 
 
     const calendarStyling = useCallback((day: moment.Moment) => {
@@ -151,7 +155,7 @@ export function useDateField(
         ]
     );
 
-    
+
 
     useFieldChangeState(changeState, fieldState);
 

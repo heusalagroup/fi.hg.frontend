@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { DatePickerFieldModel } from "../../../types/items/DatepickerModel";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
@@ -67,7 +67,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
         props?.model?.maxLength
     );
 
-    const onChange = (e: any) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
     }
 
@@ -113,8 +113,3 @@ export function DatePickerField(props: DatePickerFieldProps) {
     );
 
 }
-
-
-
-
-
