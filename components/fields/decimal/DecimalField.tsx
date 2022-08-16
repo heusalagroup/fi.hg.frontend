@@ -47,7 +47,8 @@ export function DecimalField(props: DecimalFieldProps) {
     const {
         fieldState,
         onChangeCallback,
-        value
+        value,
+        toFixed
     } = useDecimalField(
         label,
         props?.model?.key ?? '',
@@ -74,19 +75,21 @@ export function DecimalField(props: DecimalFieldProps) {
         setFocus(true);
     }
 
-    const handleChange = (e: any) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const parsedTempValue = value.replace(',', '.')
         setTempVal(parsedTempValue)
         onChangeCallback(e)
     }
+
     const simpleDecimalValidationCallback = useCallback(
         () => {
             const regexVal = /^\d+(\.\d{0,2})?$/;
             const validated = !regexVal.test(tempVal)
+            const eRemover = toFixed(value)
             if (validated) {
                 setValidation(true)
-                setTempVal(value)           // If validation ok, setting tempvalue to 'internal value' as a guard
+                setTempVal(eRemover)           // If validation ok, setting tempvalue to 'internal value' as a guard
             } else {
                 setValidation(false)
             }
@@ -126,7 +129,7 @@ export function DecimalField(props: DecimalFieldProps) {
                 type={COMPONENT_INPUT_TYPE}
                 autoComplete="off"
                 placeholder={placeholder}
-                value={tempVal}                 
+                value={tempVal}
                 onChange={handleChange}
                 readOnly={props?.change === undefined}
             />
