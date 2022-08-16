@@ -1,0 +1,27 @@
+.hg-card {
+
+  box-sizing: border-box;
+  padding: 1em 2em;
+  margin: 1em 5px;
+  border-radius: 12px;
+  line-height: 2em;
+  overflow: hidden;
+  min-width: 100px;
+  max-width: 90vw;
+
+  display: flex;
+  flex-direction: column;
+  //align-items: center;
+  //justify-items: center;
+  //align-content: center;
+  //justify-content: center;
+  flex-wrap: wrap;
+
+  & > .hg-card-label {
+    font-weight: 800;
+  }
+
+  & > .hg-card-content {
+  }
+
+}
