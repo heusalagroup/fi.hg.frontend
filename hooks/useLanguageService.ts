@@ -10,7 +10,7 @@ import { useServiceEvent } from "./useServiceEvent";
 
 const LOG = LogService.createLogger('useLanguageService');
 
-export function useLanguageService (): UseTranslationResponse<"translation"> {
+export function useLanguageService (): UseTranslationResponse<"translation", undefined> {
 
     const translation = useTranslation();
     const i18n = translation?.i18n;
