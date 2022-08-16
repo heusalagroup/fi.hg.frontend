@@ -39,6 +39,7 @@ export function Button (props: ButtonProps) {
     const className = props?.className;
     const children = props?.children;
     const buttonStyle = props?.style ?? ButtonStyle.SECONDARY;
+    const hasClick = !!props?.click;
     const click = props?.click;
 
     const childCount = Children.count(children);
@@ -48,7 +49,8 @@ export function Button (props: ButtonProps) {
         onFocus?: any,
         onKeyDown?: any,
         ref?: any,
-        disabled?: any
+        disabled?: any,
+        onClick?: any
     } = {};
 
     const blurCallback = props?.blur;
@@ -101,6 +103,10 @@ export function Button (props: ButtonProps) {
         ]
     );
 
+    if ( hasClick || type !== ButtonType.SUBMIT) {
+        buttonProps.onClick = onClick;
+    }
+
     return (
         <button
             className={
@@ -111,7 +117,6 @@ export function Button (props: ButtonProps) {
                 + (className ? ` ${className}` : '')
             }
             type={type}
-            onClick={onClick}
             {...buttonProps}
         >{children}</button>
     );
