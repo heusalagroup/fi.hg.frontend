@@ -2,6 +2,8 @@
 
 import { ReactNode } from "react";
 import { SUBMIT_BUTTON_CLASS_NAME } from "../../constants/hgClassName";
+import { Button } from "../button/Button";
+import { ButtonType } from "../button/types/ButtonType";
 
 export interface SubmitButtonProps {
     readonly className ?: string;
@@ -11,12 +13,12 @@ export interface SubmitButtonProps {
 export function SubmitButton (props: SubmitButtonProps) {
     const className = props?.className;
     return (
-        <button
-            type={"submit"}
+        <Button
+            type={ButtonType.SUBMIT}
             className={
                 SUBMIT_BUTTON_CLASS_NAME
                 + (className? ` ${className}` : '')
             }
-        >{props.children}</button>
+        >{props.children}</Button>
     );
 }
