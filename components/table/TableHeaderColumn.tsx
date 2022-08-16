@@ -2,6 +2,7 @@
 
 import { TABLE_HEADER_COLUMN_CLASS_NAME } from "../../constants/hgClassName";
 import { ReactNode } from "react";
+import "./TableHeaderColumn.scss";
 
 export interface TableHeaderColumnProps {
     readonly className ?: string;

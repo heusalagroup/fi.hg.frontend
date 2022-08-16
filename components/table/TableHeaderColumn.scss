@@ -6,7 +6,9 @@
   text-align: left;
 
   & > .hg-table-header-column-content {
-    padding: 0.5em 0.75em 0.5em 0.75em;
+    padding: 0.25em 0.75em;
+    text-align: left;
+    font-weight: bold;
   }
 
 }

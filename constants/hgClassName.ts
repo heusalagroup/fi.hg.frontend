@@ -39,3 +39,4 @@ export const TABLE_HEADER_CLASS_NAME            = 'hg-table-header';
 export const TABLE_BODY_CLASS_NAME              = 'hg-table-body';
 export const TABLE_ROW_CLASS_NAME               = 'hg-table-row';
 export const TABLE_COLUMN_CLASS_NAME            = 'hg-table-column';
+export const TIME_COLUMN_CLASS_NAME             = 'hg-time-column';
