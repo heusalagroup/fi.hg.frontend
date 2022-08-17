@@ -19,7 +19,7 @@ export function Card (props: CardProps) {
             CARD_CLASS_NAME
             + (className? ` ${className}` : '')
         }>
-            <div className={CARD_CLASS_NAME+'-label'}>{label}</div>
+            { label ? <div className={CARD_CLASS_NAME+'-label'}>{label}</div> : null }
             <div className={CARD_CLASS_NAME+'-content'}>{children}</div>
         </div>
     );
