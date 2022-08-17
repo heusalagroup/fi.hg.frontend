@@ -1,16 +1,15 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { Icon } from "../../icon/Icon";
-import { Link } from "react-router-dom";
-import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
-import { ThemeService } from "../../../services/ThemeService";
-import { ButtonStyle } from "../../button/types/ButtonStyle";
-import { BUTTON_CLASS_NAME, LINK_BUTTON_CLASS_NAME } from "../../../constants/hgClassName";
+import { Icon } from "../icon/Icon";
+import { stringifyStyleScheme, StyleScheme } from "../../types/StyleScheme";
+import { ThemeService } from "../../services/ThemeService";
+import { ButtonStyle } from "../button/types/ButtonStyle";
+import { BUTTON_CLASS_NAME, EXTERNAL_LINK_BUTTON_CLASS_NAME } from "../../constants/hgClassName";
 import { ReactNode } from "react";
-import "./LinkButton.scss";
+import "./ExternalLinkButton.scss";
 
-export interface LinkButtonProps {
+export interface ExternalLinkButtonProps {
     readonly className   ?: string;
     readonly to           : string;
     readonly icon        ?: any;
@@ -22,7 +21,7 @@ export interface LinkButtonProps {
     readonly children    ?: ReactNode;
 }
 
-export function LinkButton (props: LinkButtonProps) {
+export function ExternalLinkButton (props: ExternalLinkButtonProps) {
     const className   = props?.className;
     const to          = props?.to;
     const MyIcon      = props?.icon;
@@ -32,16 +31,17 @@ export function LinkButton (props: LinkButtonProps) {
     const buttonStyle = props?.style      ?? ButtonStyle.SECONDARY;
     const styleScheme = props?.themeStyle ?? ThemeService.getStyleScheme();
     return (
-        <Link to={to}
-              className={
-                  LINK_BUTTON_CLASS_NAME
-                  + ` ${BUTTON_CLASS_NAME}`
-                  + ` ${BUTTON_CLASS_NAME}-${buttonStyle}`
-                  + ` ${BUTTON_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                  + (className? ` ${className}` : '')
-              }
-              target={ target }
-              rel={ rel }
+        <a
+          href={to}
+          className={
+              EXTERNAL_LINK_BUTTON_CLASS_NAME
+              + ` ${BUTTON_CLASS_NAME}`
+              + ` ${BUTTON_CLASS_NAME}-${buttonStyle}`
+              + ` ${BUTTON_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
+              + (className? ` ${className}` : '')
+          }
+          target={ target }
+          rel={ rel }
         >
             {MyIcon ? (
                 <Icon className={`${BUTTON_CLASS_NAME}-icon`}><MyIcon /></Icon>
@@ -50,6 +50,6 @@ export function LinkButton (props: LinkButtonProps) {
                 <span className={`${BUTTON_CLASS_NAME}-text`}>{label}</span>
             ): null}
             {props?.children}
-        </Link>
+        </a>
     );
 }
