@@ -44,3 +44,4 @@ export const TIME_COLUMN_CLASS_NAME             = 'hg-time-column';
 export const CARD_CLASS_NAME             = 'hg-card';
 export const CARD_GRID_CLASS_NAME             = 'hg-card-grid';
 export const DATE_CARD_CLASS_NAME             = 'hg-date-card';
+export const TEXT_CARD_CLASS_NAME             = 'hg-text-card';
