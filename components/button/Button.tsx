@@ -34,16 +34,13 @@ export interface ButtonProps {
 export type ButtonClickCallback = VoidCallback;
 
 export function Button (props: ButtonProps) {
-
     const type = props?.type ?? ButtonType.DEFAULT;
     const className = props?.className;
     const children = props?.children;
     const buttonStyle = props?.style ?? ButtonStyle.SECONDARY;
     const hasClick = !!props?.click;
     const click = props?.click;
-
     const childCount = Children.count(children);
-
     const buttonProps: {
         onBlur?: any,
         onFocus?: any,
@@ -120,7 +117,6 @@ export function Button (props: ButtonProps) {
             {...buttonProps}
         >{children}</button>
     );
-
 }
 
 

@@ -10,16 +10,19 @@ export interface SubmitButtonProps {
     readonly className ?: string;
     readonly children  ?: ReactNode;
     readonly style  ?: ButtonStyle;
+    readonly enabled?: boolean;
 }
 
 export function SubmitButton (props: SubmitButtonProps) {
     const className = props?.className;
     const style = props?.style ?? ButtonStyle.PRIMARY;
+    const enabled = props?.enabled;
     const children = props?.children;
     return (
         <Button
             type={ButtonType.SUBMIT}
             style={style}
+            enabled={enabled}
             className={
                 SUBMIT_BUTTON_CLASS_NAME
                 + (className? ` ${className}` : '')
