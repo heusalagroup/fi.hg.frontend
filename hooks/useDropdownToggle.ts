@@ -1,59 +1,57 @@
 // Copyright (c) 2021-2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
-import { useLocation } from "react-router-dom";
-import { useWindowSize } from "./useWindowSize";
+import {
+    useState,
+    useCallback
+} from "react";
 import { LogService } from "../../core/LogService";
-import { useScrollTop } from "./useScrollTop";
+import { useWindowSizeChange } from "./useWindowSizeChange";
+import { useLocationChange } from "./useLocationChange";
+import { useScrollTopChange } from "./useScrollTopChange";
+import { VoidCallback } from "../../core/interfaces/callbacks";
 
 const LOG = LogService.createLogger('useDropdownToggle');
 
-export type SetProfileMenuOpenCallback = Dispatch<SetStateAction<boolean>>;
-
-export function useDropdownToggle (initialState: boolean = false) : [boolean, SetProfileMenuOpenCallback] {
-
+/**
+ *
+ * @param context Logging context, e.g. parent's name.
+ * @param initialState
+ */
+export function useDropdownToggle (
+    context: string,
+    initialState: boolean = false
+) : [boolean, VoidCallback, VoidCallback, VoidCallback] {
     const [ isDropdownOpen, setDropdownOpen ] = useState<boolean>(initialState);
-
-    const location = useLocation();
-    const windowSize = useWindowSize();
-    const scrollTop = useScrollTop(window?.document?.scrollingElement);
-
-    // When window size changes, close menu
-    useEffect(
+    const toggleMenuCallback = useCallback(
         () => {
-            LOG.debug('Closing dropdown menu since window size changed');
+            LOG.debug('Toggling dropdown menu');
+            setDropdownOpen(() => !isDropdownOpen);
+        },
+        [
+            setDropdownOpen,
+            isDropdownOpen
+        ]
+    );
+    const openMenuCallback = useCallback(
+        () => {
+            LOG.debug('Opening dropdown menu');
             setDropdownOpen(false);
         },
         [
-            windowSize,
             setDropdownOpen
         ]
     );
-
-    // When location changes, close menu
-    useEffect(
+    const closeMenuCallback = useCallback(
         () => {
-            LOG.debug('Closing dropdown menu since location changed');
+            LOG.debug('Closing dropdown menu');
             setDropdownOpen(false);
         },
         [
-            location,
             setDropdownOpen
         ]
     );
-
-    // When scroll changes
-    useEffect(
-        () => {
-            LOG.debug('Closing dropdown menu since location changed');
-            setDropdownOpen(false);
-        },
-        [
-            scrollTop,
-            setDropdownOpen
-        ]
-    );
-
-    return [ isDropdownOpen, setDropdownOpen ];
-
+    useWindowSizeChange('useDropdownToggle', closeMenuCallback);
+    useLocationChange('useDropdownToggle', closeMenuCallback);
+    useScrollTopChange('useDropdownToggle', closeMenuCallback);
+    return [ isDropdownOpen, toggleMenuCallback, closeMenuCallback, openMenuCallback ];
 }

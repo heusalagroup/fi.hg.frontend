@@ -7,7 +7,7 @@ const LOG = LogService.createLogger('useWindowSize');
 
 export function useScrollTop (
     scrollingElement: Element | null | undefined
-) {
+) : number | undefined {
 
     const [ scrollTop, setScrollTop ] = useState<number | undefined>(
         scrollingElement?.scrollTop

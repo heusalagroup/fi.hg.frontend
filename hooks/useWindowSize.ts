@@ -11,7 +11,7 @@ export interface WindowSize {
     readonly width: number | undefined;
 }
 
-export function useWindowSize () {
+export function useWindowSize () : WindowSize {
 
     const [ windowSize, setWindowSize ] = useState<WindowSize>(
         {
