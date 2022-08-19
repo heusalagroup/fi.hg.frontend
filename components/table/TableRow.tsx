@@ -46,6 +46,7 @@ export function TableRow (props: TableRowProps) {
             + (className? ` ${className}` : '')
             + (first ? ' ' + TABLE_ROW_CLASS_NAME + '-first' : '')
             + (last ? ' ' + TABLE_ROW_CLASS_NAME + '-last' : '')
+            + (click ? ' ' + TABLE_ROW_CLASS_NAME + '-clickable' : '')
         }
             {...trProps}
         >{children}</tr>
