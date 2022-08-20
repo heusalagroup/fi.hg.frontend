@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { VoidCallback } from "../../core/interfaces/callbacks";
 import { trim } from "../../core/modules/lodash";
-import { PhoneNumberUtils } from "../../../sendanor/frontend/services/PhoneNumberUtils";
+import { PhoneNumberUtils } from "../../core/PhoneNumberUtils";
 
 export function usePhoneValidator (
     phoneNumber: string | undefined,

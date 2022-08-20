@@ -1,6 +1,6 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { EnumUtils, EnumObject } from "../../core/utils/EnumUtils";
+import { EnumUtils, EnumObject } from "../../core/EnumUtils";
 import { createSelectFieldItem, SelectFieldItem } from "../types/items/SelectFieldModel";
 import { map } from "../../core/modules/lodash";
 

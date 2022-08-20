@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import { useTranslation, UseTranslationResponse } from "react-i18next";
 import { parseLanguage } from "../../core/types/Language";
 import { LanguageService, LanguageServiceEvent } from "../../core/LanguageService";
-import { TranslationUtils } from "../../core/utils/TranslationUtils";
+import { TranslationUtils } from "../../core/TranslationUtils";
 import { LogService } from "../../core/LogService";
 import { useServiceEvent } from "./useServiceEvent";
 

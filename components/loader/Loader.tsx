@@ -27,13 +27,10 @@ export interface LoaderProps {
  * Loader component.
  */
 export function Loader (props: LoaderProps) {
-
     const className = props?.className;
     const speed = props?.speed ?? DEFAULT_LOADER_SPEED;
     const hiddenTime = props?.hiddenTime ?? DEFAULT_HIDDEN_TIME;
-
     const [hidden, setHidden] = useState<boolean>( (hiddenTime ?? -1) >= 0 );
-
     const setVisibleCallback = useCallback(
         () => {
             setHidden(false);
@@ -42,18 +39,15 @@ export function Loader (props: LoaderProps) {
             setHidden
         ]
     );
-
     const [delayedSetVisibleCallback, cancelDelayedSetVisibleCallback] = useDelayedCallback(
         setVisibleCallback,
         hiddenTime > 0 ? hiddenTime : 0
     );
-
     useMountEffect(
         'Loader',
         delayedSetVisibleCallback,
         cancelDelayedSetVisibleCallback
     );
-
     return (
         <div className={
             LOADER_CLASS_NAME
@@ -64,5 +58,4 @@ export function Loader (props: LoaderProps) {
             >{hidden ? null : <LoadingIcon />}</div>
         </div>
     );
-
 }

@@ -16,10 +16,8 @@ export interface FormProps {
 }
 
 export function Form (props: FormProps) {
-
     const className = props?.className;
     const submit : SubmitCallback | undefined = props?.submit;
-
     const submitCallback = useCallback(
         (event: FormEvent<HTMLFormElement>) => {
             if (event) {
@@ -37,7 +35,6 @@ export function Form (props: FormProps) {
             submit
         ]
     );
-
     return (
         <form
             className={
@@ -47,5 +44,4 @@ export function Form (props: FormProps) {
             onSubmit={submitCallback}
         >{props.children}</form>
     );
-
 }
