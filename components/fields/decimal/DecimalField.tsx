@@ -12,8 +12,8 @@ import {
 } from "../../../constants/hgClassName";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import { useDecimalField } from "../../../hooks/field/useDecimalField";
+import { NumberUtils } from "../../../../core/NumberUtils";
 import './DecimalField.scss';
-import { NumberUtils } from '../../../../core/utils/NumberUtils';
 
 const LOG = LogService.createLogger('DecimalField');
 const DEFAULT_PLACEHOLDER = '123.00';
@@ -33,17 +33,14 @@ export interface DecimalFieldProps {
 }
 
 export function DecimalField(props: DecimalFieldProps) {
-
     const className = props?.className;
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder ?? DEFAULT_PLACEHOLDER;
     const label = props.label ?? props.model?.label ?? '';
-
     const inputReference = useRef<HTMLInputElement>(null);
     const [focus, setFocus] = useState(false);
     const [tempVal, setTempVal] = useState('');
     const [validation, setValidation] = useState(true);
-
     const {
         fieldState,
         onChangeCallback,
@@ -58,7 +55,7 @@ export function DecimalField(props: DecimalFieldProps) {
         props?.model?.required ?? false,
         props?.model?.minValue,
         props?.model?.maxValue,
-        toNumberClass,
+        NumberUtils.parseNumber,
         stringifyInteger,
         tempVal
     );
@@ -138,10 +135,6 @@ export function DecimalField(props: DecimalFieldProps) {
     );
 
 }
-
-const toNumberClass = NumberUtils.parseNumber        // toNumber moved to core/utils
-
-
 
 function stringifyInteger(value: number | undefined): string {
     return `${value ?? ''}`;
