@@ -21,6 +21,7 @@ export const EMAIL_FIELD_CLASS_NAME             = 'hg-email-field';
 export const JSON_FIELD_CLASS_NAME              = 'hg-json-field';
 export const TEXT_AREA_FIELD_CLASS_NAME         = 'hg-text-area-field';
 export const INTEGER_FIELD_CLASS_NAME           = 'hg-integer-field';
+export const DECIMAL_FIELD_CLASS_NAME           = 'hg-decimal-field';
 export const LINK_BUTTON_CLASS_NAME             = 'hg-link-button';
 export const EXTERNAL_LINK_BUTTON_CLASS_NAME             = 'hg-external-link-button';
 export const DRAGGABLE_CLASS_NAME               = 'hg-draggable';

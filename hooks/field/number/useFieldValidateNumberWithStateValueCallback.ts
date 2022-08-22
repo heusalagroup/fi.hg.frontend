@@ -22,7 +22,7 @@ export function useFieldValidateNumberWithStateValueCallback (
     validateValueCallback : FieldValidateNumberValueCallback,
     toNumber: ToNumberCallback
 ) : FieldValidateNumberWithStateValueCallback {
-    return useCallback(
+    return useCallback(                                        
         (
             stateValueString: string,
             propValue: number | undefined,
@@ -33,7 +33,7 @@ export function useFieldValidateNumberWithStateValueCallback (
 
             LOG.debug(`${identifier}: _validateWithStateValue: stateValueString = `, stateValueString);
 
-            if ( !validateValueCallback(propValue, required, minValue, maxValue) ) {
+            if ( !validateValueCallback(propValue, required, minValue, maxValue) ) {         // if validateValueCallback returns false
                 LOG.debug(`${identifier}: _validateWithStateValue: propValue = `, propValue);
                 return false;
             }
