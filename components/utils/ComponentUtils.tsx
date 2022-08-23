@@ -35,7 +35,7 @@ export class ComponentUtils {
 
     public static prepareParagraphNodes (
         t: TFunction,
-        description: any[] | undefined,
+        description: readonly any[] | undefined,
         paramBlocks: ComponentNodeMap | undefined
     ) {
         return (
@@ -69,7 +69,6 @@ export class ComponentUtils {
                     : null}
             </>
         );
-
     }
 
     /**
