@@ -214,7 +214,7 @@ export class WindowService {
 
     private static _isDarkModeEnabled () : boolean {
         const w = WindowObjectService.getWindow();
-        return !w && !!w.matchMedia && !!w.matchMedia(DARK_COLOR_SCHEME_QUERY)?.matches;
+        return !!(w?.matchMedia?(DARK_COLOR_SCHEME_QUERY)?.match);
     }
 
     private static _getColorScheme () : ColorScheme {
