@@ -4,5 +4,6 @@ import { useDocument } from "./useDocument";
 
 export function useScrollingElement () : Element | undefined {
     const document = useDocument();
-    return document?.scrollingElement;
+    const element = document?.scrollingElement;
+    return element ? element : undefined;
 }
