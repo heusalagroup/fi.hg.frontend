@@ -71,10 +71,16 @@ export class WindowSizeService {
     }
 
     private static _startListeningResize () {
-        if ( this._handleResize === undefined && WindowObjectService.hasWindow() ) {
-            this._handleResize = WindowSizeService._onResize.bind(this);
+        if ( this._handleResize === undefined ) {
             const w = WindowObjectService.getWindow();
-            w.addEventListener("resize", this._handleResize);
+            if (w) {
+                this._handleResize = WindowSizeService._onResize.bind(this);
+                w.addEventListener("resize", this._handleResize);
+            } else {
+                LOG.warn(`Warning! Could not add event listener for "resize" since no window object`);
+            }
+        } else {
+            LOG.warn(`Warning! Already listening resize`);
         }
     }
 
@@ -85,7 +91,11 @@ export class WindowSizeService {
         }
         if (this._handleResize !== undefined && WindowObjectService.hasWindow() ) {
             const w = WindowObjectService.getWindow();
-            w.removeEventListener("resize", this._handleResize);
+            if (w) {
+                w.removeEventListener("resize", this._handleResize);
+            } else {
+                LOG.warn(`Warning! Could not remove event listener for "resize" since no window object`);
+            }
             this._handleResize = undefined;
         }
     }
