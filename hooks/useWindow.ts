@@ -11,7 +11,7 @@ export function useWindow () : Window | undefined {
     useEffect(
         () => {
             const ww = WindowObjectService.getWindow();
-            if (!ww) {
+            if (ww) {
                 setW(ww);
             }
         },

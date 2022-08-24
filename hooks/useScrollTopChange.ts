@@ -4,8 +4,6 @@ import { VoidCallback } from "../../core/interfaces/callbacks";
 import { LogService } from "../../core/LogService";
 import { useEffect } from "react";
 import { useScrollTop } from "./useScrollTop";
-import { useWindow } from "./useWindow";
-import { useDocument } from "./useDocument";
 import { useScrollingElement } from "./useScrollingElement";
 
 const LOG = LogService.createLogger('useScrollTopChange');
