@@ -122,9 +122,9 @@ export class WindowEventService {
         if (this._messageCallback) {
             this._unInitializeWindowMessageListener();
         }
-        this._messageCallback = this._processMessageEventObject.bind(this);
         const w = WindowObjectService.getWindow();
         if (w) {
+            this._messageCallback = this._processMessageEventObject.bind(this);
             w.addEventListener('message', this._messageCallback);
         } else {
             LOG.warn(`Cannot listen message events. No window object detected.`);
@@ -134,7 +134,11 @@ export class WindowEventService {
     private static _unInitializeWindowMessageListener () {
         if (this._messageCallback) {
             const w = WindowObjectService.getWindow();
-            w.removeEventListener('message', this._messageCallback);
+            if (w) {
+                w.removeEventListener('message', this._messageCallback);
+            } else {
+                LOG.warn(`Warning! Could not remove event listener since window object not found`);
+            }
             this._messageCallback = undefined;
         }
     }
