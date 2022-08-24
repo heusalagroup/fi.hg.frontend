@@ -4,18 +4,17 @@ import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useLocation } from "react-router-dom";
 import { LogService } from "../../core/LogService";
 import { useScrollTop } from "./useScrollTop";
+import { useScrollingElement } from "./useScrollingElement";
 
-const LOG = LogService.createLogger('useDropdownToggle');
+const LOG = LogService.createLogger('useDropdownToggleWithoutWindowSize');
 
 export type SetProfileMenuOpenCallback = Dispatch<SetStateAction<boolean>>;
 
 export function useDropdownToggleWithoutWindowSize(initialState: boolean = false): [boolean, SetProfileMenuOpenCallback] {
-
     const [isDropdownOpen, setDropdownOpen] = useState<boolean>(initialState);
-
     const location = useLocation();
-    //const windowSize = useWindowSize();
-    const scrollTop = useScrollTop(window?.document?.scrollingElement);
+    const scrollingElement = useScrollingElement();
+    const scrollTop = useScrollTop(scrollingElement);
 
     // When window size changes, close menu
     useEffect(
@@ -54,5 +53,4 @@ export function useDropdownToggleWithoutWindowSize(initialState: boolean = false
     );
 
     return [isDropdownOpen, setDropdownOpen];
-
 }

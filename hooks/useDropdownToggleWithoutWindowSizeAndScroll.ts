@@ -4,7 +4,7 @@ import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useLocation } from "react-router-dom";
 import { LogService } from "../../core/LogService";
 
-const LOG = LogService.createLogger('useDropdownToggle');
+const LOG = LogService.createLogger('useDropdownToggleWithoutWindowSizeAndScroll');
 
 export type SetProfileMenuOpenCallback = Dispatch<SetStateAction<boolean>>;
 

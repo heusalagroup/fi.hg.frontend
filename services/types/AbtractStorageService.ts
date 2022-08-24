@@ -173,10 +173,6 @@ export abstract class AbstractStorageService {
         return this;
     }
 
-    protected static _getWindow () : any | undefined {
-        return typeof window !== 'undefined' ? window : undefined;
-    }
-
 }
 
 

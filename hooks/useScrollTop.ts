@@ -2,12 +2,15 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { LogService } from "../../core/LogService";
+import { useWindow } from "./useWindow";
 
 const LOG = LogService.createLogger('useWindowSize');
 
 export function useScrollTop (
     scrollingElement: Element | null | undefined
 ) : number | undefined {
+
+    const w = useWindow();
 
     const [ scrollTop, setScrollTop ] = useState<number | undefined>(
         scrollingElement?.scrollTop
@@ -26,28 +29,23 @@ export function useScrollTop (
 
     useEffect(
         () => {
-
             LOG.debug(`Listening scroll events...`);
-
             setScrollTop(scrollingElement?.scrollTop);
-
-            if (typeof window !== 'undefined') {
-                window.addEventListener('scroll', onScroll);
+            if (w) {
+                w.addEventListener('scroll', onScroll);
                 return () => {
-                    window.removeEventListener('scroll', onScroll);
+                    w.removeEventListener('scroll', onScroll);
                 };
             } else {
                 LOG.warn(`Could not detect window object. Cannot listen scroll events.`);
             }
-
         },
         [
             setScrollTop,
             scrollingElement,
-            onScroll
+            onScroll,
+            w
         ]
     );
-
     return scrollTop;
-
 }

@@ -11,6 +11,7 @@ import { AbstractStorageService,
 } from "./types/AbtractStorageService";
 import { Observer, ObserverCallback, ObserverDestructor} from "../../core/Observer";
 import { WindowService, WindowServiceDestructor, WindowServiceEvent} from "./WindowService";
+import { WindowObjectService } from "./WindowObjectService";
 
 export type SessionStorageServiceDestructor = ObserverDestructor;
 
@@ -26,7 +27,8 @@ export class SessionStorageService extends AbstractStorageService {
     }
 
     protected static _getStorage () : StorageObject | undefined {
-        return this._getWindow()?.sessionStorage;
+        const w = WindowObjectService.getWindow();
+        return w?.sessionStorage;
     }
 
     public static on (name : StorageServiceEvent.PROPERTY_DELETED , callback : StorageServiceDeletedEventCallback)  : ObserverDestructor;

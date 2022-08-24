@@ -4,15 +4,13 @@ import { Observer,  ObserverCallback, ObserverDestructor } from "../../core/Obse
 import { LogService } from "../../core/LogService";
 import { ColorScheme, stringifyColorScheme } from "../../core/style/types/ColorScheme";
 import { stringifyStyleScheme, StyleScheme } from "../types/StyleScheme";
+import { WindowObjectService } from "./WindowObjectService";
 
 const LOG = LogService.createLogger('WindowService');
 
 export enum WindowServiceEvent {
-
     COLOR_SCHEME_CHANGED = "WindowServiceEvent:colorSchemeChanged",
-
     STORAGE_CHANGED = "WindowServiceEvent:storageChanged"
-
 }
 
 export type WindowServiceDestructor = ObserverDestructor;
@@ -50,7 +48,8 @@ export class WindowService {
 
     public static hasParent () : boolean {
         try {
-            return window !== window?.parent;
+            const w = WindowObjectService.getWindow();
+            return w !== undefined && w !== WindowObjectService.getParent();
         } catch (err) {
             return false;
         }
@@ -178,9 +177,10 @@ export class WindowService {
             this._unInitializeStorageListener();
         }
 
-        if (typeof window !== "undefined") {
+        const w = WindowObjectService.getWindow();
+        if (w) {
             this._storageCallback = this._onStorageEvent.bind(this);
-            window.addEventListener('storage', this._storageCallback);
+            w.addEventListener('storage', this._storageCallback);
         } else {
             LOG.warn(`Cannot listen storage events. No window object detected.`);
         }
@@ -188,16 +188,15 @@ export class WindowService {
     }
 
     private static _unInitializeStorageListener () {
-
         if (this._storageCallback) {
-            if (typeof window !== "undefined") {
-                window.removeEventListener('storage', this._storageCallback);
+            const w = WindowObjectService.getWindow();
+            if (w) {
+                w.removeEventListener('storage', this._storageCallback);
             } else {
                 LOG.warn(`Cannot remove storage event listener. No window object detected.`);
             }
             this._storageCallback = undefined;
         }
-
     }
 
     private static _onStorageEvent (event: StorageEvent) {
@@ -214,7 +213,8 @@ export class WindowService {
 
 
     private static _isDarkModeEnabled () : boolean {
-        return typeof window !== "undefined" && !!window.matchMedia && !!window.matchMedia(DARK_COLOR_SCHEME_QUERY)?.matches;
+        const w = WindowObjectService.getWindow();
+        return !w && !!w.matchMedia && !!w.matchMedia(DARK_COLOR_SCHEME_QUERY)?.matches;
     }
 
     private static _getColorScheme () : ColorScheme {
@@ -235,13 +235,14 @@ export class WindowService {
             this._unInitializeMediaSchemeListeners();
         }
 
-        if (typeof window === "undefined") {
+        const w = WindowObjectService.getWindow();
+        if (!w) {
             LOG.warn(`No window object detected. Cannot setup media scheme listeners.`);
             return;
         }
 
         const darkCallback = this._darkColorSchemeChangeCallback = this._onDarkColorSchemeChange.bind(this);
-        this._watchMediaDarkScheme = window.matchMedia(DARK_COLOR_SCHEME_QUERY);
+        this._watchMediaDarkScheme = w.matchMedia(DARK_COLOR_SCHEME_QUERY);
         this._watchMediaDarkScheme.addEventListener('change', darkCallback);
 
         if (this._colorScheme === undefined) {

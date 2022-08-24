@@ -4,6 +4,7 @@ import { LogService } from "../../core/LogService";
 import { Observer, ObserverCallback, ObserverDestructor} from "../../core/Observer";
 import {JsonObject} from "../../core/Json";
 import {isString} from "../../core/modules/lodash";
+import { WindowObjectService } from "./WindowObjectService";
 
 const LOG = LogService.createLogger('WindowEventService');
 
@@ -118,30 +119,24 @@ export class WindowEventService {
     }
 
     private static _initializeWindowMessageListener () {
-
         if (this._messageCallback) {
             this._unInitializeWindowMessageListener();
         }
-
         this._messageCallback = this._processMessageEventObject.bind(this);
-
-        if (typeof window !== 'undefined') {
-            window.addEventListener('message', this._messageCallback);
+        const w = WindowObjectService.getWindow();
+        if (w) {
+            w.addEventListener('message', this._messageCallback);
         } else {
             LOG.warn(`Cannot listen message events. No window object detected.`);
         }
-
     }
 
     private static _unInitializeWindowMessageListener () {
-
         if (this._messageCallback) {
-
-            window.removeEventListener('message', this._messageCallback);
-
+            const w = WindowObjectService.getWindow();
+            w.removeEventListener('message', this._messageCallback);
             this._messageCallback = undefined;
         }
-
     }
 
     private static _processMessageEventObject (event : MessageEvent) {
