@@ -4,7 +4,7 @@ import { Observer,  ObserverCallback, ObserverDestructor } from "../../core/Obse
 import { LogService } from "../../core/LogService";
 import { ColorScheme, stringifyColorScheme } from "../../core/style/types/ColorScheme";
 import { stringifyStyleScheme, StyleScheme } from "../types/StyleScheme";
-import { WindowObjectService } from "./WindowObjectService";
+import { WindowObjectService } from "../../core/WindowObjectService";
 
 const LOG = LogService.createLogger('WindowService');
 

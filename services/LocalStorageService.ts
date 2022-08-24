@@ -10,7 +10,7 @@ import { AbstractStorageService,
 } from "./types/AbtractStorageService";
 import { Observer, ObserverCallback, ObserverDestructor} from "../../core/Observer";
 import { WindowService, WindowServiceDestructor, WindowServiceEvent} from "./WindowService";
-import { WindowObjectService } from "./WindowObjectService";
+import { WindowObjectService } from "../../core/WindowObjectService";
 
 export type LocalStorageServiceDestructor = ObserverDestructor;
 

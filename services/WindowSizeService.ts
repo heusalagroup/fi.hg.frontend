@@ -3,7 +3,7 @@
 import { Observer, ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { VoidCallback } from "../../core/interfaces/callbacks";
 import { LogService } from "../../core/LogService";
-import { WindowObjectService } from "./WindowObjectService";
+import { WindowObjectService } from "../../core/WindowObjectService";
 
 const LOG = LogService.createLogger('WindowSizeService');
 
