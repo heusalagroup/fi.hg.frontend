@@ -30,6 +30,11 @@ export function isButtonStyle (value: any): value is ButtonStyle {
     }
 }
 
+export function isButtonStyleOrUndefined (value: any): value is ButtonStyle | undefined {
+    if (value === undefined) return true;
+    return isButtonStyle(value);
+}
+
 export function stringifyButtonStyle (value: ButtonStyle): string {
     switch (value) {
         case ButtonStyle.PRIMARY   : return 'primary';
