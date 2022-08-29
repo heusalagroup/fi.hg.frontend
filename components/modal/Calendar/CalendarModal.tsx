@@ -1,7 +1,8 @@
-import moment from "moment-timezone"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LogService } from "../../../../core/LogService";
 import { CalendarProps } from "../../fields/datePicker/DatePickerField";
+import './CalendarModal.scss'
+import { momentType, TimeService } from "../../../../core/TimeService";
 
 interface CalendarModalProps extends CalendarProps {
     readonly onChangeCallback?: (value: string) => void;
@@ -10,22 +11,20 @@ interface CalendarModalProps extends CalendarProps {
 }
 
 interface WeekMoment {
-    value: moment.Moment;
+    value: momentType;
     index: number;
-    array?: moment.Moment[];
+    array?: momentType[];
 }
 
 const LOG = LogService.createLogger('CalendarModal');
 
-
 export function Calendar(props: CalendarModalProps) {
     const { onChangeCallback, buildCalendar, calendarStyling, focus } = props;
-    const [value, setValue] = useState(moment())
-    const [selectedValue, setSelectedValue] = useState(moment())
-    const [calendar, setCalendar] = useState<moment.Moment[]>([])
+    const [value, setValue] = useState(TimeService.momentEntity())
+    const [selectedValue, setSelectedValue] = useState(TimeService.momentEntity())
+    const [calendar, setCalendar] = useState<momentType[]>([])
 
     const inputReference = useRef<HTMLInputElement>(null);
-
 
     useEffect(() => {
         buildMonth();
@@ -56,15 +55,15 @@ export function Calendar(props: CalendarModalProps) {
         ]
     )
 
-    const handleDateData = (curr: moment.Moment): void => {
-        const newVal = curr.toISOString()
+    const handleDateData = (curr: momentType): void => {
+        const newVal = curr.toISOString(true)
         LOG.debug('Input value from newVal', newVal, typeof (newVal))
         if (onChangeCallback) {
             onChangeCallback(newVal)
         }
     }
 
-    const handeClick = (day: moment.Moment): void => {
+    const handeClick = (day: momentType): void => {
         LOG.debug('value value onclick', day)
         const curr = day;
         setSelectedValue(curr)
@@ -92,7 +91,7 @@ export function Calendar(props: CalendarModalProps) {
             {calendar?.map((week: any) =>
                 <div className='week-container'>
                     {
-                        week.map((day: moment.Moment): JSX.Element => (
+                        week.map((day: momentType): JSX.Element => (
                             <div className='datepicker-day-container' onClick={() => handeClick(day)}>
                                 {calendarStyling && (
                                     <div className={selectedValue.isSame(day, 'date') ? 'selected' : calendarStyling(day)}>

@@ -1,24 +1,24 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { useCallback, useEffect, useState } from "react";
-import { FormFieldState } from "../../types/FormFieldState";
-import { useFieldChangeState } from "./useFieldChangeState";
-import { LogService } from "../../../core/LogService";
-import { useFieldDateChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
-import { useFieldIdentifier } from "./useFieldIdentifier";
-import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
-import { FieldChangeCallback } from "./useFieldChangeCallback";
-import moment from "moment-timezone";
-import { useFieldStringStateUpdateCallback } from "./string/useFieldStringStateUpdateCallback";
-import { useFieldValidateStringWithStateValueCallback } from "./string/useFieldValidateStringWithStateValueCallback";
-import { useFieldValidateStringValueCallback } from "./string/useFieldValidateStringValueCallback";
-import { useFieldStringInternalValueUpdateCallback } from "./string/useFieldStringInternalValueUpdateCallback";
+import { FormFieldState } from "../types/FormFieldState";
+import { useFieldChangeState } from "./field/useFieldChangeState";
+import { LogService } from "../../core/LogService";
+import { useFieldDateChangeEventCallback } from "./field/string/useFieldStringChangeEventCallback";
+import { useFieldIdentifier } from "./field/useFieldIdentifier";
+import { useFieldMountEffectWithInternalState } from "./field/useFieldMountEffectWithInternalState";
+import { FieldChangeCallback } from "./field/useFieldChangeCallback";
+import { useFieldStringStateUpdateCallback } from "./field/string/useFieldStringStateUpdateCallback";
+import { useFieldValidateStringWithStateValueCallback } from "./field/string/useFieldValidateStringWithStateValueCallback";
+import { useFieldValidateStringValueCallback } from "./field/string/useFieldValidateStringValueCallback";
+import { useFieldStringInternalValueUpdateCallback } from "./field/string/useFieldStringInternalValueUpdateCallback";
+import { momentType, TimeService } from "../../core/TimeService";
 
 const LOG = LogService.createLogger('useDatepickerField');
 
 type InternalValueType = string;
 
-export function useDateField(
+export function useDatePicker(
     label: string,
     key: string,
     change: FieldChangeCallback<InternalValueType | undefined> | undefined,
@@ -26,7 +26,8 @@ export function useDateField(
     propsValue: string | undefined,
     isRequired: boolean,
     propsMinLength: number | undefined,
-    propsMaxLength: number | undefined
+    propsMaxLength: number | undefined,
+    dateFormat?: string
 ) {
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
@@ -58,7 +59,8 @@ export function useDateField(
     const onChangeCallback = useFieldDateChangeEventCallback(
         identifier,
         setValue,
-        change
+        change,
+        dateFormat
     );
 
     useFieldMountEffectWithInternalState(
@@ -68,42 +70,41 @@ export function useDateField(
         updateFieldStateCallback
     );
 
-    const buildCalendar = useCallback((value: moment.Moment): moment.Moment[] => {
-        const startDay = value.clone().startOf("month").startOf("week");
-        const endDay = value.clone().endOf("month").endOf("week");
+    const buildCalendar = useCallback((value: momentType): any[] => {
+            const startDay = TimeService.momentEntity(value).clone().startOf("month").startOf("week");
+            const endDay = TimeService.momentEntity(value).clone().endOf("month").endOf("week");
 
-        const day = startDay.clone();
-        const calendarArray: any = []
-        while (day.isBefore(endDay, "day")) {
-            calendarArray.push(
-                Array(7).fill(0).map(() => day.add(1, "day").clone())
-            );
-        }
-        return calendarArray
-    },
+            const day = startDay.clone();
+            const calendarArray: any = []
+            while (day.isBefore(endDay, "day")) {
+                calendarArray.push(
+                    Array(7).fill(0).map(() => day.add(1, "day").clone())
+                );
+            }
+            return calendarArray
+        },
         [
-            
+
         ]
     )
 
+    const calendarStyling = useCallback((day: momentType) => {
 
-    const calendarStyling = useCallback((day: moment.Moment) => {
+            function beforeToday(day: momentType) {
+                return day.isBefore(new Date(), "day");
+            }
 
-        function beforeToday(day: moment.Moment) {
-            return day.isBefore(new Date(), "day");
-        }
+            function isToday(day: momentType) {
+                return day.isSame(new Date(), "day");
+            }
 
-        function isToday(day: moment.Moment) {
-            return day.isSame(new Date(), "day");
-        }
-
-        function dayStyles(day: moment.Moment) {
-            if (beforeToday(day)) return "before"
-            if (isToday(day)) return "today"
-            return ""
-        }
-        return dayStyles(day)
-    },
+            function dayStyles(day: momentType) {
+                if (beforeToday(day)) return "before"
+                if (isToday(day)) return "today"
+                return ""
+            }
+            return dayStyles(day)
+        },
         [
             value,
             onChangeCallback,
@@ -154,8 +155,6 @@ export function useDateField(
             updateFieldStateCallback,
         ]
     );
-
-
 
     useFieldChangeState(changeState, fieldState);
 

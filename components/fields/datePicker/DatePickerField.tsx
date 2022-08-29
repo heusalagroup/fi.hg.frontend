@@ -1,8 +1,8 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import React, { ReactNode, useState } from 'react';
-import { DatePickerFieldModel } from "../../../types/items/DatepickerModel";
+import { ReactNode, useState } from "react";
+import { DatePickerFieldModel } from "../../../types/items/DatepickerFieldModel";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
@@ -11,12 +11,12 @@ import {
     DATE_PICKER_FIELD_CLASS_NAME
 } from "../../../constants/hgClassName";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
-import './DatePickerField.scss';
-import moment from 'moment-timezone';
-import { useDateField } from '../../../hooks/field/useDatepickerField';
+import { useDatePicker } from "../../../hooks/useDatepickerField";
 import { TranslationFunction } from "../../../../../../fi/hg/core/types/TranslationFunction";
 import { LogService } from '../../../../core/LogService';
 import { Calendar } from '../../modal/Calendar/CalendarModal';
+import { momentType } from "../../../../core/TimeService";
+import './DatePickerField.scss';
 
 const COMPONENT_CLASS_NAME = DATE_PICKER_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "text";
@@ -38,7 +38,7 @@ export interface DatePickerFieldProps {
 }
 
 export interface CalendarProps {
-    buildCalendar: (value: moment.Moment) => moment.Moment[]
+    buildCalendar: (value: momentType) => momentType[]
 }
 
 export function DatePickerField(props: DatePickerFieldProps) {
@@ -56,7 +56,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
         onChangeCallback,
         buildCalendar,
         calendarStyling
-    } = useDateField(
+    } = useDatePicker(
         label,
         props?.model?.key ?? '',
         props?.change,
@@ -95,7 +95,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
                     type={COMPONENT_INPUT_TYPE}
                     autoComplete="off"
                     placeholder={placeholder}
-                    value={value}
+                    value={value?.slice(0, 10)}
                     onChange={onChange}
                     onClick={() => setShowCalendar(!showCalendar)}
                     readOnly={props?.change === undefined}
