@@ -2,16 +2,13 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import {
-    useState,
-    MouseEvent,
     ChangeEvent,
     ReactNode,
     useCallback,
-    useRef,
-    useEffect
+    useRef
 } from 'react';
 import { CheckboxFieldModel } from "../../../types/items/CheckboxFieldModel";
-import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
+import { FormFieldState } from "../../../types/FormFieldState";
 import { LogService } from "../../../../core/LogService";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
@@ -19,9 +16,8 @@ import {
     CHECKBOX_FIELD_CLASS_NAME,
     FIELD_CLASS_NAME
 } from "../../../constants/hgClassName";
-import './CheckboxField.scss';
-import { useFieldChangeState } from "../../../hooks/field/useFieldChangeState";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
+import './CheckboxField.scss';
 
 const LOG = LogService.createLogger('CheckboxField');
 const COMPONENT_CLASS_NAME = CHECKBOX_FIELD_CLASS_NAME;
@@ -41,183 +37,20 @@ export interface CheckboxFieldProps {
 
 export function CheckboxField (props: CheckboxFieldProps) {
 
+    const value = !!props?.value;
     const className = props?.className;
     const label = props.label ?? props.model?.label ?? '';
     const change = props?.change;
-    const changeState = props?.changeState;
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const key = props?.model?.key ?? '';
     const identifier = `#${key}: "${label}"`;
-
-    const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [ value, setValue ] = useState<boolean>(false);
-
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const validateValueCallback = useCallback(
-        (
-            internalValue: boolean | undefined,
-            required: boolean
-        ): boolean => {
-            LOG.debug(`${identifier}: validateValueCallback: `, required, internalValue);
-            return required ? internalValue === true : true;
-        },
-        [
-            identifier
-        ]
-    );
-
-    const validateWithStateValueCallback = useCallback(
-        (
-            stateValue: boolean,
-            propValue: boolean | undefined,
-            required: boolean
-        ): boolean => {
-
-            LOG.debug(`${identifier}: _validateWithStateValue: stateValue = `, stateValue);
-
-            if ( !validateValueCallback(propValue, required) ) {
-                LOG.debug(`${identifier}: _validateWithStateValue: propValue = `, propValue);
-                return false;
-            }
-
-            if ( !validateValueCallback(stateValue, required) ) {
-                return false;
-            }
-
-            LOG.debug(`${identifier}: _validateWithStateValue: propValue = `, propValue);
-            return stateValue === (propValue ?? false);
-
-        },
-        [
-            identifier,
-            validateValueCallback
-        ]
-    );
-
-    const updateFieldStateCallback = useCallback(
-        () => {
-
-            LOG.debug(`${identifier}: updateFieldStateCallback: state: `, stringifyFormFieldState(fieldState));
-
-            if ( fieldState < FormFieldState.MOUNTED ) return;
-            if ( fieldState >= FormFieldState.UNMOUNTED ) return;
-
-            const isValid = validateWithStateValueCallback(
-                value,
-                props.value,
-                props?.model?.required ?? false
-            );
-            LOG.debug(`${identifier}: updateFieldStateCallback: isValid: `, isValid);
-
-            setFieldState(isValid ? FormFieldState.VALID : FormFieldState.INVALID);
-
-        },
-        [
-            value,
-            identifier,
-            fieldState,
-            validateWithStateValueCallback,
-            props.value,
-            props?.model?.required
-        ]
-    );
-
-    const setStateValue = useCallback(
-        (newValue: boolean) => {
-            if ( newValue !== value ) {
-                setValue(newValue);
-                updateFieldStateCallback();
-            }
-        },
-        [
-            value,
-            updateFieldStateCallback
-        ]
-    );
-
-    const toggleCallback = useCallback(
-        (event: MouseEvent<HTMLLabelElement>) => {
-            if ( event ) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            setValue((oldValue) => !oldValue);
-        }, [
-            setValue
-        ]
-    );
-
-    const updateValueStateCallback = useCallback(
-        () => {
-            setStateValue(props?.value ?? false);
-        },
-        [
-            setStateValue,
-            props?.value
-        ]
-    );
-
-    const onChangeCallback = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            if ( event ) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            const newValue: boolean = event?.target?.checked ?? false;
-            LOG.debug(`${identifier}: _onChange: newValue = `, newValue);
-            setValue(newValue);
-        },
-        [
-            identifier,
-            setValue
-        ]
-    );
-
-    // Call update methods and set initial state initially and when unmounted
-    useEffect(
-        () => {
-            LOG.debug('Mount');
-            updateValueStateCallback();
-            setFieldState(FormFieldState.MOUNTED);
-            updateFieldStateCallback();
-            return () => {
-                LOG.debug('Unmount');
-                setFieldState(FormFieldState.UNMOUNTED);
-            };
-        },
-        [
-            updateValueStateCallback,
-            updateFieldStateCallback
-        ]
-    );
-
-    // Update field state and internal value when props?.value changes
-    useEffect(
-        () => {
-            const newValue = props?.value ?? false;
-            LOG.debug(`${identifier}: Update: `, newValue);
-            updateFieldStateCallback();
-            if ( value !== newValue ) {
-                setValue(() => props?.value ?? false);
-            }
-        },
-        [
-            props?.value,
-            identifier,
-            updateFieldStateCallback,
-            setValue,
-            value
-        ]
-    );
-
-    // Call props.change when internal value changes
-    useEffect(
-        () => {
-            LOG.debug(`${identifier}: Props value changed: `, value);
+    const changeCallback = useCallback(
+        (value: boolean | undefined) => {
             if ( change ) {
                 try {
-                    change(value);
+                    change(!!value);
                 } catch (err) {
                     LOG.error(`${identifier}: Error in change props: `, err);
                 }
@@ -227,34 +60,30 @@ export function CheckboxField (props: CheckboxFieldProps) {
         },
         [
             identifier,
-            value,
             change
         ]
     );
 
-    // Call updateFieldStateCallback() when internal value changes
-    useEffect(
-        () => {
-            LOG.debug(`Internal value update: `, value);
-            updateFieldStateCallback();
+    const onChangeCallback = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const newValue = !!event?.target?.checked;
+            LOG.debug(`${identifier}: _onChange: Change detected: `, newValue);
+            changeCallback(newValue);
         },
         [
-            value,
-            updateFieldStateCallback
+            identifier,
+            changeCallback
         ]
     );
-
-    useFieldChangeState(changeState, fieldState);
 
     return (
         <label
             className={
                 `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
+                // + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
                 + ` ${className ? ` ${className}` : ''}`
             }
-            onClick={toggleCallback}
         >
             <input
                 ref={inputRef}
