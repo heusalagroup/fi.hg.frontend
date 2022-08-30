@@ -6,7 +6,7 @@ import { momentType, TimeService } from "../../../../core/TimeService";
 
 interface CalendarModalProps extends CalendarProps {
     readonly onChangeCallback?: (value: string) => void;
-    readonly calendarStyling?: (day: moment.Moment) => "" | "before" | "today";
+    readonly calendarStyling?: (day: momentType) => "" | "before" | "today";
     readonly focus?: (value: boolean) => void;
 }
 
@@ -20,9 +20,9 @@ const LOG = LogService.createLogger('CalendarModal');
 
 export function Calendar(props: CalendarModalProps) {
     const { onChangeCallback, buildCalendar, calendarStyling, focus } = props;
-    const [value, setValue] = useState(TimeService.momentEntity())
-    const [selectedValue, setSelectedValue] = useState(TimeService.momentEntity())
-    const [calendar, setCalendar] = useState<momentType[]>([])
+    const [ value, setValue ] = useState(TimeService.momentEntity())
+    const [ selectedValue, setSelectedValue ] = useState(TimeService.momentEntity())
+    const [ calendar, setCalendar ] = useState<momentType[]>([])
 
     const inputReference = useRef<HTMLInputElement>(null);
 
@@ -47,8 +47,8 @@ export function Calendar(props: CalendarModalProps) {
     }
 
     const buildMonth = useCallback(() => {
-        setCalendar(buildCalendar(value))
-    },
+            setCalendar(buildCalendar(value))
+        },
         [
             prevMonth,
             nextMonth

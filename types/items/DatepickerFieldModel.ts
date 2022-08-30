@@ -4,11 +4,7 @@ import { FormItemType } from "../FormItemType";
 import { FormFieldModel,  isFormFieldModel } from "../FormFieldModel";
 
 export interface DatePickerFieldModel extends FormFieldModel {
-
     readonly type         : FormItemType.DATE_FIELD;
-    readonly minLength   ?: number;
-    readonly maxLength   ?: number;
-
 }
 
 export function isDatepickerFieldModel (value: any) : value is DatePickerFieldModel {

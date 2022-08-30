@@ -6,7 +6,7 @@ import {
     isStringOrUndefined, isUndefined
 } from "../../core/modules/lodash";
 import { FormItemModel } from "./FormItemModel";
-import {FormFieldType, isFormFieldType} from "./FormFieldType";
+import { FormFieldType, isFormFieldType } from "./FormFieldType";
 import { isStyleScheme, StyleScheme } from "./StyleScheme";
 
 export interface FormFieldModel extends FormItemModel {

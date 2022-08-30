@@ -43,7 +43,7 @@ export function useFieldDateChangeEventCallback (       // Had trouble calling f
 
     return useCallback(
         (value: string) => {
-            const eventTargetValue = TimeService.parseISOString(value, true)?? '';
+            const eventTargetValue = TimeService.momentEntity(value).format(dateFormat) ?? '';
             setValue(eventTargetValue);
             changeCallback(eventTargetValue);
         },

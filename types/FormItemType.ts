@@ -1,6 +1,6 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import {isString} from "../../core/modules/lodash";
+import { isString } from "../../core/modules/lodash";
 
 /**
  * If you add more fields, make sure to update ./FormFieldType.ts also.
@@ -38,6 +38,7 @@ export function isFormItemType (value: any) : value is FormItemType {
         case FormItemType.CHECKBOX_FIELD:
         case FormItemType.TEXT_AREA_FIELD:
         case FormItemType.INTEGER_FIELD:
+        case FormItemType.DATE_FIELD:
         case FormItemType.PAGE_BREAK:
             return true;
 
