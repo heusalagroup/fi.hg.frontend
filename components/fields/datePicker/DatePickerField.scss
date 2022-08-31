@@ -1,0 +1,47 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+
+@import "src/fi/hg/frontend/styles/index";
+
+.hg-date-picker-field {
+
+  padding           : $field-padding;
+  margin            : $field-margin;
+  display           : flex;
+  flex-direction    : column;
+  align-items       : center;
+  justify-content   : center;
+
+  & > .hg-date-picker-field-label {
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    & > .hg-date-picker-field-label-text {
+      box-sizing: border-box;
+      flex-direction: column;
+      flex-shrink: 1;
+      padding: $field-label-padding;
+      min-width: $field-label-min-width;
+      max-width: 100%;
+      text-align: right;
+      flex-wrap: wrap;
+
+    }
+
+    & > .hg-date-picker-field-input {
+      box-sizing: border-box;
+      padding: 1em 0.75em;
+      flex-grow: 1;
+      border: 0;
+      font-size: 1.25em;
+      border-radius: 0.25em;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+  }
+
+}

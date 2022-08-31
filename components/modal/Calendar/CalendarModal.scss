@@ -1,0 +1,75 @@
+@import "src/fi/hg/frontend/styles/index";
+
+.hg-calendar-modal {
+  position: relative;
+  flex-direction:column;
+  justify-content: space-evenly;
+  min-width: 200px;
+  cursor: pointer;
+  align-self: center;
+
+  & > .hg-calendar-modal-datepicker-header{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    background-color: $ux-blue-color;
+    color: $ux-white-color;
+    & > .hg-calendar-modal-previous {
+      margin-right:auto;
+      float:left;
+      color: $ux-white-color;
+    }
+    & > .hg-calendar-modal-next {
+      margin-left: auto;
+      float: right;
+      color: $ux-white-color;
+    }
+  }
+
+  & > .hg-calendar-modal-week-container {
+    display: flex;
+    flex-direction: row;
+    &>.datepicker-day-container {
+      position: relative;
+      flex-direction: row;
+      width: calc(100% / 7);
+      height: 30px;
+      display: inline-block;
+      background-color: $ux-white-color;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      z-index:2;
+      text-align: center;
+
+      &:hover {
+        .children {
+          background-color: $ux-red-color ;
+        }
+      }
+
+      // for the active class you write
+      &.is-active {
+        .children {
+          background-color: $ux-red-color ;
+        }
+      }
+
+      & > .hg-calendar-modal-before {
+        opacity: 0.5;
+      }
+
+      & > .hg-calendar-modal-selected {
+        background-color: $ux-red-color ;
+        border: 1px transparent solid;
+        border-radius: 10px;
+      }
+
+      & > .hg-calendar-modal-today {
+        background-color: $ux-grey-color;
+      }
+    }
+
+  }
+
+}

@@ -1,8 +1,8 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import moment from "moment";
 import { useEffect, useState } from "react";
 import { LogService } from "../../core/LogService";
+import { moment } from "../../core/modules/moment";
 
 const LOG = LogService.createLogger('useTimeString');
 
