@@ -12,17 +12,13 @@ import {
 } from "../../../constants/hgClassName";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import { useDatePicker } from "../../../hooks/useDatepickerField";
-import { TranslationFunction } from "../../../../../../fi/hg/core/types/TranslationFunction";
-import { LogService } from '../../../../core/LogService';
+import { TranslationFunction } from "../../../../core/types/TranslationFunction";
 import { Calendar } from '../../modal/Calendar/CalendarModal';
-import { momentType } from "../../../../core/TimeService";
+import { momentType } from "../../../../core/modules/moment";
 import './DatePickerField.scss';
 
 const COMPONENT_CLASS_NAME = DATE_PICKER_FIELD_CLASS_NAME;
 const COMPONENT_INPUT_TYPE = "text";
-
-const LOG = LogService.createLogger('DatepickerField');
-
 
 export interface DatePickerFieldProps {
     readonly t?: TranslationFunction
@@ -38,7 +34,7 @@ export interface DatePickerFieldProps {
 }
 
 export interface CalendarProps {
-    buildCalendar: (value: momentType) => momentType[]
+    buildCalendar: (value: momentType) => momentType[];
 }
 
 export function DatePickerField(props: DatePickerFieldProps) {
@@ -103,9 +99,9 @@ export function DatePickerField(props: DatePickerFieldProps) {
                 {props.children}
             </label>
             { showCalendar ?
-                <Calendar 
-                onChangeCallback={onChangeCallback} 
-                buildCalendar={buildCalendar} 
+                <Calendar
+                onChangeCallback={onChangeCallback}
+                buildCalendar={buildCalendar}
                 calendarStyling={calendarStyling}
                 focus={setShowCalendar}
                  /> : ''}

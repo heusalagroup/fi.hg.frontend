@@ -1,8 +1,10 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LogService } from "../../../../core/LogService";
 import { CalendarProps } from "../../fields/datePicker/DatePickerField";
+import { moment, momentType } from "../../../../core/modules/moment";
 import './CalendarModal.scss'
-import { momentType, TimeService } from "../../../../core/TimeService";
 
 interface CalendarModalProps extends CalendarProps {
     readonly onChangeCallback?: (value: string) => void;
@@ -21,8 +23,8 @@ const LOG = LogService.createLogger('CalendarModal');
 
 export function Calendar(props: CalendarModalProps) {
     const { onChangeCallback, buildCalendar, calendarStyling, focus } = props;
-    const [ value, setValue ] = useState(TimeService.momentEntity())
-    const [ selectedValue, setSelectedValue ] = useState(TimeService.momentEntity())
+    const [ value, setValue ] = useState(moment())
+    const [ selectedValue, setSelectedValue ] = useState(moment())
     const [ calendar, setCalendar ] = useState<momentType[]>([])
 
     const inputReference = useRef<HTMLInputElement>(null);

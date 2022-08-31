@@ -12,7 +12,7 @@ import { useFieldStringStateUpdateCallback } from "./field/string/useFieldString
 import { useFieldValidateStringWithStateValueCallback } from "./field/string/useFieldValidateStringWithStateValueCallback";
 import { useFieldValidateStringValueCallback } from "./field/string/useFieldValidateStringValueCallback";
 import { useFieldStringInternalValueUpdateCallback } from "./field/string/useFieldStringInternalValueUpdateCallback";
-import { momentType, TimeService } from "../../core/TimeService";
+import { moment, momentType } from "../../core/modules/moment";
 
 const LOG = LogService.createLogger('useDatepickerField');
 
@@ -71,8 +71,8 @@ export function useDatePicker(
     );
 
     const buildCalendar = useCallback((value: momentType): any[] => {
-        const startDay = TimeService.momentEntity(value).clone().startOf("month").startOf("week");
-        const endDay = TimeService.momentEntity(value).clone().endOf("month").endOf("week");
+        const startDay = moment(value).clone().startOf("month").startOf("week");
+        const endDay = moment(value).clone().endOf("month").endOf("week");
 
         const day = startDay.clone();
         const calendarArray: any = []
@@ -84,10 +84,9 @@ export function useDatePicker(
         return calendarArray
     },
         [
-            
-        ]
-    )
 
+        ]
+    );
 
     const calendarStyling = useCallback((day: momentType) => {
 

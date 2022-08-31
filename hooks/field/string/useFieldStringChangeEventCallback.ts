@@ -1,8 +1,8 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { ChangeEvent, Dispatch, SetStateAction, useCallback } from "react";
-import { TimeService } from "../../../../core/TimeService";
 import { FieldChangeCallback, useFieldChangeCallback } from "../useFieldChangeCallback";
+import { moment } from "../../../../core/modules/moment";
 
 /**
  *
@@ -43,7 +43,7 @@ export function useFieldDateChangeEventCallback (       // Had trouble calling f
 
     return useCallback(
         (value: string) => {
-            const eventTargetValue = TimeService.momentEntity(value).format(dateFormat) ?? '';
+            const eventTargetValue = moment(value).format(dateFormat) ?? '';
             setValue(eventTargetValue);
             changeCallback(eventTargetValue);
         },
