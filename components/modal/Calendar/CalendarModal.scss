@@ -1,7 +1,6 @@
 @import "src/fi/hg/frontend/styles/index";
 
-
-.datepicker-form-container {
+.hg-calendar-modal {
   position: relative;
   flex-direction:column;
   justify-content: space-evenly;
@@ -9,25 +8,25 @@
   cursor: pointer;
   align-self: center;
 
-  & > .datepicker-header{
+  & > .hg-calendar-modal-datepicker-header{
     display: flex;
     justify-content: center;
     align-self: center;
     background-color: $ux-blue-color;
     color: $ux-white-color;
-    & > .previous {
+    & > .hg-calendar-modal-previous {
       margin-right:auto;
       float:left;
       color: $ux-white-color;
     }
-    & > .next {
+    & > .hg-calendar-modal-next {
       margin-left: auto;
       float: right;
       color: $ux-white-color;
     }
   }
 
-  & > .week-container {
+  & > .hg-calendar-modal-week-container {
     display: flex;
     flex-direction: row;
     &>.datepicker-day-container {
@@ -56,17 +55,17 @@
         }
       }
 
-      & > .before {
+      & > .hg-calendar-modal-before {
         opacity: 0.5;
       }
 
-      & > .selected {
+      & > .hg-calendar-modal-selected {
         background-color: $ux-red-color ;
         border: 1px transparent solid;
         border-radius: 10px;
       }
 
-      & > .today {
+      & > .hg-calendar-modal-today {
         background-color: $ux-grey-color;
       }
     }

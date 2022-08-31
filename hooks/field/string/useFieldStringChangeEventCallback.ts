@@ -48,6 +48,7 @@ export function useFieldDateChangeEventCallback (       // Had trouble calling f
             changeCallback(eventTargetValue);
         },
         [
+            dateFormat,
             changeCallback,
             setValue
         ]

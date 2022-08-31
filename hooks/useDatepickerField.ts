@@ -13,6 +13,8 @@ import { useFieldValidateStringWithStateValueCallback } from "./field/string/use
 import { useFieldValidateStringValueCallback } from "./field/string/useFieldValidateStringValueCallback";
 import { useFieldStringInternalValueUpdateCallback } from "./field/string/useFieldStringInternalValueUpdateCallback";
 import { moment, momentType } from "../../core/modules/moment";
+import { CalendarStylingCallback } from "../components/modal/Calendar/types/CalendarStylingCallback";
+import { CalendarStyling } from "../components/modal/Calendar/types/CalendarStyling";
 
 const LOG = LogService.createLogger('useDatepickerField');
 
@@ -29,9 +31,7 @@ export function useDatePicker(
     propsMaxLength: number | undefined,
     dateFormat?: string
 ) {
-
-    const identifier = useFieldIdentifier(key, label);  //key: label string pair
-
+    const identifier = useFieldIdentifier(key, label);
     const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
     const [value, setValue] = useState<InternalValueType>(propsValue ?? '');
 
@@ -88,22 +88,23 @@ export function useDatePicker(
         ]
     );
 
-    const calendarStyling = useCallback((day: momentType) => {
+    const calendarStyling : CalendarStylingCallback = useCallback((day: momentType) : CalendarStyling => {
 
         function beforeToday(day: momentType) {
-            return day.isBefore(new Date(), "day");
+            return day.isBefore(new Date(), CalendarStyling.DAY);
         }
 
         function isToday(day: momentType) {
-            return day.isSame(new Date(), "day");
+            return day.isSame(new Date(), CalendarStyling.DAY);
         }
 
         function dayStyles(day: momentType) {
-            if (beforeToday(day)) return "before"
-            if (isToday(day)) return "today"
-            return ""
+            if (beforeToday(day)) return CalendarStyling.BEFORE;
+            if (isToday(day)) return CalendarStyling.TODAY;
+            return CalendarStyling.NONE;
         }
-        return dayStyles(day)
+
+        return dayStyles(day);
     },
         [
             value,
@@ -156,8 +157,6 @@ export function useDatePicker(
         ]
     );
 
-
-
     useFieldChangeState(changeState, fieldState);
 
     return {
@@ -168,5 +167,5 @@ export function useDatePicker(
         buildCalendar,
         calendarStyling
     };
-};
+}
 

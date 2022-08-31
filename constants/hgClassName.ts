@@ -47,3 +47,4 @@ export const CARD_CLASS_NAME             = 'hg-card';
 export const CARD_GRID_CLASS_NAME             = 'hg-card-grid';
 export const DATE_CARD_CLASS_NAME             = 'hg-date-card';
 export const TEXT_CARD_CLASS_NAME             = 'hg-text-card';
+export const CALENDAR_MODAL_CLASS_NAME        = 'hg-calendar-modal';
