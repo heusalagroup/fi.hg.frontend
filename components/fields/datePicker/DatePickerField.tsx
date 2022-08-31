@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useState, ChangeEvent } from "react";
 import { DatePickerFieldModel } from "../../../types/items/DatepickerFieldModel";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
@@ -38,14 +38,11 @@ export interface CalendarProps {
 }
 
 export function DatePickerField(props: DatePickerFieldProps) {
-    const t = props?.t;
     const className = props?.className;
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
-
     const [showCalendar, setShowCalendar] = useState(false);
-
     const {
         fieldState,
         value,
@@ -62,25 +59,24 @@ export function DatePickerField(props: DatePickerFieldProps) {
         props?.model?.minLength,
         props?.model?.maxLength
     );
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-    }
-
-    return (                                                // Input field
-        <div className='datepicker-container'>
-            <label
-                className={
-                    `${COMPONENT_CLASS_NAME} ${FIELD_CLASS_NAME}`
-                    + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
-                    + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
-                    + ` ${className ? ` ${className}` : ''}`
-                }
-            >
+    const onChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            e.preventDefault();
+        },
+        []
+    );
+    return (
+        <div className={`${COMPONENT_CLASS_NAME}${className ? ` ${className}` : ''}`}>
+            <label className={
+                COMPONENT_CLASS_NAME+'-label'
+                + ` ${FIELD_CLASS_NAME}`
+                + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
+                + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
+            }>
                 {label ? (
                     <span className={
-                        COMPONENT_CLASS_NAME + '-label'
-                        + ` ${FIELD_CLASS_NAME}-label`
+                        COMPONENT_CLASS_NAME + '-label-text'
+                        + ` ${FIELD_CLASS_NAME}-label-text`
                     }>{label}</span>
                 ) : null}
                 <input
@@ -107,5 +103,4 @@ export function DatePickerField(props: DatePickerFieldProps) {
                  /> : ''}
         </div>
     );
-
 }
