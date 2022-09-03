@@ -10,9 +10,9 @@ import {
     useCallback
 } from 'react';
 import { EventCallback, VoidCallback } from "../../../core/interfaces/callbacks";
-import { ButtonType } from "./types/ButtonType";
+import { ButtonType } from "../../../core/frontend/button/ButtonType";
 import { LogService } from "../../../core/LogService";
-import { ButtonStyle } from "./types/ButtonStyle";
+import { ButtonStyle } from "../../../core/frontend/button/ButtonStyle";
 import { BUTTON_CLASS_NAME } from "../../constants/hgClassName";
 import './Button.scss';
 

@@ -5,7 +5,7 @@ import { Icon } from "../../icon/Icon";
 import { Link } from "react-router-dom";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
 import { ThemeService } from "../../../services/ThemeService";
-import { ButtonStyle } from "../../button/types/ButtonStyle";
+import { ButtonStyle } from "../../../../core/frontend/button/ButtonStyle";
 import { BUTTON_CLASS_NAME, LINK_BUTTON_CLASS_NAME } from "../../../constants/hgClassName";
 import { ReactNode } from "react";
 import "./LinkButton.scss";

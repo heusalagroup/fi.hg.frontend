@@ -4,7 +4,7 @@
 import { Icon } from "../icon/Icon";
 import { stringifyStyleScheme, StyleScheme } from "../../types/StyleScheme";
 import { ThemeService } from "../../services/ThemeService";
-import { ButtonStyle } from "../button/types/ButtonStyle";
+import { ButtonStyle } from "../../../core/frontend/button/ButtonStyle";
 import { BUTTON_CLASS_NAME, EXTERNAL_LINK_BUTTON_CLASS_NAME } from "../../constants/hgClassName";
 import { ReactNode } from "react";
 import "./ExternalLinkButton.scss";

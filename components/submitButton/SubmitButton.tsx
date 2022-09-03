@@ -3,8 +3,8 @@
 import { ReactNode } from "react";
 import { SUBMIT_BUTTON_CLASS_NAME } from "../../constants/hgClassName";
 import { Button } from "../button/Button";
-import { ButtonType } from "../button/types/ButtonType";
-import { ButtonStyle } from "../button/types/ButtonStyle";
+import { ButtonType } from "../../../core/frontend/button/ButtonType";
+import { ButtonStyle } from "../../../core/frontend/button/ButtonStyle";
 
 export interface SubmitButtonProps {
     readonly className ?: string;

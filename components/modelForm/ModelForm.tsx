@@ -19,7 +19,7 @@ import { FormItem } from "../../types/FormItem";
 import { PageBreakModel } from "../../types/items/PageBreakModel";
 import { VoidCallback } from "../../../core/interfaces/callbacks";
 import { FormFieldState } from "../../types/FormFieldState";
-import { ButtonType } from "../button/types/ButtonType";
+import { ButtonType } from "../../../core/frontend/button/ButtonType";
 import { MODEL_FORM_CLASS_NAME } from "../../constants/hgClassName";
 import { FieldChangeCallback } from "../../hooks/field/useFieldChangeCallback";
 import { TranslationFunction } from "../../../core/types/TranslationFunction";
