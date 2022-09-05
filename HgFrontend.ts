@@ -7,6 +7,14 @@ import { RequestClient } from "../core/RequestClient";
 
 export class HgFrontend {
 
+    /**
+     * This method will initialize our libraries using frontend implementations.
+     *
+     * Right now it will call `RequestClient.useClient()` with a standard fetch
+     * implementation.
+     *
+     * @param requestClient
+     */
     public static initialize (
         requestClient ?: RequestClientInterface | undefined
     ) {
