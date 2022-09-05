@@ -1,0 +1,22 @@
+// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+
+import { RequestClientInterface } from "../core/requestClient/RequestClientInterface";
+import { WindowObjectService } from "../core/WindowObjectService";
+import { FetchRequestClient } from "../core/requestClient/fetch/FetchRequestClient";
+import { RequestClient } from "../core/RequestClient";
+
+export class HgFrontend {
+
+    public static initialize (
+        requestClient ?: RequestClientInterface | undefined
+    ) {
+        if (!requestClient) {
+            const w = WindowObjectService.getWindow();
+            if (!w) throw new TypeError(`HgFrontend.initialize(): Window object could not be found`);
+            requestClient = new FetchRequestClient( w.fetch.bind(w) );
+        }
+        RequestClient.useClient(requestClient);
+    }
+
+}
+
