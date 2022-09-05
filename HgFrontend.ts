@@ -10,7 +10,7 @@ export class HgFrontend {
     /**
      * This method will initialize our libraries using frontend implementations.
      *
-     * Right now it will call `RequestClient.useClient()` with a standard fetch
+     * Right now it will call `RequestClient.setClient()` with a standard fetch
      * implementation.
      *
      * @param requestClient
@@ -23,7 +23,7 @@ export class HgFrontend {
             if (!w) throw new TypeError(`HgFrontend.initialize(): Window object could not be found`);
             requestClient = new FetchRequestClient( w.fetch.bind(w) );
         }
-        RequestClient.useClient(requestClient);
+        RequestClient.setClient(requestClient);
     }
 
 }
