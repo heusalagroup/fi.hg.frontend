@@ -29,7 +29,7 @@
   & > .hg-calendar-modal-week-container {
     display: flex;
     flex-direction: row;
-    &>.datepicker-day-container {
+    &>.hg-calendar-modal-day-container {
       position: relative;
       flex-direction: row;
       width: calc(100% / 7);
