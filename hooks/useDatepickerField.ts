@@ -20,7 +20,7 @@ const LOG = LogService.createLogger('useDatepickerField');
 
 type InternalValueType = string;
 
-export function useDatePicker(
+export function useDatePicker (
     label: string,
     key: string,
     change: FieldChangeCallback<InternalValueType | undefined> | undefined,
@@ -32,8 +32,8 @@ export function useDatePicker(
     dateFormat?: string
 ) {
     const identifier = useFieldIdentifier(key, label);
-    const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [value, setValue] = useState<InternalValueType>(propsValue ?? '');
+    const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
+    const [ value, setValue ] = useState<InternalValueType>(propsValue ?? '');
 
     const updateValueStateCallback = useFieldStringInternalValueUpdateCallback(
         identifier,
@@ -70,49 +70,44 @@ export function useDatePicker(
         updateFieldStateCallback
     );
 
-    const buildCalendar = useCallback((value: momentType): any[] => {
-        const startDay = moment(value).clone().startOf("month").startOf("week");
-        const endDay = moment(value).clone().endOf("month").endOf("week");
+    const buildCalendar = useCallback(
+        (value: momentType): any[] => {
+            const startDay = moment(value).clone().startOf("month").startOf("week");
+            const endDay = moment(value).clone().endOf("month").endOf("week");
 
-        const day = startDay.clone();
-        const calendarArray: any = []
-        while (day.isBefore(endDay, "day")) {
-            calendarArray.push(
-                Array(7).fill(0).map(() => day.add(1, "day").clone())
-            );
-        }
-        return calendarArray
-    },
-        [
-
-        ]
+            const day = startDay.clone();
+            const calendarArray: any = [];
+            while ( day.isBefore(endDay, "day") ) {
+                calendarArray.push(
+                    Array(7).fill(0).map(() => day.add(1, "day").clone())
+                );
+            }
+            return calendarArray;
+        },
+        []
     );
 
-    const calendarStyling : CalendarStylingCallback = useCallback((day: momentType) : CalendarStyling => {
+    const calendarStyling: CalendarStylingCallback = useCallback(
+        (day: momentType): CalendarStyling => {
 
-        function beforeToday(day: momentType) {
-            return day.isBefore(new Date(), CalendarStyling.DAY);
-        }
+            function beforeToday (day: momentType) {
+                return day.isBefore(new Date(), CalendarStyling.DAY);
+            }
 
-        function isToday(day: momentType) {
-            return day.isSame(new Date(), CalendarStyling.DAY);
-        }
+            function isToday (day: momentType) {
+                return day.isSame(new Date(), CalendarStyling.DAY);
+            }
 
-        function dayStyles(day: momentType) {
-            if (beforeToday(day)) return CalendarStyling.BEFORE;
-            if (isToday(day)) return CalendarStyling.TODAY;
-            return CalendarStyling.NONE;
-        }
+            function dayStyles (day: momentType) {
+                if ( beforeToday(day) ) return CalendarStyling.BEFORE;
+                if ( isToday(day) ) return CalendarStyling.TODAY;
+                return CalendarStyling.NONE;
+            }
 
-        return dayStyles(day);
-    },
-        [
-            value,
-            onChangeCallback,
-            buildCalendar,
-            updateFieldStateCallback
-        ]
-    )
+            return dayStyles(day);
+        },
+        []
+    );
 
     // Update field state when internal value changes
     useEffect(
@@ -124,7 +119,7 @@ export function useDatePicker(
             identifier,
             value,
             updateFieldStateCallback,
-            onChangeCallback,
+            onChangeCallback
         ]
     );
 
@@ -138,7 +133,7 @@ export function useDatePicker(
             identifier,
             propsValue,
             updateValueStateCallback,
-            updateFieldStateCallback,
+            updateFieldStateCallback
         ]
     );
 
@@ -153,7 +148,7 @@ export function useDatePicker(
             isRequired,
             propsMinLength,
             propsMaxLength,
-            updateFieldStateCallback,
+            updateFieldStateCallback
         ]
     );
 

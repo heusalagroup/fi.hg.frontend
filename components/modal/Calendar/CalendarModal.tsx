@@ -101,6 +101,7 @@ export function Calendar (props: CalendarModalProps) {
             handleDateData(day);
         },
         [
+            value,
             setSelectedValue,
             setValue,
             handleDateData
