@@ -89,7 +89,7 @@ export class WordpressService {
                 this._observer.triggerEvent(WordpressServiceEvent.WORDPRESS_PAGE_CHANGED);
             }
         }
-    }
+    }wdadw
 
     private static async _initializeWordpress() {
         const list: readonly WordpressPageDTO[] = await WordpressService.getMyWordpressPageList();
