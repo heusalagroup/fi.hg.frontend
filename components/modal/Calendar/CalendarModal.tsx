@@ -142,7 +142,7 @@ export function Calendar (props: CalendarModalProps) {
         <div
             className={
                 CALENDAR_MODAL_CLASS_NAME
-                + `${CALENDAR_MODAL_CLASS_NAME}${className ? ` ${className}` : ''}`
+                + `${className ? ` ${className}` : ''}`
             }
             onBlur={handleBlur}
             tabIndex={1}
@@ -165,7 +165,7 @@ export function Calendar (props: CalendarModalProps) {
                     <div className={CALENDAR_MODAL_CLASS_NAME + "-week-container"}>
                         {week.map((day: momentType): JSX.Element => (
                             <div
-                                className={CALENDAR_MODAL_CLASS_NAME + "-datepicker-day-container"}
+                                className={CALENDAR_MODAL_CLASS_NAME + "-day-container"}
                                 onClick={() => handleClick(day)}
                             >{calendarStyling && (
                                 <div className={selectedValue.isSame(day, 'date') ? CALENDAR_MODAL_CLASS_NAME + '-selected' : CALENDAR_MODAL_CLASS_NAME+'-'+calendarStyling(day)}>
