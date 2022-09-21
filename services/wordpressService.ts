@@ -1,8 +1,13 @@
 import { Observer, ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { LogService } from "../../core/LogService";
 import { WordpressClient } from "../../core/wordpress/WordpressClient"
-import { WordpressPageDTO, isWordpressPageDTO } from "../../core/wordpress/dto/WordpressPageDTO"
-import { WordpressPageListDTO, isWordpressPagesDTO } from "../../core/wordpress/dto/WordpressPageListDTO"
+import { isWordpressPageDTO, WordpressPageDTO } from "../../core/wordpress/dto/WordpressPageDTO"
+import { isWordpressPagesDTO, WordpressPageListDTO } from "../../core/wordpress/dto/WordpressPageListDTO"
+import { HgFrontend } from "../HgFrontend";
+import { WordpressReferenceDTO } from "../../core/wordpress/dto/WordpressReferenceDTO";
+import { WordpressUserProfileDTO } from "../../core/wordpress/dto/WordpressUserProfileDTO";
+
+HgFrontend.initialize(); // FIXME: Wasn't certain where this should be placed, but Im certain it needs to be fixed!
 
 export enum WordpressServiceEvent {
     WORDPRESS_PAGE_ADDED = "WordpressService:WordpressPageAdded",
@@ -13,13 +18,13 @@ export enum WordpressServiceEvent {
 
 export type WordpressServiceDestructor = ObserverDestructor;
 
-const LOG = LogService.createLogger('WorkspaceService');
+const LOG = LogService.createLogger('WordpressService');
 
 export class WordpressService {
 
     private static _wordpressPage: WordpressPageDTO | undefined;
+    private static _wordpressReferences: WordpressReferenceDTO | undefined;
     private static _observer: Observer<WordpressServiceEvent> = new Observer<WordpressServiceEvent>("WordpressService");
-
 
     public static getCurrentWordpressPageId(): string | undefined {
         return this._wordpressPage?.id;
@@ -58,10 +63,8 @@ export class WordpressService {
     }
 
     public static async getMyWordpressPageList(): Promise<readonly WordpressPageDTO[]> {
-        const client = new WordpressClient('https://cms.hg.fi');
-        console.log('new client', client)
+        const client = new WordpressClient('https://cms.hg.fi'); // FIXME: Save client somewhere in a service as reusable
         const result = await client.getPages();
-        console.log('new result', result)
         if (!result) {
             LOG.debug(`Couldn't get wordpress pages;`);
             return [];
@@ -69,17 +72,24 @@ export class WordpressService {
         return await client.getPages();
     }
 
-    public static async postWordpressPage(content: WordpressPageDTO, headers?): Promise<WordpressPageDTO> {
-        const client = new WordpressClient('https://cms.hg.fi');
-        console.log('new client', client)
-        const stringifiedContent = JSON.stringify(content)
-        const result = await client.createPage(stringifiedContent, headers);
-        console.log('new result', result)
+    public static async getWordpressReferenceList(): Promise<readonly WordpressReferenceDTO[]> {
+        const client = new WordpressClient('https://cms.hg.fi'); // FIXME: Save client somewhere in a service as reusable
+        const result = await client.getReferences();
         if (!result) {
-            LOG.debug(`Couldn't get wordpress pages;`);
-            return;
+            LOG.debug(`Couldn't get wordpress references;`);
+            return [];
         }
-        return await client.getPage(result.id);
+        return await client.getReferences();
+    }
+
+    public static async getWordpressUserProfilesList(): Promise<readonly WordpressUserProfileDTO[]> {
+        const client = new WordpressClient('https://cms.hg.fi'); // FIXME: Save client somewhere in a service as reusable
+        const result = await client.getUserProfiles();
+        if (!result) {
+            LOG.debug(`Couldn't get wordpress user profiles;`);
+            return [];
+        }
+        return await client.getUserProfiles();
     }
 
     public static setCurrentPage(wordpressPage: WordpressPageDTO | undefined) {
@@ -89,7 +99,7 @@ export class WordpressService {
                 this._observer.triggerEvent(WordpressServiceEvent.WORDPRESS_PAGE_CHANGED);
             }
         }
-    }wdadw
+    }
 
     private static async _initializeWordpress() {
         const list: readonly WordpressPageDTO[] = await WordpressService.getMyWordpressPageList();

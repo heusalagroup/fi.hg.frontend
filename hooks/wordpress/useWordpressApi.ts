@@ -4,95 +4,102 @@ import { WordpressService } from "../../services/WordpressService";
 import { useCallback, useEffect, useState, Dispatch, SetStateAction } from "react";
 import { WordpressPageDTO } from "../../../core/wordpress/dto/WordpressPageDTO";
 import { LogService } from "../../../core/LogService";
+import { WordpressReferenceDTO } from "../../../core/wordpress/dto/WordpressReferenceDTO";
+import { WordpressUserProfileDTO } from "../../../core/wordpress/dto/WordpressUserProfileDTO";
 
 const LOG = LogService.createLogger('useWordpressList');
 
 export function useWordpressList():
     [
             readonly WordpressPageDTO[] | undefined,
-        Dispatch<SetStateAction<WordpressPageDTO>>,
-        Dispatch<SetStateAction<boolean>>
+            readonly WordpressReferenceDTO[] | undefined,
+            readonly WordpressUserProfileDTO[] | undefined,
+
     ] {
-    const [list, setList] = useState<readonly WordpressPageDTO[] | undefined>(undefined);
-    const [data, setData] = useState<WordpressPageDTO | undefined>(undefined);
-    const [postData, setPostData] = useState(false);
-
-    const validatePostData = useCallback(
-        () => {
-            // Feel free to add more fields
-            const {content, title} = data;
-            if (content && title) {
-                LOG.debug('Content is valid for Wordpress')
-                return true
-            } else {
-                LOG.debug('Content is not valid for Wordpress')
-                return false
-            }
-        },
-        [
-            setData
-        ]
-    )
-
-    const postWordpressPageCallback = useCallback(
-        async () => {
-            if (validatePostData()) {
-                LOG.debug('Posting data in hook');
-                try {
-                    LOG.debug(`Posting page`);
-                    const result = await WordpressService.postWordpressPage(data);
-                    LOG.debug(`Posted page: `, result);
-                    setData(result);
-                    setPostData(false)
-                } catch (err) {
-                    LOG.error(`Failed to post wordpress page : `, err);
-                }
-            }
-
-        },
-        [
-            setData
-        ]
-    )
+    const [pageList, setPageList] = useState<readonly WordpressPageDTO[] | undefined>(undefined);
+    const [referencesList, setReferenceLIst] = useState<readonly WordpressReferenceDTO[] | undefined>(undefined);
+    const [userProfilesList, setUserProfilesList] = useState<readonly WordpressUserProfileDTO[] | undefined>(undefined);
 
     const getWordpressPagesCallback = useCallback(
         async () => {
             try {
-                LOG.debug(`Fetching list`);
+                LOG.debug(`Fetching pages list`);
                 const result = await WordpressService.getMyWordpressPageList();
-                LOG.debug(`Received list: `, result);
-                setList(result);
+                LOG.debug(`Received pages list: `, result);
+                setPageList(result);
             } catch (err) {
                 LOG.error(`Failed to load wordpress page list: `, err);
             }
         },
         [
-            setList
+            setPageList
         ]
     );
 
-    // Update list initially
+    const getWordpressReferencesCallback = useCallback(
+        async () => {
+            try {
+                LOG.debug(`Fetching references list`);
+                const result = await WordpressService.getWordpressReferenceList();
+                LOG.debug(`Received references list: `, result);
+                setReferenceLIst(result);
+            } catch (err) {
+                LOG.error(`Failed to load wordpress references list: `, err);
+            }
+        },
+        [
+            setReferenceLIst
+        ]
+    );
+
+    const getWordpressUserProfilesCallback = useCallback(
+        async () => {
+            try {
+                LOG.debug(`Fetching user profiles list`);
+                const result = await WordpressService.getWordpressUserProfilesList();
+                LOG.debug(`Received user profiles list: `, result);
+                setUserProfilesList(result);
+            } catch (err) {
+                LOG.error(`Failed to load wordpress user profiles list: `, err);
+            }
+        },
+        [
+            setUserProfilesList
+        ]
+    );
+
+    // Update page list initially
     useEffect(
         () => {
             LOG.debug(`Initial update triggered`);
-            getWordpressPagesCallback();
+            getWordpressPagesCallback()
         },
         [
             getWordpressPagesCallback
         ]
     );
 
-    // Post data
+    // Update reference list initially
     useEffect(
         () => {
-            LOG.debug(`Page post triggered`);
-            postWordpressPageCallback();
+            LOG.debug(`Initial update triggered`);
+            getWordpressReferencesCallback()
         },
         [
-            postData
+            getWordpressReferencesCallback
         ]
     );
 
-    return [list, setData, setPostData];
+    // Update reference list initially
+    useEffect(
+        () => {
+            LOG.debug(`Initial update triggered`);
+            getWordpressUserProfilesCallback()
+        },
+        [
+            getWordpressUserProfilesCallback
+        ]
+    );
 
+    return [pageList, referencesList, userProfilesList];
 }
