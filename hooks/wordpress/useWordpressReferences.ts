@@ -1,19 +1,31 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { WordpressService } from "../../services/WordpressService";
-import { useCallback, useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { LogService } from "../../../core/LogService";
 import { WordpressReferenceDTO } from "../../../core/wordpress/dto/WordpressReferenceDTO";
+import { routeValidation } from "./routeValidation";
 
-const LOG = LogService.createLogger('useWordpressList');
+const LOG = LogService.createLogger('useWordpressReferencesList');
 
-export function useWordpressReferencesList(url?, endpoint?):
+export function useWordpressReferencesList(url?:string, endpoint?:string, refresh?:boolean):
     [
             readonly WordpressReferenceDTO[] | undefined,
     ] {
     const [referencesList, setReferenceList] = useState<readonly WordpressReferenceDTO[] | undefined>(undefined);
+    const [valid, setValid] = useState<boolean>(false);
 
-
+    const refreshCallback = useCallback(
+        () => {
+            const result = routeValidation(url, endpoint);
+            setValid(result);
+        },
+        [
+            url,
+            endpoint,
+            refresh
+        ]
+    )
     const getWordpressReferencesCallback = useCallback(
         async () => {
             try {
@@ -26,7 +38,7 @@ export function useWordpressReferencesList(url?, endpoint?):
             }
         },
         [
-            setReferenceList
+            refreshCallback
         ]
     );
 
@@ -35,10 +47,14 @@ export function useWordpressReferencesList(url?, endpoint?):
     useEffect(
         () => {
             LOG.debug(`Initial update triggered`);
-            getWordpressReferencesCallback()
+            refreshCallback()
+            if(valid) {
+                getWordpressReferencesCallback()
+            }
         },
         [
-            getWordpressReferencesCallback
+            refreshCallback,
+            valid
         ]
     );
 

@@ -1,8 +1,7 @@
 import { Observer, ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { LogService } from "../../core/LogService";
-import { WordpressClient, WordpressContentInterface } from "../../core/wordpress/WordpressClient"
-import { isWordpressPageDTO, WordpressPageDTO } from "../../core/wordpress/dto/WordpressPageDTO"
-import { isWordpressPagesDTO, WordpressPageListDTO } from "../../core/wordpress/dto/WordpressPageListDTO"
+import { WordpressClient } from "../../core/wordpress/WordpressClient"
+import {  WordpressPageDTO } from "../../core/wordpress/dto/WordpressPageDTO"
 import { WordpressReferenceDTO } from "../../core/wordpress/dto/WordpressReferenceDTO";
 import { WordpressUserProfileDTO } from "../../core/wordpress/dto/WordpressUserProfileDTO";
 
@@ -29,23 +28,6 @@ export class WordpressService {
     private static _wordpressReferences: WordpressReferenceDTO | undefined;
     private static _observer: Observer<WordpressServiceEvent> = new Observer<WordpressServiceEvent>("WordpressService");
 
-    public static getCurrentWordpressPageId(): string | undefined {
-        return this._wordpressPage?.id;
-    }
-
-    public static getCurrentWordpressTitle(): object | undefined {
-        return this._wordpressPage?.title;
-    }
-
-    public static getWordpressPage(): WordpressPageDTO | undefined {
-        if (isWordpressPageDTO(this._wordpressPage))
-            return this._wordpressPage;
-    }
-
-    public static async getWordpressPages(): Promise<WordpressPageListDTO | undefined> {
-        if (isWordpressPagesDTO(this._wordpressPage))
-            return this._wordpressPage;
-    }
 
     public static on(
         name: WordpressServiceEvent,
@@ -69,7 +51,7 @@ export class WordpressService {
         const client = new WordpressClient(url, endpoint); // FIXME: Save client somewhere in a service as reusable
         const result = await client.getWordpressContent();
         if (!result) {
-            LOG.debug(`Couldn't get wordpress pages;`);
+            LOG.debug(`Couldn't get wordpress content;`);
             return;
         }
         return await client.getWordpressContent();
@@ -115,7 +97,7 @@ export class WordpressService {
     }
 
     private static async _initializeWordpress() {
-        const list: readonly WordpressPageDTO[] = await WordpressService.getWordpressContent();
+        const list: readonly any[] = await WordpressService.getWordpressContent();
         if ((list?.length ?? 0) !== 1) {
             LOG.info(`No wordpress pages;`);
         } else {

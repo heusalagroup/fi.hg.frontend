@@ -1,17 +1,31 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { WordpressService } from "../../services/WordpressService";
-import { useCallback, useEffect, useState} from "react";
-import { WordpressPageDTO } from "../../../core/wordpress/dto/WordpressPageDTO";
+import {useCallback, useEffect, useState} from "react";
 import { LogService } from "../../../core/LogService";
+import { WordpressPageDTO } from "../../../core/wordpress/dto/WordpressPageDTO";
+import { routeValidation } from "./routeValidation";
 
-const LOG = LogService.createLogger('useWordpressList');
+const LOG = LogService.createLogger('useWordpressPagesList');
 
-export function useWordpressPagesList(url?, endpoint?):
+export function useWordpressPagesList(url?:string, endpoint?:string, refresh?:boolean):
     [
-        readonly WordpressPageDTO[] | undefined,
+            readonly WordpressPageDTO[] | undefined,
     ] {
     const [pageList, setPageList] = useState<readonly WordpressPageDTO[] | undefined>(undefined);
+    const [valid, setValid] = useState<boolean>(false);
+
+    const refreshCallback = useCallback(
+        () => {
+            const result = routeValidation(url, endpoint);
+            setValid(result);
+        },
+        [
+            url,
+            endpoint,
+            refresh
+        ]
+    )
 
     const getWordpressPagesCallback = useCallback(
         async () => {
@@ -25,7 +39,7 @@ export function useWordpressPagesList(url?, endpoint?):
             }
         },
         [
-            setPageList
+            refreshCallback
         ]
     );
 
@@ -34,10 +48,14 @@ export function useWordpressPagesList(url?, endpoint?):
     useEffect(
         () => {
             LOG.debug(`Initial update triggered`);
-            getWordpressPagesCallback()
+            refreshCallback()
+            if(valid) {
+                getWordpressPagesCallback()
+            }
         },
         [
-            getWordpressPagesCallback
+            refreshCallback,
+            valid
         ]
     );
 
