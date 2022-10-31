@@ -26,6 +26,9 @@ export interface TextFieldProps {
     readonly placeholder?: string;
     readonly model?: TextFieldModel;
     readonly value?: string;
+    readonly minLength?: number | undefined;
+    readonly maxLength?: number | undefined;
+    readonly required?: boolean | false;
     readonly change?: FieldChangeCallback<string | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
     readonly children?: ReactNode;
@@ -38,6 +41,8 @@ export function TextField (props: TextFieldProps) {
     const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
 
+    const isRequired = props.required ?? false;
+
     const {
         fieldState,
         value,
@@ -48,11 +53,12 @@ export function TextField (props: TextFieldProps) {
         props?.change,
         props?.changeState,
         props?.value,
-        props?.model?.required ?? false,
-        props?.model?.minLength,
-        props?.model?.maxLength
-    );
+         props?.model?.required ?? isRequired,
+        props?.model?.minLength ? props?.model?.minLength : props?.minLength,
+        props?.model?.maxLength ? props?.model?.maxLength :  props?.maxLength
 
+    );
+    console.log("TextField_________fieldstate",fieldState )
     return (
         <label
             className={
