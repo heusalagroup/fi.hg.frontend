@@ -162,8 +162,8 @@ export function Calendar (props: CalendarModalProps) {
             </div>
             {calendar?.map(
 
-                (week: any) =>
-                    <div key={week.toString()} className={CALENDAR_MODAL_CLASS_NAME + "-week-container"}>
+                (week: any, i) =>
+                    <div key={i} className={CALENDAR_MODAL_CLASS_NAME + "-week-container"}>
                         {week.map((day: momentType, index:number): JSX.Element => (
                             <div
                                 key={index}
