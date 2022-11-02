@@ -161,20 +161,22 @@ export function Calendar (props: CalendarModalProps) {
                 >{String.fromCharCode(187)}</div>
             </div>
             {calendar?.map(
+
                 (week: any) =>
-                    <div className={CALENDAR_MODAL_CLASS_NAME + "-week-container"}>
-                        {week.map((day: momentType): JSX.Element => (
+                    <div key={week.toString()} className={CALENDAR_MODAL_CLASS_NAME + "-week-container"}>
+                        {week.map((day: momentType, index:number): JSX.Element => (
                             <div
+                                key={index}
                                 className={CALENDAR_MODAL_CLASS_NAME + "-day-container"}
                                 onClick={() => handleClick(day)}
-                            >{calendarStyling && (
+                            > {calendarStyling && (
                                 <div className={selectedValue.isSame(day, 'date') ? CALENDAR_MODAL_CLASS_NAME + '-selected' : CALENDAR_MODAL_CLASS_NAME+'-'+calendarStyling(day)}>
                                     {day.format("D").toString()}
                                 </div>
                             )}</div>
                         ))}
                     </div>
-            )}
+                    )}
         </div>
     );
 }
