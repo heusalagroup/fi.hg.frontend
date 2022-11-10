@@ -19,6 +19,7 @@ export const COUNTRY_FIELD_CLASS_NAME           = 'hg-country-field';
 export const PASSWORD_FIELD_CLASS_NAME          = 'hg-password-field';
 export const DATE_PICKER_FIELD_CLASS_NAME       = 'hg-date-picker-field';
 export const EMAIL_FIELD_CLASS_NAME             = 'hg-email-field';
+export const FILE_INPUT_FIELD_CLASS_NAME        = 'hg-file-input-field';
 export const JSON_FIELD_CLASS_NAME              = 'hg-json-field';
 export const TEXT_AREA_FIELD_CLASS_NAME         = 'hg-text-area-field';
 export const INTEGER_FIELD_CLASS_NAME           = 'hg-integer-field';

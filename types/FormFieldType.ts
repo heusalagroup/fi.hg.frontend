@@ -14,6 +14,7 @@ export type FormFieldType = (
     | FormItemType.SELECT_FIELD
     | FormItemType.SLIDER_FIELD
     | FormItemType.DATE_FIELD
+    | FormItemType.FILE_FIELD
     );
 
 export function isFormFieldType (value: any): value is FormFieldType {
@@ -32,6 +33,7 @@ export function isFormFieldType (value: any): value is FormFieldType {
         case FormItemType.SELECT_FIELD:
         case FormItemType.SLIDER_FIELD:
         case FormItemType.DATE_FIELD:
+        case FormItemType.FILE_FIELD:
             return true;
 
         default:

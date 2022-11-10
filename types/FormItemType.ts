@@ -19,6 +19,7 @@ export enum FormItemType {
     JSON_FIELD       = "json-field",
     INTEGER_FIELD    = "integer-field",
     DATE_FIELD       = "date-field",
+    FILE_FIELD       = "file-field",
 
     // Non-fields
     PAGE_BREAK = "page-break"
@@ -39,6 +40,7 @@ export function isFormItemType (value: any) : value is FormItemType {
         case FormItemType.TEXT_AREA_FIELD:
         case FormItemType.INTEGER_FIELD:
         case FormItemType.DATE_FIELD:
+        case FormItemType.FILE_FIELD:
         case FormItemType.PAGE_BREAK:
             return true;
 
