@@ -11,10 +11,10 @@ import { FieldChangeCallback, useFieldChangeCallback } from "../useFieldChangeCa
  */
 export function useFieldFileChangeEventCallback (
     identifier: string,
-    setValue: Dispatch<SetStateAction<FileList | null>>,
-    change: FieldChangeCallback<FileList | null> | undefined
+    setValue: Dispatch<SetStateAction<FileList | any>>,
+    change: FieldChangeCallback<FileList | any> | undefined
 ) {
-    const changeCallback = useFieldChangeCallback<FileList | null>(identifier, change);
+    const changeCallback = useFieldChangeCallback<FileList | any>(identifier, change);
     return useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             if ( event ) {
@@ -22,7 +22,7 @@ export function useFieldFileChangeEventCallback (
                 event.stopPropagation();
             }
             const eventTargetValue = event?.target?.files;
-            setValue(eventTargetValue);
+            setValue((prev:File[]) => [...prev, eventTargetValue]);
             changeCallback(eventTargetValue);
         },
         [

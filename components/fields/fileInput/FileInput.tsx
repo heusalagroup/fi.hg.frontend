@@ -24,7 +24,7 @@ export interface FileInputFieldProps {
     readonly label?: string;
     readonly placeholder?: string;
     readonly model?: FileInputFieldModel;
-    readonly value?: string;
+    readonly value?: File;
     readonly change?: FieldChangeCallback<string | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
     readonly children?: ReactNode;
@@ -77,7 +77,7 @@ export function FileInput(props: FileInputFieldProps) {
                 onChange={onChangeCallback}
                 readOnly={props?.change === undefined}
             />
-            {value}
+
             {props?.children}
         </label>
     );

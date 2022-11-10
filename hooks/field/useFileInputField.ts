@@ -1,6 +1,6 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { FormFieldState } from "../../types/FormFieldState";
 import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
@@ -16,36 +16,42 @@ import { useFieldFileChangeEventCallback } from "./array/useFieldFileChangeEvent
 
 const LOG = LogService.createLogger('useFileInputField');
 
-type InternalValueType = FileList;
+type InternalValueType = File;
 
 export function useFileInputField(
     label: string,
     key: string,
-    change: FieldChangeCallback<FileList | null> | undefined,
-    changeState: FieldChangeCallback<FormFieldState> | null,
-    propsValue: FileList | null,
+    change: FieldChangeCallback<string | undefined> | undefined,
+    changeState: FieldChangeCallback<FormFieldState> | undefined,
+    propsValue: File | any,
 ) {
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
     const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [value, setValue] = useState<InternalValueType>(propsValue);
+    const [value, setValue] = useState<InternalValueType[]>([]);
 
 
-    const onChange = (event: React.FormEvent) => {
-        const files = (event.target as HTMLInputElement).files
-
-        if (files && files.length > 0) {
-            setValue([...value, files[0]])
-            LOG.debug('Selected File =', files[0])
+    const onChange = (event: any) => {
+        if(propsValue) {
+            setValue([propsValue])
         }
     }
+
+
+    LOG.debug('Selected File 1=', value)
 
     const onChangeCallback = useFieldFileChangeEventCallback(
         identifier,
         setValue,
         onChange
     );
+
+    useEffect(() => {
+
+    }, [
+        onChangeCallback
+    ])
 
     useFieldChangeState(changeState, fieldState);
 
