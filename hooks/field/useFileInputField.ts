@@ -1,22 +1,17 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FormFieldState } from "../../types/FormFieldState";
 import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
-import { useFieldStringChangeEventCallback } from "./string/useFieldStringChangeEventCallback";
 import { useFieldIdentifier } from "./useFieldIdentifier";
-import { useFieldMountEffectWithInternalState } from "./useFieldMountEffectWithInternalState";
-import { useFieldNumberStateUpdateCallback } from "./number/useFieldNumberStateUpdateCallback";
-import { useFieldDecimalNumberInternalValueUpdateCallback } from "./number/useFieldDecimalNumberInternalValueUpdateCallback";
-import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
-import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
 import { useFieldFileChangeEventCallback } from "./array/useFieldFileChangeEventCallback";
+import { parseJson } from "../../../core/Json";
 
 const LOG = LogService.createLogger('useFileInputField');
 
-type InternalValueType = File;
+type InternalValueType = string;
 
 export function useFileInputField(
     label: string,
@@ -29,36 +24,45 @@ export function useFileInputField(
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
     const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [value, setValue] = useState<InternalValueType[]>([]);
+    const [value, setValue] = useState<InternalValueType[] | undefined>([]);
+    const [file, setFile] = useState<File[] | undefined>([]);
 
+    const parseAndChangeCallback = useCallback(
+        (newValue: string | undefined) => {
+            const parsedValue = parseJson(newValue) as string;
 
-    const onChange = (event: any) => {
-        if(propsValue) {
-            setValue([propsValue])
-        }
-    }
-
-
-    LOG.debug('Selected File 1=', value)
+            if (change) {
+                change(parsedValue);
+            }
+        },
+        [
+            change,
+            propsValue
+        ]
+    );
 
     const onChangeCallback = useFieldFileChangeEventCallback(
         identifier,
         setValue,
-        onChange
+        setFile,
+        parseAndChangeCallback
     );
 
-    useEffect(() => {
+    useEffect(
+        () => {
 
-    }, [
-        onChangeCallback
-    ])
+        },
+        [
+            onChangeCallback
+        ])
 
     useFieldChangeState(changeState, fieldState);
 
     return {
         fieldState,
         value,
-        onChangeCallback
+        onChangeCallback,
+        file
     };
 
 }

@@ -1,0 +1,11 @@
+.hg-file-input-field {
+  display: flex;
+  flex-direction: column;
+
+
+
+  > .file-list {
+    display: flex;
+    flex-direction: row;
+  }
+}

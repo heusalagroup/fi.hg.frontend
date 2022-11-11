@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { FileInputFieldModel } from "../../../types/items/FileInputModel";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
@@ -24,7 +24,7 @@ export interface FileInputFieldProps {
     readonly label?: string;
     readonly placeholder?: string;
     readonly model?: FileInputFieldModel;
-    readonly value?: File;
+    readonly value?: string;
     readonly change?: FieldChangeCallback<string | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
     readonly children?: ReactNode;
@@ -39,7 +39,8 @@ export function FileInput(props: FileInputFieldProps) {
     const {
         fieldState,
         value,
-        onChangeCallback
+        onChangeCallback,
+        file
     } = useFileInputField(
         label,
         props?.model?.key ?? '',
@@ -49,7 +50,8 @@ export function FileInput(props: FileInputFieldProps) {
     )
 
 
-    LOG.debug('Currently Selected Files =', value)
+    LOG.debug('Currently Selected Files stringified =', value)
+    LOG.debug('Currently Selected Files  =', file)
 
     return (
         <label
@@ -77,7 +79,13 @@ export function FileInput(props: FileInputFieldProps) {
                 onChange={onChangeCallback}
                 readOnly={props?.change === undefined}
             />
-
+            {file && file.map((item) => (
+                <div className={` ${COMPONENT_CLASS_NAME}-file-list`}>
+                    {item.name ? <div>
+                        {item.name}
+                    </div> : null}
+                </div>
+            ))}
             {props?.children}
         </label>
     );
