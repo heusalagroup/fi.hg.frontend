@@ -18,7 +18,7 @@ export function useFileInputField(
     key: string,
     change: FieldChangeCallback<string | undefined> | undefined,
     changeState: FieldChangeCallback<FormFieldState> | undefined,
-    propsValue: File | any,
+    propsValue: File | string | undefined
 ) {
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
