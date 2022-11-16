@@ -11,6 +11,7 @@ import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback
 import './FileInput.scss';
 import { LogService } from "../../../../core/LogService";
 import { useFileInputField } from "../../../hooks/field/useFileInputField";
+import { ProcureFile } from "../../../../../../app/procurenode/types/ProcureFile";
 
 const LOG = LogService.createLogger('FileInput');
 
@@ -24,9 +25,11 @@ export interface FileInputFieldProps {
     readonly label?: string;
     readonly placeholder?: string;
     readonly model?: FileInputFieldModel;
-    readonly value?: string;
+    readonly value?: ProcureFile;
     readonly change?: FieldChangeCallback<string | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
+    readonly ticketId?: string;
+    readonly workspaceId?: string;
     readonly children?: ReactNode;
 }
 
@@ -35,6 +38,8 @@ export function FileInput(props: FileInputFieldProps) {
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
+    const ticketId = props?.ticketId;
+    const workspaceId = props?.ticketId;
 
     const {
         fieldState,
@@ -47,10 +52,12 @@ export function FileInput(props: FileInputFieldProps) {
         props?.change,
         props?.changeState,
         props?.value,
+        ticketId,
+        workspaceId
     )
 
 
-    LOG.debug('Currently Selected Files stringified =', value)
+    LOG.debug('Currently Selected Files stringified =', typeof value, value)
     LOG.debug('Currently Selected Files  =', file)
 
     return (
@@ -74,6 +81,7 @@ export function FileInput(props: FileInputFieldProps) {
                     + ` ${FIELD_CLASS_NAME}-input`
                 }
                 type={COMPONENT_INPUT_TYPE}
+                accept='.csv, .jpg'
                 autoComplete="off"
                 placeholder={placeholder}
                 onChange={onChangeCallback}

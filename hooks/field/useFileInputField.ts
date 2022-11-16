@@ -8,6 +8,8 @@ import { useFieldIdentifier } from "./useFieldIdentifier";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
 import { useFieldFileChangeEventCallback } from "./array/useFieldFileChangeEventCallback";
 import { parseJson } from "../../../core/Json";
+import { FileService } from "../../../../../services/FileService";
+import { ProcureFile } from "../../../../../app/procurenode/types/ProcureFile";
 
 const LOG = LogService.createLogger('useFileInputField');
 
@@ -18,13 +20,15 @@ export function useFileInputField(
     key: string,
     change: FieldChangeCallback<string | undefined> | undefined,
     changeState: FieldChangeCallback<FormFieldState> | undefined,
-    propsValue: File | string | undefined
+    propsValue: ProcureFile | undefined,
+    ticketId: string | undefined,
+    workspaceId: string | undefined,
 ) {
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
     const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
-    const [value, setValue] = useState<InternalValueType[] | undefined>([]);
+    const [value, setValue] = useState<ProcureFile | undefined>();
     const [file, setFile] = useState<File[] | undefined>([]);
 
     const parseAndChangeCallback = useCallback(
@@ -45,12 +49,26 @@ export function useFileInputField(
         identifier,
         setValue,
         setFile,
-        parseAndChangeCallback
+        parseAndChangeCallback,
+        workspaceId,
+        ticketId
     );
+
+    const saveFileCallback = useCallback(
+        () => {
+            if(value) {
+                const client = FileService.saveFile(value)
+                console.log('CurrentFileInClient CLIENT', client)
+            }
+        },
+        [
+
+        ]
+    )
 
     useEffect(
         () => {
-
+            saveFileCallback()
         },
         [
             onChangeCallback
