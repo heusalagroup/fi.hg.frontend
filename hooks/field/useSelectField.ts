@@ -41,6 +41,8 @@ export function useSelectField<T> (
     const [ currentItemIndex, setCurrentItemIndex ] = useState<number | undefined>(undefined);
     const [ dropdownOpen, setDropdownOpen ] = useState<boolean>(false);
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
+    const [ searchField, setSearchField ] = useState<string | undefined>('');
+    const [ searchFieldOn, setSearchFieldOn ] = useState<boolean>(false);    // For testing checkbox only - search functionality on / off
 
     const currentItem: SelectFieldItem<T> | undefined = currentItemIndex !== undefined && propsValues !== undefined ? propsValues[currentItemIndex] : undefined;
     const currentItemLabel: string = currentItem?.label ?? '';
@@ -71,9 +73,20 @@ export function useSelectField<T> (
 
         }, [
             identifier,
-            propsValues
+            propsValues,
+            searchField
         ]
     );
+
+    const updateSearchFieldCallback = useCallback(
+        () => {
+            if(searchField) setSearchField('')
+        },
+        [
+            currentItemIndex,
+            dropdownOpen
+        ]
+    )
 
     const updateCurrentItemIndexCallback = useCallback(
         () => {
@@ -120,7 +133,7 @@ export function useSelectField<T> (
         },
         [
             identifier,
-            setDropdownOpen
+            setDropdownOpen,
             // , inputRef // See above comment
         ]
     );
@@ -438,12 +451,23 @@ export function useSelectField<T> (
                     return;
 
                 case 'Backspace':
+                    setSearchField('')
+                    return
                 case 'Escape':
                     if ( dropdownOpen ) {
                         cancelKeyEvent(event);
                         return closeDropdownCallback();
                     } else {
-                        return;
+                        return
+                    }
+                default:
+                    if(searchFieldOn) {     // For testing checkbox only - search functionality on / off
+
+                        if(searchField && searchField.length < 5) {
+                            setSearchField(prev => prev + event?.key.toLowerCase())
+                        } else if (!searchField) {
+                            setSearchField(prev => prev + event?.key.toLowerCase())
+                        }
                     }
 
             }
@@ -470,7 +494,6 @@ export function useSelectField<T> (
         ]
     );
 
-
     const validateStringValueCallback = useFieldValidateArrayValueCallback<T>(identifier, propsValues);
 
     const updateFieldStateCallback = useFieldArrayUpdateCallback<T>(
@@ -495,6 +518,7 @@ export function useSelectField<T> (
             } else {
                 LOG.debug(`${identifier}: Dropdown was already open`);
             }
+            updateSearchFieldCallback()
             setFieldState(FormFieldState.MOUNTED);
             updateFieldStateCallback();
             updateCurrentItemIndexCallback();
@@ -507,7 +531,7 @@ export function useSelectField<T> (
             delayedMoveToFirstItemCallback,
             setFieldState,
             updateFieldStateCallback,
-            updateCurrentItemIndexCallback
+            updateCurrentItemIndexCallback,
         ]
     );
 
@@ -568,6 +592,17 @@ export function useSelectField<T> (
         []
     );
 
+    const onChangeBooleanCallback = useCallback(        // For testing checkbox only - search functionality on / off
+        (event: ChangeEvent<HTMLInputElement>) => {
+            if(event) {
+                setSearchFieldOn(!searchFieldOn);
+            }
+        },
+        [
+            searchFieldOn
+        ]
+    );
+
     return {
         fieldState,
         label,
@@ -580,7 +615,9 @@ export function useSelectField<T> (
         onBlurCallback,
         onKeyDownCallback,
         onChangeCallback,
-        buttonRefs: buttonRefsRef.current
+        buttonRefs: buttonRefsRef.current,
+        searchField,
+        onChangeBooleanCallback
     };
 
 }

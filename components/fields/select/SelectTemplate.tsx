@@ -2,6 +2,7 @@
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import {
+    ChangeEventHandler,
     createRef,
     ReactNode,
     RefObject
@@ -46,6 +47,8 @@ export interface SelectFieldTemplateProps<T> {
     readonly fieldState         ?: FormFieldState;
     readonly currentItemLabel   ?: string;
     readonly currentItemIndex   ?: number | undefined;
+    readonly searchField        ?: string;
+    readonly onChangeBooleanCallback   ?: ChangeEventHandler<HTMLInputElement>;
     readonly selectItemCallback  : SelectItemCallback;
 }
 
@@ -61,12 +64,16 @@ export function SelectTemplate(props: SelectFieldTemplateProps<any>) {
     const onBlurCallback = props.onBlurCallback;
     const onChangeCallback = props.onChangeCallback;
     const onKeyDownCallback = props.onKeyDownCallback;
-    const currentItemLabel = props.currentItemLabel;
     const currentItemIndex = props.currentItemIndex;
     const dropdownOpen = props.dropdownOpen ? props.dropdownOpen : false;
     const selectItemCallback = props.selectItemCallback;
     const selectItems = props?.values ?? props?.model?.values;
     const fieldState = props?.fieldState;
+    const searchField = props?.searchField;
+    const booleanSetter = props?.onChangeBooleanCallback        // For testing checkbox only - search functionality on / off
+
+    const currentItemLabel = searchField ? searchField : props.currentItemLabel;
+
 
     return (
         <div
@@ -102,6 +109,9 @@ export function SelectTemplate(props: SelectFieldTemplateProps<any>) {
                     onKeyDown={onKeyDownCallback}
                 />
 
+                <input type="checkbox" onChange={booleanSetter} />  {/* For testing checkbox only - search functionality on / off*/}
+                <label>Search</label>
+
                 {props?.children}
 
             </label>
@@ -109,6 +119,7 @@ export function SelectTemplate(props: SelectFieldTemplateProps<any>) {
             <Popup open={dropdownOpen}>
                 <div className={COMPONENT_CLASS_NAME + '-dropdown'}>
                     { selectItems ? map(selectItems, (selectItem: SelectFieldItem<any>, itemIndex: number): any => {
+                        if( searchField && selectItem.label.toLowerCase().slice(0, searchField?.length) !== searchField) return;
 
                         const isCurrentButton = currentItemIndex !== undefined && itemIndex === currentItemIndex;
 
