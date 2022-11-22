@@ -1,6 +1,6 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { ReactNode, useRef, useEffect, useState, useCallback } from 'react';
+import { ReactNode, useRef } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
 import { LogService } from "../../../../core/LogService";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
@@ -38,14 +38,14 @@ export function DecimalField(props: DecimalFieldProps) {
     const placeholder = props.placeholder ?? props.model?.placeholder ?? DEFAULT_PLACEHOLDER;
     const label = props.label ?? props.model?.label ?? '';
     const inputReference = useRef<HTMLInputElement>(null);
-    const [focus, setFocus] = useState(false);
-    const [tempVal, setTempVal] = useState('');
-    const [validation, setValidation] = useState(true);
+
     const {
         fieldState,
         onChangeCallback,
         value,
-        toFixed
+        validation,
+        handleBlur,
+        handleFocus
     } = useDecimalField(
         label,
         props?.model?.key ?? '',
@@ -57,45 +57,10 @@ export function DecimalField(props: DecimalFieldProps) {
         props?.model?.maxValue,
         NumberUtils.parseNumber,
         stringifyInteger,
-        tempVal
     );
 
-    useEffect(() => {
-        LOG.debug('debugging temp & internal value', tempVal, ' ', value)
-        simpleDecimalValidationCallback()
-    }, [tempVal]);
+    LOG.debug('DecimalField Value = New', value)
 
-    const handleBlur = () => {
-        setFocus(false);
-    }
-    const handleFocus = () => {
-        setFocus(true);
-    }
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        const parsedTempValue = value.replace(',', '.')
-        setTempVal(parsedTempValue)
-        onChangeCallback(e)
-    }
-
-    const simpleDecimalValidationCallback = useCallback(
-        () => {
-            const regexVal = /^\d+(\.\d{0,2})?$/;
-            const validated = !regexVal.test(tempVal)
-            const eRemover = toFixed(value)
-            if (validated) {
-                setValidation(true)
-                setTempVal(eRemover)           // If validation ok, setting tempvalue to 'internal value' as a guard
-            } else {
-                setValidation(false)
-            }
-        },
-        [
-            tempVal,
-            focus
-        ]
-    )
 
     return (
         <label
@@ -126,8 +91,8 @@ export function DecimalField(props: DecimalFieldProps) {
                 type={COMPONENT_INPUT_TYPE}
                 autoComplete="off"
                 placeholder={placeholder}
-                value={tempVal}
-                onChange={handleChange}
+                value={value}
+                onChange={onChangeCallback}
                 readOnly={props?.change === undefined}
             />
             {props?.children}
@@ -136,6 +101,6 @@ export function DecimalField(props: DecimalFieldProps) {
 
 }
 
-function stringifyInteger(value: number | undefined): string {
+function stringifyInteger (value: number | undefined) : string {
     return `${value ?? ''}`;
 }

@@ -16,8 +16,9 @@ export function useFieldDecimalNumberInternalValueUpdateCallback (
     return useCallback(
         () => {
             LOG.debug(`${identifier}: Changing internal value: `, propsValue);
+
             setValue((prevValue: string) => {
-                return stringifyNumber(propsValue);
+                return prevValue;
             });
         }, [
             identifier,

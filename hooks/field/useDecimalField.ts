@@ -12,11 +12,18 @@ import { useFieldDecimalNumberInternalValueUpdateCallback } from "./number/useFi
 import { useFieldValidateNumberWithStateValueCallback } from "./number/useFieldValidateNumberWithStateValueCallback";
 import { useFieldValidateNumberValueCallback } from "./number/useFieldValidateNumberValueCallback";
 import { FieldChangeCallback } from "./useFieldChangeCallback";
-import { StringifyNumberCallback, ToNumberCallback } from "./useNumberField";
 
 const LOG = LogService.createLogger('useDecimalField');
 
 type InternalValueType = string;
+
+export interface ToDecimalNumberCallback {
+    (value: string | undefined) : any | undefined;
+}
+
+export interface StringifyDecimalNumberCallback {
+    (value: number | undefined) : string;
+}
 
 export function useDecimalField(
     label: string,
@@ -27,15 +34,16 @@ export function useDecimalField(
     isRequired: boolean,
     propsMinValue: number | undefined,
     propsMaxValue: number | undefined,
-    toNumber: ToNumberCallback,
-    stringifyNumber: StringifyNumberCallback,
-    tempVal: string
+    toNumber: ToDecimalNumberCallback,
+    stringifyNumber: StringifyDecimalNumberCallback,
 ) {
 
     const identifier = useFieldIdentifier(key, label);  //key: label string pair
 
     const [fieldState, setFieldState] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
     const [value, setValue] = useState<InternalValueType>(stringifyNumber(propsValue));
+    const [focus, setFocus] = useState<boolean>(false);
+    const [validation, setValidation] = useState<boolean>(true);
 
     // if any of the parameter values change, action will be logged and number propvalue converted to string
     const updateValueStateCallback = useFieldDecimalNumberInternalValueUpdateCallback(
@@ -45,7 +53,7 @@ export function useDecimalField(
         stringifyNumber
     );
 
-    const validateNumberValueCallback = useFieldValidateNumberValueCallback(identifier); // returns curried callback function 
+    const validateNumberValueCallback = useFieldValidateNumberValueCallback(identifier); // returns curried callback function
 
     const validateWithStateValueCallback = useFieldValidateNumberWithStateValueCallback( // Validates string and returns false or number
         identifier,
@@ -74,7 +82,7 @@ export function useDecimalField(
         [
             change,
             toNumber,
-            tempVal
+            value
         ]
     );
 
@@ -84,12 +92,14 @@ export function useDecimalField(
         parseAndChangeCallback
     );
 
+
     useFieldMountEffectWithInternalState(
         identifier,
         setFieldState,
         updateValueStateCallback,
         updateFieldStateCallback
     );
+
 
     // Update field state when internal value changes
     useEffect(
@@ -100,7 +110,7 @@ export function useDecimalField(
         [
             identifier,
             value,
-            updateFieldStateCallback
+            updateFieldStateCallback,
         ]
     );
 
@@ -110,12 +120,13 @@ export function useDecimalField(
             LOG.debug(`${identifier}: Props value changed: `, propsValue);
             updateValueStateCallback();
             updateFieldStateCallback();
+            simpleDecimalValidationCallback();
         },
         [
             identifier,
             propsValue,
             updateValueStateCallback,
-            updateFieldStateCallback
+            updateFieldStateCallback,
         ]
     );
 
@@ -130,27 +141,44 @@ export function useDecimalField(
             isRequired,
             propsMinValue,
             propsMaxValue,
-            updateFieldStateCallback
+            updateFieldStateCallback,
+            decimalFunc
         ]
     );
 
-    function toFixed(x:any) {       //scientific notation removal
-        if (Math.abs(x) < 1.0) {
-          var e = parseInt(x.toString().split('e-')[1]);
-          if (e) {
-              x *= Math.pow(10,e-1);
-              x = '0.' + (new Array(e)).join('0') + x.toString().substring(2);
-          }
-        } else {
-          var e = parseInt(x.toString().split('+')[1]);
-          if (e > 20) {
-              e -= 20;
-              x /= Math.pow(10,e);
-              x += (new Array(e+1)).join('0');
-          }
+    const handleBlur = () => {
+        setFocus(false);
+    }
+    const handleFocus = () => {
+        setFocus(true);
+    }
+
+    function decimalFunc(x:string):void {       //scientific notation removal
+        LOG.debug('StringConversionToDecimal', x, 'and value', value)
+        if(x.toLowerCase().includes('e')) {
+            const withoutE = x.replace('e', '')
+            setValue(withoutE)
         }
-        return x;
+        return;
       }
+
+    const simpleDecimalValidationCallback = useCallback(
+        () => {
+            const regexVal = /^[\.0-9]*$/;
+            const commaReplace = value.replace(',', '.')
+            const validated = !regexVal.test(commaReplace);
+            if (validated) {
+                setValidation(true)
+                decimalFunc(commaReplace)
+            } else {
+                setValidation(false)
+            }
+        },
+        [
+            value,
+            focus
+        ]
+    )
 
     useFieldChangeState(changeState, fieldState);
 
@@ -159,7 +187,10 @@ export function useDecimalField(
         label,
         value,
         onChangeCallback,
-        toFixed
+        validation,
+        setFocus,
+        handleBlur,
+        handleFocus
     };
 
 }
