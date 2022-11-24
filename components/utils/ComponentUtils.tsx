@@ -11,6 +11,7 @@ import {
     startsWith
 } from "../../../core/modules/lodash";
 import { TFunction } from "react-i18next";
+import { TranslationParams } from "../../../core/types/TranslationParams";
 
 export interface ComponentNodeMap {
     readonly [key: string]: ReactNode;
@@ -36,7 +37,8 @@ export class ComponentUtils {
     public static prepareParagraphNodes (
         t: TFunction,
         description: readonly any[] | undefined,
-        paramBlocks: ComponentNodeMap | undefined
+        paramBlocks: ComponentNodeMap | undefined,
+        translationParams ?: TranslationParams
     ) {
         return (
             <>
@@ -53,16 +55,17 @@ export class ComponentUtils {
                             return (
                                 <p key={`paragraph-${i}`}>{
                                     ComponentUtils.prepareNodesFromString(
-                                        t(paragraph),
+                                        t(paragraph, translationParams),
                                         paramBlocks,
-                                        t
+                                        t,
+                                        translationParams
                                     )
                                 }</p>
                             );
                         }
 
                         return (
-                            <p key={`paragraph-${i}`}>{t(paragraph)}</p>
+                            <p key={`paragraph-${i}`}>{t(paragraph, translationParams)}</p>
                         );
 
                     })
