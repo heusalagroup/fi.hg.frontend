@@ -73,8 +73,7 @@ export function useSelectField<T> (
 
         }, [
             identifier,
-            propsValues,
-            searchField
+            propsValues
         ]
     );
 
@@ -83,8 +82,7 @@ export function useSelectField<T> (
             if(searchField) setSearchField('')
         },
         [
-            currentItemIndex,
-            dropdownOpen
+            searchField
         ]
     )
 
@@ -483,6 +481,8 @@ export function useSelectField<T> (
 
         },
         [
+            searchField,
+            searchFieldOn,
             identifier,
             closeDropdownCallback,
             delayedMoveToFirstItemCallback,
@@ -525,6 +525,7 @@ export function useSelectField<T> (
         },
         [
             identifier,
+            updateSearchFieldCallback,
             dropdownOpen,
             inputHasFocusCallback,
             openDropdownCallback,
