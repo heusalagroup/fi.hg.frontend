@@ -39,7 +39,7 @@ export class ComponentUtils {
         description: readonly any[] | undefined,
         paramBlocks: ComponentNodeMap | undefined,
         translationParams ?: TranslationParams
-    ) {
+    ) : ReactNode {
         return (
             <>
                 {description
