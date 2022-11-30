@@ -70,8 +70,6 @@ export function SelectTemplate(props: SelectFieldTemplateProps<any>) {
     const selectItems = props?.values ?? props?.model?.values;
     const fieldState = props?.fieldState;
     const searchField = props?.searchField;
-    const booleanSetter = props?.onChangeBooleanCallback        // For testing checkbox only - search functionality on / off
-
     const currentItemLabel = searchField ? searchField : props.currentItemLabel;
 
 
@@ -108,10 +106,6 @@ export function SelectTemplate(props: SelectFieldTemplateProps<any>) {
                     onChange={onChangeCallback}
                     onKeyDown={onKeyDownCallback}
                 />
-
-                <input type="checkbox" onChange={booleanSetter} />  {/* For testing checkbox only - search functionality on / off*/}
-                <label>Search</label>
-
                 {props?.children}
 
             </label>

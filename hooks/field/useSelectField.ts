@@ -42,7 +42,6 @@ export function useSelectField<T> (
     const [ dropdownOpen, setDropdownOpen ] = useState<boolean>(false);
     const [ fieldState, setFieldState ] = useState<FormFieldState>(FormFieldState.CONSTRUCTED);
     const [ searchField, setSearchField ] = useState<string | undefined>('');
-    const [ searchFieldOn, setSearchFieldOn ] = useState<boolean>(false);    // For testing checkbox only - search functionality on / off
 
     const currentItem: SelectFieldItem<T> | undefined = currentItemIndex !== undefined && propsValues !== undefined ? propsValues[currentItemIndex] : undefined;
     const currentItemLabel: string = currentItem?.label ?? '';
@@ -459,15 +458,12 @@ export function useSelectField<T> (
                         return
                     }
                 default:
-                    if(searchFieldOn) {     // For testing checkbox only - search functionality on / off
 
-                        if(searchField && searchField.length < 5) {
-                            setSearchField(prev => prev + event?.key.toLowerCase())
-                        } else if (!searchField) {
-                            setSearchField(prev => prev + event?.key.toLowerCase())
-                        }
+                    if(searchField && searchField.length < 5) {
+                        setSearchField(prev => prev + event?.key.toLowerCase())
+                    } else if (!searchField) {
+                        setSearchField(prev => prev + event?.key.toLowerCase())
                     }
-
             }
 
             LOG.debug(`${identifier}: No keycode set: `, event?.code);
@@ -618,7 +614,6 @@ export function useSelectField<T> (
         onChangeCallback,
         buttonRefs: buttonRefsRef.current,
         searchField,
-        onChangeBooleanCallback
     };
 
 }
