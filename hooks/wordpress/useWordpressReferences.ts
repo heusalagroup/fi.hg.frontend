@@ -8,7 +8,7 @@ import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressReferencesList');
 
-export function useWordpressReferencesList(url?:string, endpoint?:string, refresh?:boolean):
+export function useWordpressReferencesList(url?:string, endpoint?:string):
     [
             readonly WordpressReferenceDTO[] | undefined,
     ] {
@@ -22,15 +22,14 @@ export function useWordpressReferencesList(url?:string, endpoint?:string, refres
         },
         [
             url,
-            endpoint,
-            refresh
+            endpoint
         ]
     )
     const getWordpressReferencesCallback = useCallback(
         async () => {
             try {
                 LOG.debug(`Fetching references list`);
-                const result = await WordpressService.getWordpressReferenceList(url, endpoint);
+                const result = await WordpressService.getWordpressReferenceList(url);
                 LOG.debug(`Received references list: `, result);
                 setReferenceList(result);
             } catch (err) {
@@ -58,5 +57,14 @@ export function useWordpressReferencesList(url?:string, endpoint?:string, refres
         ]
     );
 
-    return [referencesList];
+    const onChangeCallback = useCallback(
+        () => {
+            setValid(false)
+        },
+        []
+    );
+
+    return [
+        referencesList,
+        onChangeCallback,];
 }

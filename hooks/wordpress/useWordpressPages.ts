@@ -8,7 +8,7 @@ import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressPagesList');
 
-export function useWordpressPagesList(url?:string, endpoint?:string, refresh?:boolean):
+export function useWordpressPagesList(url?:string):
     [
             readonly WordpressPageDTO[] | undefined,
     ] {
@@ -17,13 +17,11 @@ export function useWordpressPagesList(url?:string, endpoint?:string, refresh?:bo
 
     const refreshCallback = useCallback(
         () => {
-            const result = routeValidation(url, endpoint);
+            const result = routeValidation(url);
             setValid(result);
         },
         [
-            url,
-            endpoint,
-            refresh
+            url
         ]
     )
 
@@ -31,7 +29,7 @@ export function useWordpressPagesList(url?:string, endpoint?:string, refresh?:bo
         async () => {
             try {
                 LOG.debug(`Fetching pages list`);
-                const result = await WordpressService.getWordpressPageList(url, endpoint);
+                const result = await WordpressService.getWordpressPageList(url);
                 LOG.debug(`Received pages list: `, result);
                 setPageList(result);
             } catch (err) {

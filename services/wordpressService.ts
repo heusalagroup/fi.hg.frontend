@@ -17,9 +17,9 @@ export type WordpressServiceDestructor = ObserverDestructor;
 const LOG = LogService.createLogger('WordpressService');
 
 export class WordpressService {
-    url:string;
+   readonly _url:string;
     constructor(url?) {
-        this.url = url;
+        this._url = url;
     }
 
     private static _wordpressPage: WordpressPageDTO | undefined;

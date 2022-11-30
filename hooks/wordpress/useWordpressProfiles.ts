@@ -8,7 +8,7 @@ import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressProfilesList');
 
-export function useWordpressProfilesList(url?:string, endpoint?:string, refresh?:boolean):
+export function useWordpressProfilesList(url?:string):
     [
             readonly WordpressUserProfileDTO[] | undefined,
     ] {
@@ -17,13 +17,11 @@ export function useWordpressProfilesList(url?:string, endpoint?:string, refresh?
 
     const refreshCallback = useCallback(
         () => {
-            const result = routeValidation(url, endpoint);
+            const result = routeValidation(url);
             setValid(result);
         },
         [
-            url,
-            endpoint,
-            refresh
+            url
         ]
     )
 
@@ -31,7 +29,7 @@ export function useWordpressProfilesList(url?:string, endpoint?:string, refresh?
         async () => {
             try {
                 LOG.debug(`Fetching user profiles list`);
-                const result = await WordpressService.getWordpressUserProfilesList(url, endpoint);
+                const result = await WordpressService.getWordpressUserProfilesList(url);
                 LOG.debug(`Received user profiles list: `, result);
                 setUserProfilesList(result);
             } catch (err) {
