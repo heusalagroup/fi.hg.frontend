@@ -478,7 +478,7 @@ export function useSelectField<T> (
         },
         [
             searchField,
-            searchFieldOn,
+            //searchFieldOn,
             identifier,
             closeDropdownCallback,
             delayedMoveToFirstItemCallback,
@@ -589,7 +589,7 @@ export function useSelectField<T> (
         []
     );
 
-    const onChangeBooleanCallback = useCallback(        // For testing checkbox only - search functionality on / off
+    /*const onChangeBooleanCallback = useCallback(        // For testing checkbox only - search functionality on / off
         (event: ChangeEvent<HTMLInputElement>) => {
             if(event) {
                 setSearchFieldOn(!searchFieldOn);
@@ -598,7 +598,7 @@ export function useSelectField<T> (
         [
             searchFieldOn
         ]
-    );
+    );*/
 
     return {
         fieldState,
