@@ -8,21 +8,21 @@ import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressReferencesList');
 
-export function useWordpressReferencesList(url?:string, endpoint?:string):
+export function useWordpressReferencesList(url:string):
     [
             readonly WordpressReferenceDTO[] | undefined,
     ] {
     const [referencesList, setReferenceList] = useState<readonly WordpressReferenceDTO[] | undefined>(undefined);
     const [valid, setValid] = useState<boolean>(false);
 
+
     const refreshCallback = useCallback(
         () => {
-            const result = routeValidation(url, endpoint);
+            const result = routeValidation(url);
             setValid(result);
         },
         [
             url,
-            endpoint
         ]
     )
     const getWordpressReferencesCallback = useCallback(
@@ -37,7 +37,7 @@ export function useWordpressReferencesList(url?:string, endpoint?:string):
             }
         },
         [
-            refreshCallback
+            url,
         ]
     );
 
@@ -53,18 +53,10 @@ export function useWordpressReferencesList(url?:string, endpoint?:string):
         },
         [
             refreshCallback,
-            valid
+            valid,
+            getWordpressReferencesCallback
         ]
     );
 
-    const onChangeCallback = useCallback(
-        () => {
-            setValid(false)
-        },
-        []
-    );
-
-    return [
-        referencesList,
-        onChangeCallback,];
+    return [referencesList];
 }

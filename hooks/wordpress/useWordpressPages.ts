@@ -8,12 +8,13 @@ import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressPagesList');
 
-export function useWordpressPagesList(url?:string):
+export function useWordpressPagesList(url:string):
     [
             readonly WordpressPageDTO[] | undefined,
     ] {
     const [pageList, setPageList] = useState<readonly WordpressPageDTO[] | undefined>(undefined);
     const [valid, setValid] = useState<boolean>(false);
+
 
     const refreshCallback = useCallback(
         () => {
@@ -21,7 +22,7 @@ export function useWordpressPagesList(url?:string):
             setValid(result);
         },
         [
-            url
+            url,
         ]
     )
 
@@ -37,7 +38,7 @@ export function useWordpressPagesList(url?:string):
             }
         },
         [
-            refreshCallback
+            url
         ]
     );
 
@@ -53,7 +54,8 @@ export function useWordpressPagesList(url?:string):
         },
         [
             refreshCallback,
-            valid
+            valid,
+            getWordpressPagesCallback
         ]
     );
 
