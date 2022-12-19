@@ -76,15 +76,6 @@ export function useSelectField<T> (
         ]
     );
 
-    const updateSearchFieldCallback = useCallback(
-        () => {
-            if(searchField) setSearchField('')
-        },
-        [
-            searchField
-        ]
-    )
-
     const updateCurrentItemIndexCallback = useCallback(
         () => {
             setCurrentItemIndex(() => propsValue !== undefined ? findValueIndexCallback(propsValue) : undefined);
@@ -285,6 +276,17 @@ export function useSelectField<T> (
             propsValues
         ]
     );
+
+    const updateSearchFieldCallback = useCallback(
+        () => {
+            if( searchField ) setSearchField('')
+        },
+        [
+            updateCurrentItemIndexCallback,
+            currentItem,
+            updateCurrentItemFromFocusCallback
+        ]
+    )
 
     const onFocusCallback = useCallback(
         () => {
