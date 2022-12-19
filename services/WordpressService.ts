@@ -17,9 +17,11 @@ export type WordpressServiceDestructor = ObserverDestructor;
 const LOG = LogService.createLogger('WordpressService');
 
 export class WordpressService {
-   readonly _url:string;
-    constructor(url?) {
+    readonly _url:string;
+    readonly _initialized:Promise<boolean>;
+    constructor(url:string) {
         this._url = url;
+        this._initialized = WordpressService.initialize(this._url);
     }
 
     private static _wordpressPage: WordpressPageDTO | undefined;
@@ -37,14 +39,17 @@ export class WordpressService {
         this._observer.destroy();
     }
 
-    public static initialize() {
+    public static async initialize(url:string):Promise<boolean> {
         LOG.info(`Initializing`);
-        this._initializeWordpress().catch((err) => {
+        const result = await this._initializeWordpress(url).catch((err) => {
             LOG.error(`ERROR: Could not initialize wordpress: `, err);
         });
+        if (result) return true
+        return false
     }
 
-    public static async getWordpressPageList(url?): Promise<readonly WordpressPageDTO[]> {
+    public static async getWordpressPageList(url:string): Promise<readonly WordpressPageDTO[]> {
+        if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getPages();
         if (!result) {
@@ -54,7 +59,8 @@ export class WordpressService {
         return result;
     }
 
-    public static async getWordpressReferenceList(url?): Promise<readonly WordpressReferenceDTO[]> {
+    public static async getWordpressReferenceList(url:string): Promise<readonly WordpressReferenceDTO[]> {
+        if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getReferences();
         if (!result) {
@@ -64,7 +70,8 @@ export class WordpressService {
         return result;
     }
 
-    public static async getWordpressUserProfilesList(url?): Promise<readonly WordpressUserProfileDTO[]> {
+    public static async getWordpressUserProfilesList(url:string): Promise<readonly WordpressUserProfileDTO[]> {
+        if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getUserProfiles();
         if (!result) {
@@ -83,13 +90,15 @@ export class WordpressService {
         }
     }
 
-    private static async _initializeWordpress() {
-        const list: readonly any[] = await WordpressService.getWordpressPageList();
+    private static async _initializeWordpress(url:string) {
+        const list: readonly any[] = await WordpressService.getWordpressPageList(url);
         if ((list?.length ?? 0) !== 1) {
             LOG.info(`No wordpress pages;`);
+            return false
         } else {
             LOG.info(`Selecting page: `, list[0]);
             WordpressService.setCurrentPage(list[0]);
+            return true
         }
     }
 
