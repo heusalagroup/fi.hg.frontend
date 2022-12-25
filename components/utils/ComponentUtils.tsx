@@ -10,8 +10,8 @@ import {
     map,
     startsWith
 } from "../../../core/modules/lodash";
-import { TFunction } from "react-i18next";
 import { TranslationParams } from "../../../core/types/TranslationParams";
+import { TranslationFunction } from "../../../core/types/TranslationFunction";
 
 export interface ComponentNodeMap {
     readonly [key: string]: ReactNode;
@@ -35,7 +35,7 @@ export class ComponentUtils {
     }
 
     public static prepareParagraphNodes (
-        t: TFunction,
+        t: TranslationFunction,
         description: readonly any[] | undefined,
         paramBlocks: ComponentNodeMap | undefined,
         translationParams ?: TranslationParams
@@ -85,7 +85,7 @@ export class ComponentUtils {
     public static prepareNodesFromString (
         inputString: string,
         blocks: ComponentNodeMap,
-        t: TFunction,
+        t: TranslationFunction,
         translationParams: {readonly [key: string]: any} = {}
     ): ReactNode[] {
 
