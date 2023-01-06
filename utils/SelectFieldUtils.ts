@@ -2,7 +2,7 @@
 
 import { EnumUtils, EnumObject } from "../../core/EnumUtils";
 import { createSelectFieldItem, SelectFieldItem } from "../types/items/SelectFieldModel";
-import { map } from "../../core/modules/lodash";
+import { map } from "../../core/functions/map";
 
 export interface CreateLabelCallback {
     (key: string) : string;

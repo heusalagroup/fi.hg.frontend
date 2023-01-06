@@ -1,6 +1,7 @@
 // Copyright (c) 2021-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import {isString, trim} from "../../core/modules/lodash";
+import { trim } from "../../core/functions/trim";
+import { isString } from "../../core/types/String";
 
 export enum StyleScheme {
     FLAT        = 0,

@@ -2,11 +2,9 @@
 
 import { FormItemType } from "../FormItemType";
 import { FormFieldModel,  isFormFieldModel } from "../FormFieldModel";
-import {
-    isArrayOf,
-    TestCallback
-} from "../../../core/modules/lodash";
 import { SelectFieldItem } from "./SelectFieldModel";
+import { TestCallback } from "../../../core/types/TestCallback";
+import { isArrayOf } from "../../../core/types/Array";
 
 export interface SliderFieldModel<T> extends FormFieldModel {
 

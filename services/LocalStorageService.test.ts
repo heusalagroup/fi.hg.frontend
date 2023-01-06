@@ -2,8 +2,8 @@
 
 import { LocalStorageService, LocalStorageServiceDestructor} from "./LocalStorageService";
 import { WindowService, WindowServiceEvent} from "./WindowService";
-import {isFunction} from "../../core/modules/lodash";
 import {StorageServiceEvent} from "./types/AbtractStorageService";
+import { isFunction } from "../../core/types/Function";
 
 describe('LocalStorageService', () => {
 

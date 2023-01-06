@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { TIMER_CLASS_NAME } from "../../../constants/hgClassName";
-import { padStart } from "../../../../core/modules/lodash";
+import { padStart } from "../../../../core/functions/padStart";
 import "./Timer.scss";
 
 /**

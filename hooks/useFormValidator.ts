@@ -1,8 +1,8 @@
 // Copyright (c) 2021. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { useCallback, useEffect, useState } from "react";
-import { isFunction } from "../../core/modules/lodash";
 import { LogService } from "../../core/LogService";
+import { isFunction } from "../../core/types/Function";
 
 const LOG = LogService.createLogger('useFormValidator');
 

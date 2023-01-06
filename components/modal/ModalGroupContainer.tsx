@@ -7,7 +7,7 @@ import {
     ModalServiceEvent
 } from "../../services/ModalService";
 import { LogService } from "../../../core/LogService";
-import { map } from "../../../core/modules/lodash";
+import { map } from "../../../core/functions/map";
 import { ModalContainer } from "./ModalContainer";
 import { MODAL_GROUP_CONTAINER_CLASS_NAME } from "../../constants/hgClassName";
 import { useCallback, useState } from "react";

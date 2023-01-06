@@ -6,14 +6,10 @@ import { FormModel } from "../../types/FormModel";
 import { FormFieldModel, isFormFieldModel } from "../../types/FormFieldModel";
 import { Button } from "../button/Button";
 import { FormUtils } from "../fields/FormUtils";
-import {
-    every,
-    filter,
-    get,
-    keys,
-    map,
-    set
-} from "../../../core/modules/lodash";
+import { filter } from "../../../core/functions/filter";
+import { get} from "../../../core/functions/get";
+import { map } from "../../../core/functions/map";
+import { set } from "../../../core/functions/set";
 import { LogService } from "../../../core/LogService";
 import { FormItem } from "../../types/FormItem";
 import { PageBreakModel } from "../../types/items/PageBreakModel";
@@ -24,6 +20,8 @@ import { MODEL_FORM_CLASS_NAME } from "../../constants/hgClassName";
 import { FieldChangeCallback } from "../../hooks/field/useFieldChangeCallback";
 import { TranslationFunction } from "../../../core/types/TranslationFunction";
 import './ModelForm.scss';
+import { keys } from "../../../core/functions/keys";
+import { every } from "../../../core/functions/every";
 
 const LOG = LogService.createLogger('Form');
 

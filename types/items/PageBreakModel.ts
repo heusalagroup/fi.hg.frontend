@@ -1,8 +1,8 @@
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { FormItemType } from "../FormItemType";
-import { isStringOrUndefined } from "../../../core/modules/lodash";
 import { FormItemModel } from "../FormItemModel";
+import { isStringOrUndefined } from "../../../core/types/String";
 
 export interface PageBreakModel extends FormItemModel {
 

@@ -11,7 +11,7 @@ import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
 import { useFieldIdentifier } from "./useFieldIdentifier";
 import { SelectFieldItem } from "../../types/items/SelectFieldModel";
-import { find } from "../../../core/modules/lodash";
+import { find } from "../../../core/functions/find";
 import { useFieldValidateArrayValueCallback } from "./array/useFieldValidateArrayValueCallback";
 import { FieldChangeCallback, useFieldChangeCallback } from "./useFieldChangeCallback";
 import { useMountEffect } from "../useMountEffect";

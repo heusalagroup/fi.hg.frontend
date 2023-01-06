@@ -6,7 +6,7 @@ import { LogService } from "../../../../core/LogService";
 import { VoidCallback } from "../../../../core/interfaces/callbacks";
 import { FieldValidateArrayValueCallback } from "./useFieldValidateArrayValueCallback";
 import { SelectFieldItem } from "../../../types/items/SelectFieldModel";
-import { find } from "../../../../core/modules/lodash";
+import { find } from "../../../../core/functions/find";
 import { FieldValidateArrayValueCallbackWithStateValue } from "./useFieldValidateArrayValueCallbackWithStateValue";
 
 const LOG = LogService.createLogger('useFieldArrayUpdateCallbackWithStateValue');

@@ -2,11 +2,9 @@
 
 import { ModalType } from "../types/ModalType";
 import { Modal,  ModalComponentType } from "../types/Modal";
-import {
-    concat,
-    forEach,
-    remove
-} from "../../core/modules/lodash";
+import { concat } from "../../core/functions/concat";
+import { forEach } from "../../core/functions/forEach";
+import { remove } from "../../core/functions/remove";
 import { Observer,  ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { LogService } from "../../core/LogService";
 

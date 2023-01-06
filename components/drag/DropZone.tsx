@@ -10,9 +10,9 @@ import {
 import { LogService } from "../../../core/LogService";
 import { DropEffect } from "./DragManager";
 import { DropCallback } from "../../../core/interfaces/callbacks";
-import { isArray } from "../../../core/modules/lodash";
 import { DROP_ZONE_CLASS_NAME } from "../../constants/hgClassName";
 import './DropZone.scss';
+import { isArray } from "../../../core/types/Array";
 
 const LOG = LogService.createLogger('DropZone');
 

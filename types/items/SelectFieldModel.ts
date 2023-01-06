@@ -5,10 +5,8 @@ import {
     FormFieldModel,
     isFormFieldModel
 } from "../FormFieldModel";
-import {
-    isArrayOf,
-    TestCallback
-} from "../../../core/modules/lodash";
+import { TestCallback } from "../../../core/types/TestCallback";
+import { isArrayOf } from "../../../core/types/Array";
 
 export interface SelectFieldItem<T> {
     readonly label : string;

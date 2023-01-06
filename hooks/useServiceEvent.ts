@@ -3,8 +3,8 @@
 import { useCallback, useEffect } from "react";
 import { LogService } from "../../core/LogService";
 import { VoidCallback } from "../../core/interfaces/callbacks";
-import { isPromise } from "../../core/modules/lodash";
 import { ObserverCallback, ObserverDestructor } from "../../core/Observer";
+import { isPromise } from "../../core/types/Promise";
 
 const LOG = LogService.createLogger('useServiceEvent');
 

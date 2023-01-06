@@ -2,9 +2,9 @@
 
 import { LogService } from "../../core/LogService";
 import { Observer, ObserverCallback, ObserverDestructor} from "../../core/Observer";
-import {JsonObject} from "../../core/Json";
-import {isString} from "../../core/modules/lodash";
+import { JsonObject } from "../../core/Json";
 import { WindowObjectService } from "../../core/WindowObjectService";
+import { isString } from "../../core/types/String";
 
 const LOG = LogService.createLogger('WindowEventService');
 

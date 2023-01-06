@@ -2,7 +2,7 @@
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { SelectFieldModel, SelectFieldItem} from "../../../types/items/SelectFieldModel";
-import { map } from "../../../../core/modules/lodash";
+import { map } from "../../../../core/functions/map";
 import { FormFieldState,  stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";

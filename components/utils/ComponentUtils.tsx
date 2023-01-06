@@ -1,17 +1,16 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { ReactNode } from "react";
-import {
-    endsWith,
-    filter,
-    find,
-    has, isString,
-    keys,
-    map,
-    startsWith
-} from "../../../core/modules/lodash";
+import { endsWith } from "../../../core/functions/endsWith";
+import { filter } from "../../../core/functions/filter";
+import { find } from "../../../core/functions/find";
+import { has } from "../../../core/functions/has";
+import { map } from "../../../core/functions/map";
+import { startsWith } from "../../../core/functions/startsWith";
 import { TranslationParams } from "../../../core/types/TranslationParams";
 import { TranslationFunction } from "../../../core/types/TranslationFunction";
+import { isString } from "../../../core/types/String";
+import { keys } from "../../../core/functions/keys";
 
 export interface ComponentNodeMap {
     readonly [key: string]: ReactNode;

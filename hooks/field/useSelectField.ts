@@ -14,13 +14,14 @@ import { useFieldChangeState } from "./useFieldChangeState";
 import { LogService } from "../../../core/LogService";
 import { useFieldIdentifier } from "./useFieldIdentifier";
 import { SelectFieldItem } from "../../types/items/SelectFieldModel";
-import { findIndex, some } from "../../../core/modules/lodash";
+import { findIndex } from "../../../core/functions/findIndex";
 import { useFieldValidateArrayValueCallback } from "./array/useFieldValidateArrayValueCallback";
 import { useFieldArrayUpdateCallback } from "./array/useFieldArrayUpdateCallback";
 import { FieldChangeCallback, useFieldChangeCallback } from "./useFieldChangeCallback";
 import { useDelayedCallback } from "../useDelayedCallback";
 import { useMountEffect } from "../useMountEffect";
 import { useSelectItemCallback } from "./array/useSelectItemCallback";
+import { some } from "../../../core/functions/some";
 
 const LOG = LogService.createLogger('useSelectField');
 

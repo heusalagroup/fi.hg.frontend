@@ -1,13 +1,12 @@
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
-import {
-    isBooleanOrUndefined,
-    isNumberOrUndefined,
-    isStringOrUndefined, isUndefined
-} from "../../core/modules/lodash";
 import { FormItemModel } from "./FormItemModel";
-import {FormFieldType, isFormFieldType} from "./FormFieldType";
+import { FormFieldType, isFormFieldType } from "./FormFieldType";
 import { isStyleScheme, StyleScheme } from "./StyleScheme";
+import { isUndefined } from "../../core/types/undefined";
+import { isBooleanOrUndefined } from "../../core/types/Boolean";
+import { isStringOrUndefined } from "../../core/types/String";
+import { isNumberOrUndefined } from "../../core/types/Number";
 
 export interface FormFieldModel extends FormItemModel {
 

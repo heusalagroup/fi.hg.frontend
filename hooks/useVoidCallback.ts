@@ -2,10 +2,10 @@
 
 import { useCallback } from "react";
 import { VoidCallback } from "../../core/interfaces/callbacks";
-import { isPromise } from "../../core/modules/lodash";
 import { useHandleError } from "./useHandleError";
 import { useWarningLogger } from "./useWarningLogger";
 import { useDebugLogger } from "./useDebugLogger";
+import { isPromise } from "../../core/types/Promise";
 
 export function useVoidCallback (
     context: string | undefined,

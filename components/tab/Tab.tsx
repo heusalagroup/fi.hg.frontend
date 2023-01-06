@@ -3,7 +3,7 @@
 
 import { SelectFieldItem } from "../../types/items/SelectFieldModel";
 import { Button } from "../button/Button";
-import { map } from "../../../core/modules/lodash";
+import { map } from "../../../core/functions/map";
 import { ChangeCallback } from "../../../core/interfaces/callbacks";
 import { LogService } from "../../../core/LogService";
 import { TAB_CLASS_NAME } from "../../constants/hgClassName";

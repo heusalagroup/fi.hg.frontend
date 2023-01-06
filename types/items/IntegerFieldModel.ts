@@ -2,7 +2,7 @@
 
 import { FormItemType } from "../FormItemType";
 import { FormFieldModel,  isFormFieldModel } from "../FormFieldModel";
-import { isNumberOrUndefined } from "../../../core/modules/lodash";
+import { isNumberOrUndefined } from "../../../core/types/Number";
 
 export interface IntegerFieldModel extends FormFieldModel {
 

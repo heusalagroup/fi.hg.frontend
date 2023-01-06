@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
-import { isEqual } from "../../../../core/modules/lodash";
+import { isEqual } from "../../../../core/functions/isEqual";
 import { parseJson, ReadonlyJsonAny } from "../../../../core/Json";
 import { FieldValidateJsonValueCallback } from "./useFieldValidateJsonValueCallback";
 

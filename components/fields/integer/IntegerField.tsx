@@ -4,7 +4,7 @@
 import { ReactNode } from 'react';
 import { IntegerFieldModel } from "../../../types/items/IntegerFieldModel";
 import { LogService } from "../../../../core/LogService";
-import { isSafeInteger, trim } from "../../../../core/modules/lodash";
+import { trim } from "../../../../core/functions/trim";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { ThemeService } from "../../../services/ThemeService";
 import { stringifyStyleScheme, StyleScheme } from "../../../types/StyleScheme";
@@ -15,6 +15,7 @@ import {
 import { useNumberField } from "../../../hooks/field/useNumberField";
 import { FieldChangeCallback } from "../../../hooks/field/useFieldChangeCallback";
 import './IntegerField.scss';
+import { isSafeInteger } from "../../../../core/types/Number";
 
 const LOG = LogService.createLogger('IntegerField');
 const DEFAULT_PLACEHOLDER = '123';

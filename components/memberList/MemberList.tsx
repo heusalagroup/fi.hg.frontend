@@ -1,7 +1,7 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { RepositoryMember } from "../../../core/simpleRepository/types/RepositoryMember";
-import { map } from "../../../core/modules/lodash";
+import { map } from "../../../core/functions/map";
 import { MEMBER_LIST_CLASS_NAME } from "../../constants/hgClassName";
 import { TranslationFunction } from "../../../core/types/TranslationFunction";
 import "./MemberList.scss";

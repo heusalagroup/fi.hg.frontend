@@ -1,11 +1,11 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { EnumType } from "../../core/modules/lodash";
 import { useEffect, useState } from "react";
 import { EnumUtils } from "../../core/EnumUtils";
+import { Enum } from "../../core/types/EnumType";
 
 export function useEnumValues<T extends number|string> (
-    type: EnumType<T>
+    type: Enum<T>
 ) : readonly T[] {
     const [ list, setList ] = useState<readonly T[]>( () => EnumUtils.getValues<T>(type) );
     useEffect(

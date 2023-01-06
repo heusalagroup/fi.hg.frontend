@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
 import { FieldValidateStringValueCallback } from "./useFieldValidateStringValueCallback";
-import { trim } from "../../../../core/modules/lodash";
+import { trim } from "../../../../core/functions/trim";
 
 const LOG = LogService.createLogger('useFieldValidateStringWithStateValueCallback');
 

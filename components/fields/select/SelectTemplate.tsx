@@ -8,9 +8,7 @@ import {
     RefObject
 } from 'react';
 import { SelectFieldModel, SelectFieldItem } from "../../../types/items/SelectFieldModel";
-import {
-    map
-} from "../../../../core/modules/lodash";
+import { map } from "../../../../core/functions/map";
 import { Popup } from "../../popup/Popup";
 import { Button } from "../../button/Button";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";

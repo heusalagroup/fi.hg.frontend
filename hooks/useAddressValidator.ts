@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { VoidCallback } from "../../core/interfaces/callbacks";
-import { trim } from "../../core/modules/lodash";
+import { trim } from "../../core/functions/trim";
 
 export function useAddressValidator (
     address: string | undefined,
