@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { EnumUtils } from "../../core/EnumUtils";
 import {Enum} from "../../core/types/Enum";
-//import { Enum } from "../../core/types/EnumType";
 
 export function useEnumValues<T extends number|string> (
     type: Enum<T>
