@@ -4,6 +4,7 @@ import { WordpressClient } from "../../core/wordpress/WordpressClient"
 import { WordpressPageDTO } from "../../core/wordpress/dto/WordpressPageDTO"
 import { WordpressReferenceDTO } from "../../core/wordpress/dto/WordpressReferenceDTO";
 import { WordpressUserProfileDTO } from "../../core/wordpress/dto/WordpressUserProfileDTO";
+import {WordpressPostDTO} from "../../core/wordpress/dto/WordpressPostDTO";
 
 export enum WordpressServiceEvent {
     WORDPRESS_PAGE_ADDED = "WordpressService:WordpressPageAdded",
@@ -54,6 +55,17 @@ export class WordpressService {
         const result = await client.getPages();
         if (!result) {
             LOG.debug(`Couldn't get wordpress pages;`);
+            return [];
+        }
+        return result;
+    }
+
+    public static async getWordpressPostList(url:string): Promise<readonly WordpressPostDTO[]> {
+        if(!this.initialize) return []
+        const client = WordpressClient.create(url);
+        const result = await client.getPages();
+        if (!result) {
+            LOG.debug(`Couldn't get wordpress posts;`);
             return [];
         }
         return result;
