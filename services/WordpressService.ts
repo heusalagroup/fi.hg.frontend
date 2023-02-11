@@ -63,7 +63,7 @@ export class WordpressService {
     public static async getWordpressPostList(url:string): Promise<readonly WordpressPostDTO[]> {
         if(!this.initialize) return []
         const client = WordpressClient.create(url);
-        const result = await client.getPages();
+        const result = await client.getPosts();
         if (!result) {
             LOG.debug(`Couldn't get wordpress posts;`);
             return [];
