@@ -7,6 +7,7 @@ import { WpPageDTO } from "../../core/wordpress/dto/WpPageDTO"
 import { WpReferenceDTO } from "../../core/wordpress/dto/WpReferenceDTO";
 import { WpUserProfileDTO } from "../../core/wordpress/dto/WpUserProfileDTO";
 import { WpPostDTO } from "../../core/wordpress/dto/WpPostDTO";
+import { WpUserProfileListDTO } from "../../core/wordpress/dto/WpUserProfileListDTO";
 
 export enum WpServiceEvent {
     WP_PAGE_ADDED = "WpServiceEvent:WpPageAdded",
@@ -87,7 +88,7 @@ export class WpService {
     public static async getWpUserProfileList (url:string): Promise<readonly WpUserProfileDTO[]> {
         if(!this.initialize) return []
         const client = WpClient.create(url);
-        const result = await client.getUserProfiles();
+        const result : WpUserProfileListDTO = await client.getUserProfiles();
         if (!result) {
             LOG.debug(`Couldn't get wordpress user profiles;`);
             return [];
