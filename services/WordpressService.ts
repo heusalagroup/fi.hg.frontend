@@ -1,10 +1,11 @@
 import { Observer, ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { LogService } from "../../core/LogService";
 import { WordpressClient } from "../../core/wordpress/WordpressClient"
-import { WordpressPageDTO } from "../../core/wordpress/dto/WordpressPageDTO"
-import { WordpressReferenceDTO } from "../../core/wordpress/dto/WordpressReferenceDTO";
-import { WordpressUserProfileDTO } from "../../core/wordpress/dto/WordpressUserProfileDTO";
-import {WordpressPostDTO} from "../../core/wordpress/dto/WordpressPostDTO";
+import { explainWpPageDTO, isWpPageDTO, WpPageDTO } from "../../core/wordpress/dto/WpPageDTO";
+import { WpReferenceDTO } from "../../core/wordpress/dto/WpReferenceDTO";
+import { WpUserProfileDTO } from "../../core/wordpress/dto/WpUserProfileDTO";
+import { isWpPostDTO, WpPostDTO } from "../../core/wordpress/dto/WpPostDTO";
+import { explainArrayOf, isArrayOf } from "../../core/types/Array";
 
 export enum WordpressServiceEvent {
     WORDPRESS_PAGE_ADDED = "WordpressService:WordpressPageAdded",
@@ -25,7 +26,7 @@ export class WordpressService {
         this._initialized = WordpressService.initialize(this._url);
     }
 
-    private static _wordpressPage: WordpressPageDTO | undefined;
+    private static _wordpressPage: WpPageDTO | undefined;
     private static _observer: Observer<WordpressServiceEvent> = new Observer<WordpressServiceEvent>("WordpressService");
 
 
@@ -49,29 +50,29 @@ export class WordpressService {
         return false
     }
 
-    public static async getWordpressPageList(url:string): Promise<readonly WordpressPageDTO[]> {
+    public static async getWordpressPageList(url:string) : Promise<readonly WpPageDTO[]> {
         if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getPages();
-        if (!result) {
-            LOG.debug(`Couldn't get wordpress pages;`);
+        if (!isArrayOf<WpPageDTO>(result, isWpPageDTO)) {
+            LOG.warn(`getWordpressPageList: Couldn't get wordpress pages: ${explainArrayOf<WpPageDTO>("WordpressPageDTO", explainWpPageDTO, result, isWpPageDTO)}`);
             return [];
         }
         return result;
     }
 
-    public static async getWordpressPostList(url:string): Promise<readonly WordpressPostDTO[]> {
+    public static async getWordpressPostList (url:string) : Promise<readonly WpPostDTO[]> {
         if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getPages();
-        if (!result) {
-            LOG.debug(`Couldn't get wordpress posts;`);
+        if (!isArrayOf<WpPostDTO>(result, isWpPostDTO)) {
+            LOG.debug(`Couldn't get wordpress posts: ${explainArrayOf<WpPostDTO>("WordpressPostDTO", explainWordpressPostDTO, result, isWpPostDTO)}`);
             return [];
         }
         return result;
     }
 
-    public static async getWordpressReferenceList(url:string): Promise<readonly WordpressReferenceDTO[]> {
+    public static async getWordpressReferenceList(url:string): Promise<readonly WpReferenceDTO[]> {
         if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getReferences();
@@ -82,7 +83,7 @@ export class WordpressService {
         return result;
     }
 
-    public static async getWordpressUserProfilesList(url:string): Promise<readonly WordpressUserProfileDTO[]> {
+    public static async getWordpressUserProfilesList(url:string): Promise<readonly WpUserProfileDTO[]> {
         if(!this.initialize) return []
         const client = WordpressClient.create(url);
         const result = await client.getUserProfiles();
@@ -93,7 +94,7 @@ export class WordpressService {
         return result;
     }
 
-    public static setCurrentPage(wordpressPage: WordpressPageDTO | undefined) {
+    public static setCurrentPage(wordpressPage: WpPageDTO | undefined) {
         if (wordpressPage !== this._wordpressPage) {
             this._wordpressPage = wordpressPage;
             if (this._observer.hasCallbacks(WordpressServiceEvent.WORDPRESS_PAGE_CHANGED)) {

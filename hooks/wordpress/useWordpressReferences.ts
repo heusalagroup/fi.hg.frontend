@@ -3,16 +3,16 @@
 import { WordpressService } from "../../services/WordpressService";
 import {useCallback, useEffect, useState} from "react";
 import { LogService } from "../../../core/LogService";
-import { WordpressReferenceDTO } from "../../../core/wordpress/dto/WordpressReferenceDTO";
+import { WpReferenceDTO } from "../../../core/wordpress/dto/WpReferenceDTO";
 import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressReferencesList');
 
 export function useWordpressReferencesList(url:string):
     [
-            readonly WordpressReferenceDTO[] | undefined,
+            readonly WpReferenceDTO[] | undefined,
     ] {
-    const [referencesList, setReferenceList] = useState<readonly WordpressReferenceDTO[] | undefined>(undefined);
+    const [referencesList, setReferenceList] = useState<readonly WpReferenceDTO[] | undefined>(undefined);
     const [valid, setValid] = useState<boolean>(false);
 
 

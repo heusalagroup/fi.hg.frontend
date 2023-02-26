@@ -3,16 +3,16 @@
 import { WordpressService } from "../../services/WordpressService";
 import {useCallback, useEffect, useState} from "react";
 import { LogService } from "../../../core/LogService";
-import { WordpressPageDTO } from "../../../core/wordpress/dto/WordpressPageDTO";
+import { WpPageDTO } from "../../../core/wordpress/dto/WpPageDTO";
 import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressPagesList');
 
 export function useWordpressPagesList(url:string):
     [
-            readonly WordpressPageDTO[] | undefined,
+            readonly WpPageDTO[] | undefined,
     ] {
-    const [pageList, setPageList] = useState<readonly WordpressPageDTO[] | undefined>(undefined);
+    const [pageList, setPageList] = useState<readonly WpPageDTO[] | undefined>(undefined);
     const [valid, setValid] = useState<boolean>(false);
 
 

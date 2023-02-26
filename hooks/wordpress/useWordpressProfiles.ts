@@ -3,16 +3,16 @@
 import { WordpressService } from "../../services/WordpressService";
 import {useCallback, useEffect, useState} from "react";
 import { LogService } from "../../../core/LogService";
-import { WordpressUserProfileDTO } from "../../../core/wordpress/dto/WordpressUserProfileDTO";
+import { WpUserProfileDTO } from "../../../core/wordpress/dto/WpUserProfileDTO";
 import { routeValidation } from "./routeValidation";
 
 const LOG = LogService.createLogger('useWordpressProfilesList');
 
 export function useWordpressProfilesList(url:string):
     [
-            readonly WordpressUserProfileDTO[] | undefined,
+            readonly WpUserProfileDTO[] | undefined,
     ] {
-    const [userProfilesList, setUserProfilesList] = useState<readonly WordpressUserProfileDTO[] | undefined>(undefined);
+    const [userProfilesList, setUserProfilesList] = useState<readonly WpUserProfileDTO[] | undefined>(undefined);
     const [valid, setValid] = useState<boolean>(false);
 
     const refreshCallback = useCallback(
