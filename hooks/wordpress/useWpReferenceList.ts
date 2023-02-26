@@ -1,37 +1,28 @@
 // Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
-import { WordpressService } from "../../services/WordpressService";
-import {useCallback, useEffect, useState} from "react";
+import { WpService } from "../../services/WpService";
+import { useCallback, useEffect, useState } from "react";
 import { LogService } from "../../../core/LogService";
 import { WpReferenceDTO } from "../../../core/wordpress/dto/WpReferenceDTO";
-import { routeValidation } from "./routeValidation";
+import { endsWith } from "../../../core/functions/endsWith";
 
-const LOG = LogService.createLogger('useWordpressReferencesList');
+const LOG = LogService.createLogger('useWpReferenceList');
 
-export function useWordpressReferencesList(url:string):
+export function useWpReferenceList (url:string):
     [
             readonly WpReferenceDTO[] | undefined,
     ] {
-    const [referencesList, setReferenceList] = useState<readonly WpReferenceDTO[] | undefined>(undefined);
-    const [valid, setValid] = useState<boolean>(false);
 
+    const urlIsValid : boolean = !endsWith(url, '/');
+    const [list, setList] = useState<readonly WpReferenceDTO[] | undefined>(undefined);
 
-    const refreshCallback = useCallback(
-        () => {
-            const result = routeValidation(url);
-            setValid(result);
-        },
-        [
-            url,
-        ]
-    )
     const getWordpressReferencesCallback = useCallback(
         async () => {
             try {
                 LOG.debug(`Fetching references list`);
-                const result = await WordpressService.getWordpressReferenceList(url);
+                const result = await WpService.getWpReferenceList(url);
                 LOG.debug(`Received references list: `, result);
-                setReferenceList(result);
+                setList(result);
             } catch (err) {
                 LOG.error(`Failed to load wordpress references list: `, err);
             }
@@ -41,22 +32,19 @@ export function useWordpressReferencesList(url:string):
         ]
     );
 
-
     // Update reference list initially
     useEffect(
         () => {
             LOG.debug(`Initial update triggered`);
-            refreshCallback()
-            if(valid) {
+            if(urlIsValid) {
                 getWordpressReferencesCallback()
             }
         },
         [
-            refreshCallback,
-            valid,
+            urlIsValid,
             getWordpressReferencesCallback
         ]
     );
 
-    return [referencesList];
+    return [list];
 }
