@@ -29,6 +29,7 @@ export interface TextFieldProps {
     readonly minLength?: number | undefined;
     readonly maxLength?: number | undefined;
     readonly required?: boolean | false;
+    readonly enabled?: boolean | false;
     readonly change?: FieldChangeCallback<string | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
     readonly children?: ReactNode;
@@ -40,8 +41,8 @@ export function TextField (props: TextFieldProps) {
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
-
     const isRequired = props.required ?? false;
+    const isEnabled = props.enabled ?? true;
 
     const {
         fieldState,
@@ -83,6 +84,7 @@ export function TextField (props: TextFieldProps) {
                 autoComplete="off"
                 placeholder={placeholder}
                 value={value}
+                disabled={!isEnabled}
                 onChange={onChangeCallback}
                 readOnly={props?.change === undefined}
             />

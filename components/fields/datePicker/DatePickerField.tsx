@@ -28,6 +28,7 @@ export interface DatePickerFieldProps {
     readonly placeholder?: string;
     readonly model?: DatePickerFieldModel;
     readonly value?: string;
+    readonly enabled?: boolean | false;
     readonly change?: FieldChangeCallback<string | undefined>;
     readonly changeState?: FieldChangeCallback<FormFieldState>;
     readonly children?: ReactNode;
@@ -42,6 +43,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
     const styleScheme = props?.style ?? ThemeService.getStyleScheme();
     const placeholder = props.placeholder ?? props.model?.placeholder;
     const label = props.label ?? props.model?.label ?? '';
+    const isEnabled = props.enabled ?? true;
     const [showCalendar, setShowCalendar] = useState(false);
     const {
         fieldState,
@@ -72,6 +74,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
                 + ` ${FIELD_CLASS_NAME}`
                 + ` ${FIELD_CLASS_NAME}-style-${stringifyStyleScheme(styleScheme)}`
                 + ` ${FIELD_CLASS_NAME}-state-${stringifyFormFieldState(fieldState)}`
+                + (isEnabled ? '' : ' '+FIELD_CLASS_NAME+'-disabled')
             }>
                 {label ? (
                     <span className={
@@ -85,6 +88,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
                         + ` ${FIELD_CLASS_NAME}-input`
                     }
                     type={COMPONENT_INPUT_TYPE}
+                    disabled={!isEnabled}
                     autoComplete="off"
                     placeholder={placeholder}
                     value={value?.slice(0, 10)}
@@ -94,7 +98,7 @@ export function DatePickerField(props: DatePickerFieldProps) {
                 />
                 {props.children}
             </label>
-            { showCalendar ?
+            { showCalendar && isEnabled ?
                 <Calendar
                 onChangeCallback={onChangeCallback}
                 buildCalendar={buildCalendar}
