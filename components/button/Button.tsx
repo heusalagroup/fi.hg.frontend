@@ -1,4 +1,4 @@
-// Copyright (c) 2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+// Copyright (c) 2022-2023. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 // Copyright (c) 2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import {
@@ -29,6 +29,7 @@ export interface ButtonProps {
     readonly style ?: ButtonStyle;
     readonly enabled?: boolean;
     readonly children?: ReactNode;
+    readonly title?: string;
 }
 
 export type ButtonClickCallback = VoidCallback;
@@ -47,7 +48,8 @@ export function Button (props: ButtonProps) {
         onKeyDown?: any,
         ref?: any,
         disabled?: any,
-        onClick?: any
+        onClick?: any,
+        title?: string
     } = {};
 
     const blurCallback = props?.blur;
@@ -73,6 +75,11 @@ export function Button (props: ButtonProps) {
     const enabled = props?.enabled ?? true;
     if ( !enabled ) {
         buttonProps.disabled = true;
+    }
+
+    const title = props?.title;
+    if (title) {
+        buttonProps.title = title;
     }
 
     const onClick = useCallback(
