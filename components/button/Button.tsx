@@ -42,14 +42,14 @@ export function Button (props: ButtonProps) {
     const hasClick = !!props?.click;
     const click = props?.click;
     const childCount = Children.count(children);
-    const title = props?.title ?? '';
     const buttonProps: {
         onBlur?: any,
         onFocus?: any,
         onKeyDown?: any,
         ref?: any,
         disabled?: any,
-        onClick?: any
+        onClick?: any,
+        title?: string
     } = {};
 
     const blurCallback = props?.blur;
@@ -75,6 +75,11 @@ export function Button (props: ButtonProps) {
     const enabled = props?.enabled ?? true;
     if ( !enabled ) {
         buttonProps.disabled = true;
+    }
+
+    const title = props?.title;
+    if (title) {
+        buttonProps.title = title;
     }
 
     const onClick = useCallback(
@@ -116,7 +121,6 @@ export function Button (props: ButtonProps) {
                 + (className ? ` ${className}` : '')
             }
             type={type}
-            title={title}
             {...buttonProps}
         >{children}</button>
     );
