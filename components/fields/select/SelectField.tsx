@@ -52,7 +52,8 @@ export function SelectField (props: SelectFieldProps<any>) {
         onChangeCallback,
         onKeyDownCallback,
         dropdownOpen,
-        buttonRefs
+        buttonRefs,
+        searchField
     } = useSelectField<any>(
         label,
         props?.model?.key ?? '',
@@ -86,6 +87,7 @@ export function SelectField (props: SelectFieldProps<any>) {
             onKeyDownCallback={onKeyDownCallback}
             dropdownOpen={dropdownOpen}
             buttonRefs={buttonRefs}
+            searchField={searchField}
         />
     );
 
