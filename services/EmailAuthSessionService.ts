@@ -1,12 +1,13 @@
-// Copyright (c) 2021-2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+// Copyright (c) 2021-2023. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+// Copyright (c) 2021-2023. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { EmailTokenDTO, isEmailTokenDTO } from "../../core/auth/email/types/EmailTokenDTO";
 import { Observer, ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { LogService } from "../../core/LogService";
-import { JsonLocalStorageService } from "./JsonLocalStorageService";
 import { Language } from "../../core/types/Language";
 import { JsonAny } from "../../core/Json";
-import { EmailAuthHttpService } from "./EmailAuthHttpService";
+import { EmailAuthHttpService } from "../../core/EmailAuthHttpService";
+import { JsonLocalStorageService } from "./JsonLocalStorageService";
 
 const LOG = LogService.createLogger('EmailAuthSessionService');
 
@@ -67,10 +68,10 @@ export class EmailAuthSessionService {
     }
 
     public static async verifyEmailToken (
-        emailToken  : string,
+        emailToken  : EmailTokenDTO,
         language   ?: Language
-    ) : Promise<EmailTokenDTO | undefined> {
-        const token : EmailTokenDTO | undefined = await EmailAuthHttpService.verifyEmailToken(emailToken, language)
+    ) : Promise<EmailTokenDTO> {
+        const token : EmailTokenDTO = await EmailAuthHttpService.verifyEmailToken(emailToken, language)
         this._setEmailToken(token);
         return token;
     }
@@ -79,36 +80,28 @@ export class EmailAuthSessionService {
         token     : EmailTokenDTO,
         code      : string,
         language ?: Language
-    ) : Promise<EmailTokenDTO | undefined> {
-        const newToken : EmailTokenDTO | undefined = await EmailAuthHttpService.verifyEmailCode(token, code, language);
+    ) : Promise<EmailTokenDTO> {
+        const newToken : EmailTokenDTO = await EmailAuthHttpService.verifyEmailCode(token, code, language);
         this._setEmailToken(newToken);
         return newToken;
     }
 
     private static _setEmailToken (token : EmailTokenDTO | undefined ) {
-
         const storageKey : string = EmailAuthSessionService._localStorageKey;
-
         this._emailToken = token;
-
         if (token) {
             JsonLocalStorageService.setItem(storageKey, token as unknown as JsonAny);
         } else {
             JsonLocalStorageService.removeItem(storageKey);
         }
-
         this._observer.triggerEvent(EmailAuthSessionServiceEvent.EMAIL_TOKEN_UPDATED);
-
     }
 
     private static _getEmailTokenFromLocalStorage () : EmailTokenDTO | undefined {
         try {
             const storageKey : string = EmailAuthSessionService._localStorageKey;
             const token : any = JsonLocalStorageService.getItem(storageKey) || undefined;
-            if (isEmailTokenDTO(token)) {
-                return token;
-            }
-            return undefined;
+            return isEmailTokenDTO(token) ? token : undefined;
         } catch (err) {
             LOG.error(`Could not parse localstorage token: `, err);
             return undefined;
