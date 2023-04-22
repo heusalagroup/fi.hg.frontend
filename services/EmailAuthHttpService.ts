@@ -1,13 +1,17 @@
-// Copyright (c) 2021-2022. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+// Copyright (c) 2021-2023. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+// Copyright (c) 2021-2023. Sendanor <info@sendanor.fi>. All rights reserved.
 
 import { EmailTokenDTO, isEmailTokenDTO } from "../../core/auth/email/types/EmailTokenDTO";
 import { Language } from "../../core/types/Language";
 import { LanguageService } from "../../core/LanguageService";
 import { HttpService } from "../../core/HttpService";
 import { LogService } from "../../core/LogService";
-import { VerifyEmailCodeDTO } from "../../core/auth/email/types/VerifyEmailCodeDTO";
+import { createVerifyEmailCodeDTO, VerifyEmailCodeDTO } from "../../core/auth/email/types/VerifyEmailCodeDTO";
 import { ReadonlyJsonAny } from "../../core/Json";
 import { CallbackWithLanguage, AUTHENTICATE_EMAIL_URL, VERIFY_EMAIL_CODE_URL, VERIFY_EMAIL_TOKEN_URL } from "../../core/auth/email/constants";
+import { LogLevel } from "../../core/types/LogLevel";
+import { createVerifyEmailTokenDTO, VerifyEmailTokenDTO } from "../../core/auth/email/types/VerifyEmailTokenDTO";
+import { createAuthenticateEmailDTO } from "../../core/auth/email/types/AuthenticateEmailDTO";
 
 const LOG = LogService.createLogger('EmailAuthHttpService');
 
@@ -16,6 +20,10 @@ export class EmailAuthHttpService {
     private static _authenticateEmailUrl : CallbackWithLanguage = AUTHENTICATE_EMAIL_URL;
     private static _verifyEmailCodeUrl   : CallbackWithLanguage = VERIFY_EMAIL_CODE_URL;
     private static _verifyEmailTokenUrl  : CallbackWithLanguage = VERIFY_EMAIL_TOKEN_URL;
+
+    public static setLogLevel (level: LogLevel) {
+        LOG.setLogLevel(level);
+    }
 
     public static initialize (
         authenticateEmailUrl : CallbackWithLanguage = AUTHENTICATE_EMAIL_URL,
@@ -32,41 +40,48 @@ export class EmailAuthHttpService {
         language ?: Language
     ) : Promise<EmailTokenDTO> {
         const lang : Language = language ?? LanguageService.getCurrentLanguage();
-        const item = await HttpService.postJson(this._authenticateEmailUrl(lang), {
-            email
-        });
-        if (!isEmailTokenDTO(item)) {
-            LOG.debug(`Response: `, item);
-            throw new TypeError(`Response was not EmailTokenDTO`);
-        }
-        return item;
+        const body = createAuthenticateEmailDTO(email);
+        return await this._postJson(
+            this._authenticateEmailUrl(lang),
+            body as unknown as ReadonlyJsonAny
+        );
     }
 
     public static async verifyEmailToken (
-        emailToken : string,
-        language ?: Language
-    ) : Promise<EmailTokenDTO | undefined> {
+        emailToken  : EmailTokenDTO,
+        language   ?: Language
+    ) : Promise<EmailTokenDTO> {
         const lang : Language = language ?? LanguageService.getCurrentLanguage();
-        const response : any = await HttpService.postJson(this._verifyEmailTokenUrl(lang), {
-            emailToken
-        });
-        const token : EmailTokenDTO | undefined = response;
-        return token && isEmailTokenDTO(token) ? token : undefined;
+        const body : VerifyEmailTokenDTO = createVerifyEmailTokenDTO(emailToken);
+        return await this._postJson(
+            this._verifyEmailTokenUrl(lang),
+            body as unknown as ReadonlyJsonAny
+        );
     }
 
     public static async verifyEmailCode (
         token : EmailTokenDTO,
         code: string,
         language ?: Language
-    ) : Promise<EmailTokenDTO | undefined> {
+    ) : Promise<EmailTokenDTO> {
         const lang : Language = language ?? LanguageService.getCurrentLanguage();
-        const body : VerifyEmailCodeDTO = {
-            token,
-            code
-        } as VerifyEmailCodeDTO;
-        const response : any = await HttpService.postJson(this._verifyEmailCodeUrl(lang), body as unknown as ReadonlyJsonAny);
-        const newToken : EmailTokenDTO | undefined = response;
-        return newToken && isEmailTokenDTO(newToken) ? newToken : undefined;
+        const body : VerifyEmailCodeDTO = createVerifyEmailCodeDTO(token, code);
+        return await this._postJson(
+            this._verifyEmailCodeUrl(lang),
+            body as unknown as ReadonlyJsonAny
+        );
+    }
+
+    private static async _postJson (
+        url  : string,
+        body : ReadonlyJsonAny
+    ) : Promise<EmailTokenDTO> {
+        const response : unknown = await HttpService.postJson(url, body);
+        if (!isEmailTokenDTO(response)) {
+            LOG.debug(`Response: `, response);
+            throw new TypeError(`Response was not EmailTokenDTO`);
+        }
+        return response;
     }
 
 }
