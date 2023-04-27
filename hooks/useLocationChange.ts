@@ -3,8 +3,7 @@
 import { useEffect } from "react";
 import { VoidCallback } from "../../core/interfaces/callbacks";
 import { LogService } from "../../core/LogService";
-import { useLocation } from "react-router-dom";
-import { Location } from "history";
+import { useLocation, Location } from "react-router-dom";
 
 const LOG = LogService.createLogger('useLocationChange');
 
