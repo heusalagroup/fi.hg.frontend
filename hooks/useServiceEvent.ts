@@ -28,7 +28,7 @@ export function useServiceEvent<T extends keyof any> (
         () => {
             LOG.debug(`Event "${event.toString()}": Calling callback`);
             try {
-                const p = callback();
+                const p : unknown = callback();
                 if ( isPromise(p) ) {
                     p.catch((err: any) => {
                         LOG.error(`Event "${event.toString()}": Callback error: `, err);

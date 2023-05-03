@@ -20,7 +20,7 @@ export function useVoidCallback (
             try {
                 if (callback) {
                     writeDebug(`Calling callback`);
-                    const p = callback();
+                    const p : unknown = callback();
                     if (isPromise(p)) {
                         p.catch(handleError);
                     }
