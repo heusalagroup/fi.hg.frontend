@@ -21,11 +21,15 @@ export class HgReact {
     ) {
 
         const container = document.getElementById(rootElementId);
-        if (container && container.innerHTML !== "") {
-            hydrateRoot( container, app );
+        if (container) {
+            if (container.innerHTML !== "") {
+                hydrateRoot( container, app );
+            } else {
+                const root = createRoot( container );
+                root.render(app);
+            }
         } else {
-            const root = createRoot( container );
-            root.render(app);
+            LOG.error(`Could not find root element: ${rootElementId}`);
         }
 
         // If you want to start measuring performance in your app, pass a function
