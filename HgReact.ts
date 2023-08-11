@@ -4,7 +4,6 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import { MetricType } from "web-vitals/src/types/base";
 import { reportWebVitals } from "../../../reportWebVitals";
 import { LogService } from "../core/LogService";
-import { HelmetContextServiceImpl } from "./services/HelmetContextServiceImpl";
 
 const LOG = LogService.createLogger( 'HgReact' );
 
@@ -20,8 +19,6 @@ export class HgReact {
         app           : any,
         rootElementId : string = 'root'
     ) {
-
-        HelmetContextServiceImpl.initialize();
 
         const container = document.getElementById(rootElementId);
         if (container && container.innerHTML !== "") {
