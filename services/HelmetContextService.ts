@@ -1,9 +1,11 @@
 // Copyright (c) 2023. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
+import { HelmetServerState } from "react-helmet-async";
 import { ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { Disposable } from "../../core/types/Disposable";
 
 export interface HelmetContext {
+    helmet ?: HelmetServerState;
 }
 
 export function createHelmetContext () : HelmetContext {
