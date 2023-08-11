@@ -4,6 +4,7 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import { MetricType } from "web-vitals/src/types/base";
 import { reportWebVitals } from "../../../reportWebVitals";
 import { LogService } from "../core/LogService";
+import { HelmetContextServiceImpl } from "./services/HelmetContextServiceImpl";
 
 const LOG = LogService.createLogger( 'HgReact' );
 
@@ -19,6 +20,9 @@ export class HgReact {
         app           : any,
         rootElementId : string = 'root'
     ) {
+
+        HelmetContextServiceImpl.initialize();
+
         const container = document.getElementById(rootElementId);
         if (container && container.innerHTML !== "") {
             hydrateRoot( container, app );
@@ -26,12 +30,14 @@ export class HgReact {
             const root = createRoot( container );
             root.render(app);
         }
+
         // If you want to start measuring performance in your app, pass a function
         // to log results (for example: reportWebVitals(console.log))
         // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
         reportWebVitals((metric: MetricType): void => {
             LOG.debug(`web vitals: `, metric);
         });
+
     }
 
 }

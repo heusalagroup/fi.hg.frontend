@@ -1,0 +1,32 @@
+// Copyright (c) 2023. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
+
+import { ObserverCallback, ObserverDestructor } from "../../core/Observer";
+import { Disposable } from "../../core/types/Disposable";
+
+export interface HelmetContext {
+}
+
+export function createHelmetContext () : HelmetContext {
+    return {};
+}
+
+export enum HelmetContextServiceEvent {
+    CONTEXT_UPDATED = "helmetContextService:contextUpdated"
+}
+
+export type HelmetContextServiceDestructor = ObserverDestructor;
+
+export interface HelmetContextService extends Disposable {
+
+    initialize () : void;
+
+    getContext () : HelmetContext;
+
+    on (
+        name: HelmetContextServiceEvent,
+        callback: ObserverCallback<HelmetContextServiceEvent>
+    ): HelmetContextServiceDestructor;
+
+    destroy (): void;
+
+}
