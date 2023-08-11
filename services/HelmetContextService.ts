@@ -20,15 +20,13 @@ export type HelmetContextServiceDestructor = ObserverDestructor;
 
 export interface HelmetContextService extends Disposable {
 
-    initialize () : void;
-
-    getContext () : HelmetContext;
-
     on (
         name: HelmetContextServiceEvent,
         callback: ObserverCallback<HelmetContextServiceEvent>
     ): HelmetContextServiceDestructor;
 
     destroy (): void;
+
+    getContext () : HelmetContext;
 
 }
