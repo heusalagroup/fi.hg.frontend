@@ -2,7 +2,7 @@
 
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { MetricType } from "web-vitals/src/types/base";
-import { reportWebVitals } from "../../../reportWebVitals";
+import { reportWebVitals } from "./reportWebVitals";
 import { LogService } from "../core/LogService";
 
 const LOG = LogService.createLogger( 'HgReact' );
@@ -42,4 +42,3 @@ export class HgReact {
     }
 
 }
-
