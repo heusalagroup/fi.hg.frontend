@@ -1,6 +1,10 @@
+// Copyright (c) 2022-2023. Heusala Group <info@hg.fi>. All rights reserved.
 // Copyright (c) 2020-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
+import { LogService } from "../../../core/LogService";
 import { Observer, ObserverDestructor} from "../../../core/Observer";
+
+const LOG = LogService.createLogger( 'AbtractStorageService' );
 
 export enum StorageServiceEvent {
 
@@ -134,6 +138,7 @@ export abstract class AbstractStorageService {
             | StorageServiceClearEventCallback
             )
     ) : ObserverDestructor {
+        LOG.debug(`on`, name, callback);
         throw new Error('Must be implemented');
     }
 

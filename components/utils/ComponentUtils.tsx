@@ -81,7 +81,7 @@ export class ComponentUtils {
     ) : string {
         return (
             description
-            ? map(description, (paragraph: string | ReactNode, i: number) : string => {
+            ? map(description, (paragraph: string | ReactNode) : string => {
 
                 if ( !isString(paragraph) ) {
                     if (paragraph?.toString) return paragraph.toString();
