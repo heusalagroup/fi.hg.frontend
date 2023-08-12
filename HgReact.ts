@@ -18,7 +18,7 @@ export class HgReact {
     public static initialize (
         app           : any,
         rootElementId : string = 'root'
-    ) {
+    ) : void {
 
         const container = document.getElementById(rootElementId);
         if (container) {

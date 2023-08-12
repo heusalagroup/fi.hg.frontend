@@ -15,6 +15,7 @@ const LOG = LogService.createLogger('useScrollTopChange');
  * @param callback
  */
 export function useScrollTopChange (
+    // @ts-ignore @todo why unused?
     context: string,
     callback: VoidCallback
 ) : number | undefined {

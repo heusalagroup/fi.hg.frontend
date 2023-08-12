@@ -27,6 +27,7 @@ export function useRouteServiceWithNavigate () {
 
     const onEventCallback = useCallback(
         (
+            // @ts-ignore @todo why unused?
             eventName : RouteServiceEvent,
             routeName : string
         ) => {

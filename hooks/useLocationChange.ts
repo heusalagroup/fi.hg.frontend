@@ -14,6 +14,7 @@ const LOG = LogService.createLogger('useLocationChange');
  * @param callback
  */
 export function useLocationChange (
+    // @ts-ignore @todo why unused?
     context: string,
     callback: VoidCallback
 ) : Location {

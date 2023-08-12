@@ -10,7 +10,7 @@ import {
     StorageServiceDeletedEventCallback,
     StorageServiceEvent, StorageServiceModifiedEventCallback
 } from "./types/AbtractStorageService";
-import {ObserverCallback, ObserverDestructor} from "../../core/Observer";
+import {ObserverDestructor} from "../../core/Observer";
 
 //const LOG = LogService.createLogger('JsonSessionStorageService');
 

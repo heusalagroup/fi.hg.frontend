@@ -107,7 +107,11 @@ export class ThemeLocalStorageService {
 
     private static _initializeStorageListener () {
 
-        this._propertyChangedListener = LocalStorageService.on(LocalStorageService.Event.PROPERTY_CHANGED, (event, key: string) => {
+        this._propertyChangedListener = LocalStorageService.on(LocalStorageService.Event.PROPERTY_CHANGED, (
+            // @ts-ignore
+            event,
+            key: string
+        ) => {
             if (key === COLOR_SCHEME_LOCAL_STORAGE_KEY) {
                 this._onThemeColorSchemeChange();
             }

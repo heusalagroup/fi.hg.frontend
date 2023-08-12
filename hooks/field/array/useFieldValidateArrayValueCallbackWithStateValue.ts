@@ -2,8 +2,6 @@
 
 import { useCallback } from "react";
 import { LogService } from "../../../../core/LogService";
-import { map } from "../../../../core/functions/map";
-import { SelectFieldItem } from "../../../types/items/SelectFieldModel";
 import { FieldValidateArrayValueCallback } from "./useFieldValidateArrayValueCallback";
 
 const LOG = LogService.createLogger('useFieldValidateArrayValueCallbackWithStateValue');

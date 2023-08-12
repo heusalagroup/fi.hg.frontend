@@ -49,6 +49,7 @@ export function useRouteService () {
             return RouteService.on(
                 RouteServiceEvent.PUSH_HISTORY,
                 (
+                    // @ts-ignore @todo why unused?
                     eventName,
                     routeName: string
                 ) => {

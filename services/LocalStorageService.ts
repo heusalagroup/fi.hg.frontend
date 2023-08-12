@@ -114,7 +114,9 @@ export class LocalStorageService extends AbstractStorageService {
     private static _initializeStorageListener () {
         this._storageListener = WindowService.on(
             WindowService.Event.STORAGE_CHANGED,
-            (eventName : WindowServiceEvent, event: StorageEvent) => this._onStorageEventObject(event)
+            (
+                // @ts-ignore
+                eventName : WindowServiceEvent, event: StorageEvent) => this._onStorageEventObject(event)
         );
     }
 

@@ -18,9 +18,9 @@ describe('WindowEventService', () => {
     let callback: SpyInstance | undefined;
     let callback2: SpyInstance | undefined;
     let windowAddListener: SpyInstance | undefined;
-    let windowRemoveListener: SpyInstance | undefined;
-    let windowParentAddListener: SpyInstance | undefined;
-    let windowParentRemoveListener: SpyInstance | undefined;
+    // let windowRemoveListener: SpyInstance | undefined;
+    // let windowParentAddListener: SpyInstance | undefined;
+    // let windowParentRemoveListener: SpyInstance | undefined;
     let listener: WindowEventServiceDestructor | undefined;
     let listener2: WindowEventServiceDestructor | undefined;
 
@@ -29,7 +29,7 @@ describe('WindowEventService', () => {
         LogService.setLogLevel(LogLevel.WARN);
 
         windowAddListener = jest.spyOn(window, 'addEventListener');
-        windowRemoveListener = jest.spyOn(window, 'removeEventListener');
+        // windowRemoveListener = jest.spyOn(window, 'removeEventListener');
 
     });
 

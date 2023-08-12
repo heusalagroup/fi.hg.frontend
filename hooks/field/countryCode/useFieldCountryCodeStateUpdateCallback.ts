@@ -3,7 +3,6 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { FormFieldState, stringifyFormFieldState } from "../../../types/FormFieldState";
 import { LogService } from "../../../../core/LogService";
-import { FieldValidateStringWithStateValueCallback } from "../string/useFieldValidateStringWithStateValueCallback";
 import { VoidCallback } from "../../../../core/interfaces/callbacks";
 import { CountryCode } from "../../../../core/types/CountryCode";
 import { FieldValidateCountryCodeWithStateValueCallback } from "./useFieldValidateCountryCodeWithStateValueCallback";

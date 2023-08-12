@@ -33,7 +33,7 @@ describe('ThemeService', () => {
     let windowEventService_on_spy                   = jest.spyOn(WindowEventService, 'on');
 
     let themeLocalStorageService_getColorScheme_spy = jest.spyOn(ThemeLocalStorageService, 'getColorScheme');
-    let themeLocalStorageService_setColorScheme_spy = jest.spyOn(ThemeLocalStorageService, 'setColorScheme');
+    // let themeLocalStorageService_setColorScheme_spy = jest.spyOn(ThemeLocalStorageService, 'setColorScheme');
     let themeLocalStorageService_on_spy             = jest.spyOn(ThemeLocalStorageService, 'on');
 
     let windowService_getColorScheme_spy            = jest.spyOn(WindowService, 'getColorScheme');

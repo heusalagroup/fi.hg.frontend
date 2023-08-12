@@ -2,7 +2,6 @@
 
 import { SessionStorageService, SessionStorageServiceDestructor} from "./SessionStorageService";
 import { WindowService, WindowServiceEvent} from "./WindowService";
-import { JsonSessionStorageService } from "./JsonSessionStorageService";
 import {StorageServiceEvent} from "./types/AbtractStorageService";
 import { isFunction } from "../../core/types/Function";
 

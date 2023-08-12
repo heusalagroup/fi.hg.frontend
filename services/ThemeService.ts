@@ -242,7 +242,10 @@ export class ThemeService {
 
         this._windowEventServiceListener = WindowEventService.on(
             WindowEventService.Event.JSON_MESSAGE,
-            (event: WindowEventServiceEvent.JSON_MESSAGE, message: JsonObject) => {
+            (
+                // @ts-ignore @todo why unused?
+                event: WindowEventServiceEvent.JSON_MESSAGE,
+                message: JsonObject) => {
                 if (this._observer.hasCallbacks(ThemeServiceEvent.COLOR_SCHEME_CHANGED)) {
                     if (isColorSchemeThemeChangeMessageDTO(message)) {
                         LOG.debug(`Color scheme changed through a message as ${stringifyColorScheme(message.value)}`);
@@ -270,7 +273,10 @@ export class ThemeService {
 
         this._windowServiceListener = WindowService.on(
             WindowService.Event.COLOR_SCHEME_CHANGED,
-            (event: WindowServiceEvent, colorScheme: ColorScheme) => {
+            (
+                // @ts-ignore @todo why unused?
+                event: WindowServiceEvent,
+                colorScheme: ColorScheme) => {
                 if (this._observer.hasCallbacks(ThemeServiceEvent.COLOR_SCHEME_CHANGED)) {
                     if (this._colorScheme === undefined) {
                         LOG.debug(`Browser color scheme changed as ${stringifyColorScheme(WindowService.getColorScheme())}`);
@@ -300,7 +306,10 @@ export class ThemeService {
 
         this._storageServiceListener = ThemeLocalStorageService.on(
             ThemeLocalStorageServiceEvent.COLOR_SCHEME_CHANGED,
-            (event: ThemeLocalStorageServiceEvent.COLOR_SCHEME_CHANGED) => {
+            (
+                // @ts-ignore @todo why unused?
+                event: ThemeLocalStorageServiceEvent.COLOR_SCHEME_CHANGED
+            ) => {
                 if (this._observer.hasCallbacks(ThemeServiceEvent.COLOR_SCHEME_CHANGED)) {
                     if (this._colorScheme === undefined) {
                         LOG.debug(`Local storage color scheme changed as ${stringifyColorScheme(ThemeLocalStorageService.getColorScheme())}`);

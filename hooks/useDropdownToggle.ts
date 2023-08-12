@@ -18,6 +18,7 @@ const LOG = LogService.createLogger('useDropdownToggle');
  * @param initialState
  */
 export function useDropdownToggle (
+    // @ts-ignore @todo why unused?
     context: string,
     initialState: boolean = false
 ) : [boolean, VoidCallback, VoidCallback, VoidCallback] {
