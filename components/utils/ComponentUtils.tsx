@@ -63,8 +63,22 @@ export class ComponentUtils {
                             );
                         }
 
+                        const paragraphText = t(paragraph, translationParams);
+
+                        if (paragraphText.includes('\n\n')) {
+                            const texts = paragraphText.split('\n\n');
+                            return <>{map(
+                                texts,
+                                (text: string, subIndex:number) : any => {
+                                    return (
+                                        <p key={`paragraph-${i}-${subIndex}`}>{text}</p>
+                                    );
+                                }
+                            )}</>;
+                        }
+
                         return (
-                            <p key={`paragraph-${i}`}>{t(paragraph, translationParams)}</p>
+                            <p key={`paragraph-${i}`}>{paragraphText}</p>
                         );
 
                     })
