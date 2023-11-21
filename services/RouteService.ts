@@ -33,10 +33,15 @@ export class RouteService {
     }
 
     public static getNextHistory () : string | undefined {
-        const history = this._nextHistory;
-        this._nextHistory = undefined;
-        LOG.debug(`Route fetched: ${history}`);
-        return history;
+
+        if (this._nextHistory !== undefined) {
+            const history = this._nextHistory;
+            this._nextHistory = undefined;
+            LOG.debug(`Route fetched: ${history}`);
+            return history;
+        }
+
+        return undefined;
     }
 
     /**
