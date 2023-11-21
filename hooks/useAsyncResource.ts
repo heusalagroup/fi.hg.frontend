@@ -1,6 +1,7 @@
 // Copyright (c) 2022-2023. Heusala Group Oy <info@heusalagroup.fi>. All rights reserved.
 
 import { useCallback, useEffect, useState } from "react";
+import { isEqual } from "../../core/functions/isEqual";
 import { LogService } from "../../core/LogService";
 
 const LOG = LogService.createLogger('useAsyncResource');
@@ -30,9 +31,13 @@ export function useAsyncResource<T> (
     const refreshCallback = useCallback(
         () => {
             callback().then( (newResult : T) => {
-                setResult(newResult);
+                if (!isEqual(result, newResult)) {
+                    setResult(newResult);
+                } else {
+                    LOG.debug(`Result was not different. Not changed.`);
+                }
             }).catch((err) => {
-                LOG.error(`Error while fetching clients: `, err);
+                LOG.error(`Error while fetching resource: `, err);
                 setTimeout(
                     () => {
                         setResult(undefined);
