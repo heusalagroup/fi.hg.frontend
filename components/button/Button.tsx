@@ -7,7 +7,8 @@ import {
     MouseEvent,
     RefObject,
     ReactNode,
-    useCallback
+    useCallback,
+    CSSProperties,
 } from 'react';
 import { EventCallback, VoidCallback } from "../../../core/interfaces/callbacks";
 import { ButtonType } from "../../../core/frontend/button/ButtonType";
@@ -29,6 +30,7 @@ export interface ButtonProps {
     readonly style ?: ButtonStyle;
     readonly enabled?: boolean;
     readonly children?: ReactNode;
+    readonly css?: CSSProperties | undefined;
 }
 
 export type ButtonClickCallback = VoidCallback;
@@ -36,6 +38,7 @@ export type ButtonClickCallback = VoidCallback;
 export function Button (props: ButtonProps) {
     const type = props?.type ?? ButtonType.DEFAULT;
     const className = props?.className;
+    const css = props?.css;
     const children = props?.children;
     const buttonStyle = props?.style ?? ButtonStyle.SECONDARY;
     const hasClick = !!props?.click;
@@ -113,6 +116,7 @@ export function Button (props: ButtonProps) {
                 + ` ${BUTTON_CLASS_NAME}-${enabled ? 'enabled' : 'disabled'}`
                 + (className ? ` ${className}` : '')
             }
+            style={css}
             type={type}
             {...buttonProps}
         >{children}</button>
