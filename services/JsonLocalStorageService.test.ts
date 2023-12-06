@@ -1,19 +1,19 @@
 // Copyright (c) 2021-2021. Sendanor <info@sendanor.fi>. All rights reserved.
 
+import { jest } from "@jest/globals";
 import { JsonLocalStorageService } from "./JsonLocalStorageService";
 import { LocalStorageService } from "./LocalStorageService";
-import SpyInstance = jest.SpyInstance;
-import {StorageServiceEvent} from "./types/AbtractStorageService";
+import { StorageServiceEvent } from "./types/AbtractStorageService";
 
 describe('JsonLocalStorageService', () => {
 
     let storeMock : {
-        on             : SpyInstance,
-        hasItem        : SpyInstance,
-        getItem        : SpyInstance,
-        removeItem     : SpyInstance,
-        setItem        : SpyInstance,
-        removeAllItems : SpyInstance,
+        on             : jest.SpiedFunction<(...args : any) => any>,
+        hasItem        : jest.SpiedFunction<(...args : any) => any>,
+        getItem        : jest.SpiedFunction<(...args : any) => any>,
+        removeItem     : jest.SpiedFunction<(...args : any) => any>,
+        setItem        : jest.SpiedFunction<(...args : any) => any>,
+        removeAllItems : jest.SpiedFunction<(...args : any) => any>,
     };
 
     beforeAll(() => {
