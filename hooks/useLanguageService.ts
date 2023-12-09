@@ -25,7 +25,7 @@ export function useLanguageService (): UseTranslationResponse<"translation", und
                 LOG.error(`Could not parse language: ${l}`);
             } else if ( i18nLanguage !== ls ) {
                 LOG.debug(`Asynchronously changing language as: ${ls}`);
-                changeLanguage(ls).catch(err => {
+                changeLanguage(ls).catch((err: any) => {
                     LOG.error(`Could not change language to "${ls}" (${l}": `, err);
                 });
             } else {
