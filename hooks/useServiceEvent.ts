@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect } from "react";
 import { LogService } from "../../core/LogService";
-import { EventCallbackWithArgs, VoidCallback } from "../../core/interfaces/callbacks";
+import { EventCallbackWithArgs } from "../../core/interfaces/callbacks";
 import { ObserverCallback, ObserverDestructor } from "../../core/Observer";
 import { isPromise } from "../../core/types/Promise";
 
