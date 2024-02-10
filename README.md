@@ -1,4 +1,14 @@
-**Join our [Discord](https://discord.gg/UBTrHxA78f) to discuss about our software!**
+_____________________________________________________________________________________
+
+# DEPRECATED
+
+Development under this git repository is ***discontinued*** and future improvements 
+will continue under
+[io.hyperify.frontend](https://github.com/hyperifyio/io.hyperify.frontend).
+
+*Join our [Discord](https://discord.gg/UBTrHxA78f) to discuss about our software!*
+
+_____________________________________________________________________________________
 
 # heusalagroup/fi.hg.frontend
 
